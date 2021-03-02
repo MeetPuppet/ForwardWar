@@ -99,10 +99,10 @@ public class EnemyFSM : MonoBehaviour
                 Return();
                 break;
             case EnemyState.Damaged:
-                //Damaged();
+                Damaged();
                 break;
             case EnemyState.Die:
-                //Die();
+                Die();
                 break;
         }
         hpSlider.value = (float)hp / (float)maxHp;
@@ -227,7 +227,7 @@ public class EnemyFSM : MonoBehaviour
             m_State = EnemyState.Damaged;
             print("상태 전환: Any state -> Damaged");
 
-            Damaged();
+            Die();
         }
         // 그렇지 않다면, 죽음 상태로 전환한다.
         else
@@ -242,7 +242,7 @@ public class EnemyFSM : MonoBehaviour
     void Damaged()
     {
         // 피격 상태를 처리하기 위한 코루틴을 실행한다.
-        Updater.Add(DieProcess());
+        Updater.Add(DamageProcess());
     }
 
     // 데미지 처리용 코루틴 함수
@@ -253,7 +253,7 @@ public class EnemyFSM : MonoBehaviour
         yield return new WaitForSeconds(0.5f);
 
         // 현재 상태를 이동 상태로 전환한다.
-        m_State = EnemyState.Move;
+        m_State = EnemyState.Idle;
         print("상태 전환: Damaged -> Move");
     }
 
@@ -262,7 +262,6 @@ public class EnemyFSM : MonoBehaviour
     {
         // 진행중인 피격 코루틴을 중지한다.
         StopAllCoroutines();
-        //해당 오브젝트의 코루틴만 멈춰낼 필요가 있음
 
         // 죽음 상태를 처리하기 위한 코루틴을 실행한다.
         Updater.Add(DieProcess());

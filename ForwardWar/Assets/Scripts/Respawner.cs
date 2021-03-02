@@ -8,8 +8,13 @@ namespace Spawner
     public class Respawner : MonoBehaviour
     {
         public GameObject obj;
-        public int count = 5;
+        private int count = 5;
         private bool isSpawn = false;
+
+        private void Awake()
+        {
+            Updater.Add(SpawnObj());
+        }
 
         public IEnumerator SpawnObj()
         {
@@ -17,7 +22,13 @@ namespace Spawner
             {
                 if (isSpawn == false)
                 {
-                    Instantiate(obj, transform.position, transform.rotation);
+                    Transform[] childs = GetComponentsInChildren<Transform>();
+                    count = childs.Length;
+                    for (int i=0;i< childs.Length; ++i)
+                    {
+                        Instantiate(obj, childs[i].transform.position, childs[i].transform.rotation);
+                    }
+
                     isSpawn = true;
                 }
                 yield return null;
