@@ -10,11 +10,11 @@ namespace GameManager
 
         GameData gameData = new GameData();
         Updater updater = new Updater();
-        InputManager input = new InputManager();
+        //InputManager input = new InputManager();
 
         public static GameData Data { get { return Instance.gameData; } }
         public static Updater Updater { get { return Instance.updater; } }
-        public static InputManager Input { get { return Instance.input; } }
+       // public static InputManager Input { get { return Instance.input; } }
 
         static GameObject clip;
         void Start()

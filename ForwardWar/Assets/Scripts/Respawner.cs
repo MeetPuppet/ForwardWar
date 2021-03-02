@@ -2,9 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Spawner
+namespace Spawner.Data
 {
-    using Data;
     public class Respawner : MonoBehaviour
     {
         public GameObject obj;
