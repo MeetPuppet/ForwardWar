@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+using GameManager;
+
 public class EnemyFSM : MonoBehaviour
 {
     // 에너미 상태 상수
@@ -57,6 +59,8 @@ public class EnemyFSM : MonoBehaviour
 
     Animator anim;
 
+
+
     void Start()
     {
         // 최초의 에너미 상태는 대기 상태(Idle)로 한다.
@@ -72,6 +76,9 @@ public class EnemyFSM : MonoBehaviour
         originPos = transform.position;
         originRot = transform.rotation;
         anim = transform.GetComponentInChildren<Animator>();
+
+        //에너미 정보 리스트 - rayInfo로 접근이 가능해서 보류
+        GameManager.GameManager.Data.AddEnemyList(this);
     }
 
     void Update()
@@ -235,12 +242,13 @@ public class EnemyFSM : MonoBehaviour
     void Damaged()
     {
         // 피격 상태를 처리하기 위한 코루틴을 실행한다.
-        StartCoroutine(DamageProcess());
+        Updater.Add(DieProcess());
     }
 
     // 데미지 처리용 코루틴 함수
     IEnumerator DamageProcess()
     {
+        m_State = EnemyState.Damaged;
         // 피격 모션 시간만큼 기다린다.
         yield return new WaitForSeconds(0.5f);
 
@@ -254,9 +262,10 @@ public class EnemyFSM : MonoBehaviour
     {
         // 진행중인 피격 코루틴을 중지한다.
         StopAllCoroutines();
+        //해당 오브젝트의 코루틴만 멈춰낼 필요가 있음
 
         // 죽음 상태를 처리하기 위한 코루틴을 실행한다.
-        StartCoroutine(DieProcess());
+        Updater.Add(DieProcess());
     }
 
     IEnumerator DieProcess()

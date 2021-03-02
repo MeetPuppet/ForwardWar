@@ -1,5 +1,8 @@
 .meta
 
+ForwardWar/obj/
+ForwardWar/logs/
+
 # Prerequisites
 *.d
 

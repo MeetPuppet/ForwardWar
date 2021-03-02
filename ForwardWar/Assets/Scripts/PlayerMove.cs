@@ -32,17 +32,10 @@ public class PlayerMove : MonoBehaviour
     public Slider hpSlider;
 
     public GameObject hitEffect;
-
-    //애니메이터 변수
-    Animator anim;
     void Start()
     {
         // 캐릭터 콘트롤러 컴포넌트 받아오기
         cc = GetComponent<CharacterController>();
-
-        //
-        anim = GetComponentInChildren<Animator>();
-        Debug.Log("start");
     }
 
     void Update()
@@ -58,13 +51,10 @@ public class PlayerMove : MonoBehaviour
         Vector3 dir = new Vector3(h, 0, v);
         dir = dir.normalized;
 
-        //이덩 블랜딩 트리를 호출하고 벡터의 크기 값 넘겨주기
-        anim.SetFloat("MoveBlend", dir.magnitude);
-
         // 2-1. 메인 카메라를 기준으로 방향을 변환한다.
         dir = Camera.main.transform.TransformDirection(dir);
 
-        // 2-2. 만일, 점프 중이었고, 다시 바닥에 착지했다면
+        // 2-2. 만일, 점프 중이었고, 다시 바닥에 착지했다면...
         if (isJumping && cc.collisionFlags == CollisionFlags.Below)
         {
             // 점프 전 상태로 초기화한다.
@@ -73,7 +63,7 @@ public class PlayerMove : MonoBehaviour
             yVelocity = 0;
         }
 
-        // 2-3. 만일, 키보드 <Space> 버튼을 입력했고, 점프를 안 한 상태라면
+        // 2-3. 만일, 키보드 <Space> 버튼을 입력했고, 점프를 안 한 상태라면...
         if (Input.GetButtonDown("Jump") && !isJumping)
         {
             // 캐릭터 수직 속도에 점프력을 적용하고 점프 상태로 변경한다.
@@ -101,9 +91,12 @@ public class PlayerMove : MonoBehaviour
 
         if (hp > 0)
         {
-            StartCoroutine(PlayHitEffect());
+            // 업데이터에서 모아서 관리
+            Updater.Add(PlayHitEffect());
         }
     }
+
+    //연타당할시 문제가 있을 것
     IEnumerator PlayHitEffect()
     {
         //피격 UI 실행
