@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using UnityEngine.SceneManagement;
 using System.Collections;
 
 public class GameManager : MonoBehaviour
@@ -54,16 +53,5 @@ public class GameManager : MonoBehaviour
     void Update()
     {
         input.OnUpdate();
-
-    }
-
-    public void SceneChange(string str)
-    {
-        SceneManager.LoadScene(str);
-    }
-
-    public void ExitApp()
-    {
-        Application.Quit();
     }
 }

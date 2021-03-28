@@ -42,10 +42,6 @@ public class InputManager : Monosingleton<InputManager>
                 pressed = false;
             }
         }
-        if (Input.GetKeyDown(KeyCode.Escape))
-        {
-            Application.Quit();
-        }
         switch (key)
         {
             case KeyCode.None:

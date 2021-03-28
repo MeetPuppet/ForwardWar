@@ -112,5 +112,6 @@ public class PlayerMove : MonoBehaviour
         yield return new WaitForSeconds(0.3f);
         //피격 UI 종료
         hitEffect.SetActive(false);
+
     }
 }
