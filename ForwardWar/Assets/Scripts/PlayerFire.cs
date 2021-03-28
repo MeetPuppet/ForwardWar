@@ -76,6 +76,13 @@ public class PlayerFire : MonoBehaviour
 
                 // 피격 이펙트를 플레이한다.
                 ps.Play();
+
+                
+                EnemyFSM enemy = hitInfo.transform.gameObject.GetComponent<EnemyFSM>();
+                if(enemy != null)
+                {
+                    enemy.HitEnemy(3);
+                }
             }
         }
 

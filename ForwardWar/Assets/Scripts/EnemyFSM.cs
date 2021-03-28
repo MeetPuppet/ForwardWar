@@ -235,7 +235,7 @@ public class EnemyFSM : MonoBehaviour
     void Damaged()
     {
         // 피격 상태를 처리하기 위한 코루틴을 실행한다.
-        StartCoroutine(DamageProcess());
+        //StartCoroutine(DamageProcess());
     }
 
     // 데미지 처리용 코루틴 함수
