@@ -208,7 +208,7 @@ public class EnemyFSM : MonoBehaviour
         // 만일, 이미 피격 상태이거나 사망 상태 또는 복귀 상태라면 아무런 처리도 하지 않고 함수를 종료한다.
         if (m_State == EnemyState.Damaged || m_State == EnemyState.Die || m_State == EnemyState.Return)
         {
-            return;
+            //return;
         }
 
         // 플레이어의 공격력만큼 에너미의 체력을 감소시킨다.
@@ -265,7 +265,9 @@ public class EnemyFSM : MonoBehaviour
         cc.enabled = false;
 
         // 2초 동안 기다린 뒤에 자기 자신을 제거한다.
-        yield return new WaitForSeconds(2f);
+        //yield return new WaitForSeconds(2f);
+        yield return null;
+
         print("소멸!");
         Destroy(gameObject);
     }

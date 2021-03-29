@@ -26,7 +26,7 @@ public class MercenaryMovement : MonoBehaviour
     {
         get
         {
-            return (int)guideLine;
+            return (int)operationGuide;
         }
         set
         {
@@ -34,11 +34,14 @@ public class MercenaryMovement : MonoBehaviour
         }
     }
     OperationGuide operationGuide;
-    MercenaryState mercenaryState;
+    MercenaryState mercenaryState = MercenaryState.Alert;
 
     public float fightRange = 30;
     public float moveSpeed = 7f;
     Animator anim;
+
+    GameObject[] insightEnemys = null;
+    System.Random rnd = new System.Random();
 
     // Start is called before the first frame update
     void Start()
@@ -46,6 +49,7 @@ public class MercenaryMovement : MonoBehaviour
         EnemyParent = GameObject.Find("Enemys");
         anim = GetComponentInChildren<Animator>();
         BulletFirePS = BulletFire.GetComponent<ParticleSystem>();
+        StartCoroutine("AlertMovement");
     }
 
     // Update is called once per frame
@@ -53,13 +57,23 @@ public class MercenaryMovement : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.F))
         {
+            StopAllCoroutines();
             Ray ray = new Ray(Camera.main.transform.position, Camera.main.transform.forward);
             RaycastHit hitInfo = new RaycastHit();
 
             if (Physics.Raycast(ray, out hitInfo))
             {
-                StopAllCoroutines();
-                StartCoroutine("MoveTranslate", hitInfo.point);
+                switch (mercenaryState)
+                {
+                    case MercenaryState.Alert:
+                    case MercenaryState.Move:
+                    case MercenaryState.Breakaway:
+                    case MercenaryState.Attack:
+                        StartCoroutine("MoveTranslate", hitInfo.point);
+                        break;
+                        //StartCoroutine("FightMoveTranslate", hitInfo.point);
+                        break;
+                }
             }
         }
     }
@@ -85,10 +99,38 @@ public class MercenaryMovement : MonoBehaviour
         return enemyList.ToArray();
     }
 
+    IEnumerator AlertMovement()
+    {
+        mercenaryState = MercenaryState.Alert;
+        //Vector3 dir = default;
+        int range = rnd.Next() / 180;
+         Vector3 Rot = transform.rotation.eulerAngles;
+        Rot.y += range;
+        //
+        //dir = transform.position;
+        //dir.z = transform.position.z - range;
+        //insightEnemys = GetSightEnemys();
+
+        while (mercenaryState == MercenaryState.Alert)
+        {
+            Vector3.Lerp(transform.rotation.eulerAngles, Rot, Time.deltaTime * moveSpeed);
+
+            insightEnemys = GetSightEnemys();
+            if (insightEnemys != null)
+            {
+                StartCoroutine("FightEnemys", insightEnemys);
+                yield break;
+            }
+            yield return null;
+        }
+
+        insightEnemys = GetSightEnemys();
+    }
+
     IEnumerator MoveTranslate(Vector3 wayPoint)
     {
+        mercenaryState = MercenaryState.Move;
         Vector3 dir = default;
-        GameObject[] insightEnemys = GetSightEnemys();
 
         dir.x = wayPoint.x - transform.position.x;
         dir.z = wayPoint.z - transform.position.z;
@@ -97,7 +139,7 @@ public class MercenaryMovement : MonoBehaviour
 
         anim.SetFloat("MoveBlend", dir.magnitude);
 
-        while (dist >= moveSpeed * moveSpeed * Time.deltaTime)
+        while (dist >= 1 )
         {
             transform.Translate(dir.normalized * moveSpeed * Time.deltaTime, Space.World);
 
@@ -110,30 +152,97 @@ public class MercenaryMovement : MonoBehaviour
             yield return null;
 
             //적발견 예외처리
-            if(insightEnemys != null && dist < fightRange)
+            if(insightEnemys != null && dist < fightRange &&
+                operationGuide == OperationGuide.Combat)
             {
                 anim.SetFloat("MoveBlend", 0f);
                 StartCoroutine("FightEnemys", insightEnemys);
                 yield break;
             }
         }
+        mercenaryState = MercenaryState.Alert;
+        StartCoroutine("AlertMovement");
+        anim.SetFloat("MoveBlend", 0f);
+    }
+
+    IEnumerator FightMoveTranslate(Vector3 wayPoint)
+    {
+        insightEnemys = GetSightEnemys();
+        if (insightEnemys == null)
+        {
+            StartCoroutine("MoveTranslate", wayPoint);
+            yield break;
+        }
+
+        mercenaryState = MercenaryState.Attack;
+
+        Vector3 dir = default;
+        dir.x = wayPoint.x - transform.position.x;
+        dir.z = wayPoint.z - transform.position.z;
+
+        Vector3 enemyDir = default;
+        int targetStep = 0;
+        EnemyFSM enemyDatas = insightEnemys[targetStep].GetComponent<EnemyFSM>();
+        enemyDir.x = insightEnemys[targetStep].transform.position.x - transform.position.x;
+        enemyDir.z = insightEnemys[targetStep].transform.position.z - transform.position.z;
+
+
+        float dist = Vector3.Distance(transform.position, wayPoint);
+
+        anim.SetFloat("MoveBlend", dir.magnitude);
+
+        while (dist >= moveSpeed * moveSpeed * Time.deltaTime)
+        {
+            transform.Translate(dir.normalized * moveSpeed * Time.deltaTime, Space.World);
+
+            Quaternion lookRotation = Quaternion.LookRotation(enemyDir);
+            Vector3 rotation = Quaternion.Lerp(transform.rotation, lookRotation, Time.deltaTime * moveSpeed).eulerAngles;
+            transform.rotation = Quaternion.Euler(0f, rotation.y, 0f);
+
+            insightEnemys = GetSightEnemys();
+            dist = Vector3.Distance(transform.position, wayPoint);
+
+            if (enemyDatas != null)
+            {
+                StartCoroutine("MercenaryHitEffect");
+                enemyDatas.HitEnemy(3);
+                if (enemyDatas.hp <= 0)
+                {
+                    mercenaryState = MercenaryState.Move;
+                    StartCoroutine("MoveTranslate", wayPoint);
+                    anim.SetFloat("MoveBlend", 0f);
+                    yield break;
+                }
+            }
+            yield return null;
+
+        }
+        mercenaryState = MercenaryState.Alert;
+        StartCoroutine("AlertMovement");
         anim.SetFloat("MoveBlend", 0f);
     }
 
     IEnumerator FightEnemys(GameObject[] insightEnemysArr)
     {
+        mercenaryState = MercenaryState.Attack;
         int targetStep = 0;
         EnemyFSM enemyDatas = insightEnemysArr[targetStep].GetComponent<EnemyFSM>();
 
         Vector3 dir = default;
         Ray ray = new Ray(transform.position, transform.forward);
         RaycastHit hitInfo = new RaycastHit();
-
         dir.x = insightEnemysArr[targetStep].transform.position.x - transform.position.x;
         dir.z = insightEnemysArr[targetStep].transform.position.z - transform.position.z;
 
         while(targetStep < insightEnemysArr.Length)
         {
+            if (insightEnemysArr[targetStep] == null)
+            {
+                mercenaryState = MercenaryState.Alert;
+                StartCoroutine("AlertMovement");
+                anim.SetFloat("MoveBlend", 0f);
+                yield break;
+            }
             dir.x = insightEnemysArr[targetStep].transform.position.x - transform.position.x;
             dir.z = insightEnemysArr[targetStep].transform.position.z - transform.position.z;
             Quaternion lookRotation = Quaternion.LookRotation(dir);
@@ -149,7 +258,23 @@ public class MercenaryMovement : MonoBehaviour
                     BulletFire.transform.forward = hitInfo.normal;
 
                     StartCoroutine("MercenaryHitEffect");
+                    if (enemyDatas != null)
+                    {
+                        enemyDatas.HitEnemy(3);
+                        if(enemyDatas.hp <= 0)
+                        {
+                            mercenaryState = MercenaryState.Alert;
+                            StartCoroutine("AlertMovement");
+                            anim.SetFloat("MoveBlend", 0f);
+                            yield break;
+                        }
+                    }
                 }
+            }
+
+            if (operationGuide == OperationGuide.Snick)
+            {
+                yield break;
             }
 
             yield return null;
