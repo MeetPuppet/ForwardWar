@@ -7,6 +7,8 @@ ForwardWar/logs/
 ForwardWar/library/
 ForwardWar/UserSettings/
 ForwardWar/ProjectSettings/ProjectVersion.txt
+ForwardWar/UserSettings/EditorUserSettings.asset
+
 # This .gitignore file should be placed at the root of your Unity project directory
 #
 # Get latest from https://github.com/github/gitignore/blob/master/Unity.gitignore
