@@ -2,7 +2,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.AI;
 
 public class MercenaryMovement : MonoBehaviour
 {
@@ -22,8 +21,6 @@ public class MercenaryMovement : MonoBehaviour
     }
 
     public GameObject Commander;
-    private NavMeshAgent agent = null;
-    public GameObject CoverList;
 
     public int guideLine
     {
@@ -52,10 +49,6 @@ public class MercenaryMovement : MonoBehaviour
         EnemyParent = GameObject.Find("Enemys");
         anim = GetComponentInChildren<Animator>();
         BulletFirePS = BulletFire.GetComponent<ParticleSystem>();
-
-        agent = GetComponent<NavMeshAgent>();
-        agent.speed = moveSpeed;
-
         StartCoroutine("AlertMovement");
     }
 
@@ -70,7 +63,6 @@ public class MercenaryMovement : MonoBehaviour
 
             if (Physics.Raycast(ray, out hitInfo))
             {
-
                 switch (mercenaryState)
                 {
                     case MercenaryState.Alert:
@@ -78,7 +70,6 @@ public class MercenaryMovement : MonoBehaviour
                     case MercenaryState.Breakaway:
                     case MercenaryState.Attack:
                         StartCoroutine("MoveTranslate", hitInfo.point);
-                        
                         break;
                         //StartCoroutine("FightMoveTranslate", hitInfo.point);
                         break;
@@ -113,7 +104,7 @@ public class MercenaryMovement : MonoBehaviour
         mercenaryState = MercenaryState.Alert;
         //Vector3 dir = default;
         int range = rnd.Next() / 180;
-        Vector3 Rot = transform.rotation.eulerAngles;
+         Vector3 Rot = transform.rotation.eulerAngles;
         Rot.y += range;
         //
         //dir = transform.position;
@@ -141,15 +132,21 @@ public class MercenaryMovement : MonoBehaviour
         mercenaryState = MercenaryState.Move;
         Vector3 dir = default;
 
-        agent.destination = wayPoint;
-        
+        dir.x = wayPoint.x - transform.position.x;
+        dir.z = wayPoint.z - transform.position.z;
 
         float dist = Vector3.Distance(transform.position, wayPoint);
 
-        anim.SetFloat("MoveBlend", agent.destination.magnitude);
+        anim.SetFloat("MoveBlend", dir.magnitude);
 
-        while (dist >= (moveSpeed * moveSpeed * Time.deltaTime)*2)
+        while (dist >= 1 )
         {
+            transform.Translate(dir.normalized * moveSpeed * Time.deltaTime, Space.World);
+
+            Quaternion lookRotation = Quaternion.LookRotation(dir);
+            Vector3 rotation = Quaternion.Lerp(transform.rotation, lookRotation, Time.deltaTime * moveSpeed).eulerAngles;
+            transform.rotation = Quaternion.Euler(0f, rotation.y, 0f);
+
             insightEnemys = GetSightEnemys();
             dist = Vector3.Distance(transform.position, wayPoint);
             yield return null;
@@ -176,7 +173,7 @@ public class MercenaryMovement : MonoBehaviour
             StartCoroutine("MoveTranslate", wayPoint);
             yield break;
         }
-        agent.destination = wayPoint;
+
         mercenaryState = MercenaryState.Attack;
 
         Vector3 dir = default;
@@ -196,6 +193,8 @@ public class MercenaryMovement : MonoBehaviour
 
         while (dist >= moveSpeed * moveSpeed * Time.deltaTime)
         {
+            transform.Translate(dir.normalized * moveSpeed * Time.deltaTime, Space.World);
+
             Quaternion lookRotation = Quaternion.LookRotation(enemyDir);
             Vector3 rotation = Quaternion.Lerp(transform.rotation, lookRotation, Time.deltaTime * moveSpeed).eulerAngles;
             transform.rotation = Quaternion.Euler(0f, rotation.y, 0f);
@@ -228,29 +227,6 @@ public class MercenaryMovement : MonoBehaviour
         mercenaryState = MercenaryState.Attack;
         int targetStep = 0;
         EnemyFSM enemyDatas = insightEnemysArr[targetStep].GetComponent<EnemyFSM>();
-
-        int shortDistArr = 0;
-        for (int i = 0; i < CoverList.transform.childCount; ++i)
-        {
-            float dist1 = Vector3.Distance(transform.position, CoverList.transform.GetChild(i).transform.position);
-            float dist2 = Vector3.Distance(transform.position,
-                CoverList.transform.GetChild(shortDistArr).transform.position);
-
-            if (dist1 < dist2)
-            {
-                shortDistArr = i;
-            }
-        }
-
-        agent.destination = CoverList.transform.GetChild(shortDistArr).transform.position;
-        float dist = Vector3.Distance(transform.position, agent.destination);
-        anim.SetFloat("MoveBlend", agent.destination.magnitude);
-        while (dist >= (moveSpeed * moveSpeed * Time.deltaTime) * 2f)
-        {
-            dist = Vector3.Distance(transform.position, agent.destination);
-            yield return null;
-        }
-        anim.SetFloat("MoveBlend", 0f);
 
         Vector3 dir = default;
         Ray ray = new Ray(transform.position, transform.forward);
