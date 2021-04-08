@@ -1,3 +1,4 @@
+using NVIDIA.Flex;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -33,10 +34,19 @@ public class PlayerMove : MonoBehaviour
 
     public GameObject hitEffect;
 
+    //컨트롤할 플렉스 오브젝트
+    public GameObject FlexComp;
+    private FlexSourceActor flexSource;
+
+    //물 plane들을 포함한 object
+    public GameObject waterSector;
+
     //애니메이터 변수
     Animator anim;
     void Start()
     {
+        flexSource = FlexComp.GetComponent<FlexSourceActor>();
+
         // 캐릭터 콘트롤러 컴포넌트 받아오기
         cc = GetComponent<CharacterController>();
 
@@ -91,6 +101,7 @@ public class PlayerMove : MonoBehaviour
         // 4. 현재 플레이어 hp를 hp 슬라이더에 반영
         hpSlider.value = (float)hp / (float)maxHp;
 
+
     }
 
     // 플레이어의 피격 함수
@@ -114,4 +125,32 @@ public class PlayerMove : MonoBehaviour
         hitEffect.SetActive(false);
 
     }
+
+
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (flexSource.isActive == true)
+        {
+            return;
+        }
+
+        //waterSector에 존재하는 콜라이더와 접촉시 FlexComp를 작동시킴
+        for (int i = 0; i < waterSector.transform.childCount; ++i)
+        {
+            if (waterSector.transform.GetChild(i).Equals(other.transform))
+                flexSource.isActive = true;
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (flexSource.isActive == true)
+        {
+            flexSource.isActive = false;
+        }
+    }
+
+
+
 }
