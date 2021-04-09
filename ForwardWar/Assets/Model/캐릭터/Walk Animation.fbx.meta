@@ -1,42 +1,12 @@
 fileFormatVersion: 2
-guid: 8f10c7c9078cb344a977852ea72f1db3
+guid: d075cc02a01e25f4099cabf752983c76
 ModelImporter:
   serializedVersion: 20200
   internalIDToNameTable:
   - first:
       74: 1827226128182048838
     second: Take 001
-  externalObjects:
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: 03 - Default
-    second: {fileID: 2100000, guid: 04029846bd152aa49bb26cf363ad1faa, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: 08 - Default
-    second: {fileID: 2100000, guid: 53f6254105e628e4ea62b0b0280a00bd, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: 09 - Default
-    second: {fileID: 2100000, guid: e52ff7cd995057e4fb92932bcbb60b1b, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: GunPart4__Black-Ops-Weapons-M19
-    second: {fileID: 2100000, guid: 53f6254105e628e4ea62b0b0280a00bd, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: GunPart5__Black-Ops-Weapons-M19
-    second: {fileID: 2100000, guid: 53f6254105e628e4ea62b0b0280a00bd, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: Material #12
-    second: {fileID: 2100000, guid: 53f6254105e628e4ea62b0b0280a00bd, type: 2}
+  externalObjects: {}
   materials:
     materialImportMode: 2
     materialName: 0

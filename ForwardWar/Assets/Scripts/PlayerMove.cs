@@ -69,7 +69,7 @@ public class PlayerMove : MonoBehaviour
         dir = dir.normalized;
 
         //이덩 블랜딩 트리를 호출하고 벡터의 크기 값 넘겨주기
-        anim.SetFloat("MoveBlend", dir.magnitude);
+        anim.SetFloat("Blend", dir.magnitude);
 
         // 2-1. 메인 카메라를 기준으로 방향을 변환한다.
         dir = Camera.main.transform.TransformDirection(dir);
@@ -130,7 +130,7 @@ public class PlayerMove : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (flexSource.isActive == true)
+        if (flexSource == null || flexSource.isActive == true)
         {
             return;
         }
@@ -145,7 +145,7 @@ public class PlayerMove : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-        if (flexSource.isActive == true)
+        if (flexSource == null || flexSource.isActive == true)
         {
             flexSource.isActive = false;
         }

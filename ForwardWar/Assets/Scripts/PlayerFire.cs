@@ -52,12 +52,12 @@ public class PlayerFire : MonoBehaviour
         // 마우스 왼쪽 버튼을 누르면 시선이 바라보는 방향으로 총을 발사하고 싶다.
 
         // 마우스 왼쪽 버튼 입력을 받는다.
-        if (Input.GetMouseButtonDown(0) && anim.GetFloat("MoveBlend") == 0)
+        if (Input.GetMouseButtonDown(0) && anim.GetFloat("Blend") == 0)
         {
             //만일 이동블렌드 트리 파라미터의 값이 0이면 공격 실행
-            if(anim.GetFloat("MoveBlend") == 0)
+            if(anim.GetFloat("Blend") == 0)
             {
-                anim.SetTrigger("Attack");
+                //anim.SetTrigger("Attack");
             }
             // 레이를 생성하고 발사될 위치와 진행 방향을 설정한다.
             Ray ray = new Ray(Camera.main.transform.position, Camera.main.transform.forward);
