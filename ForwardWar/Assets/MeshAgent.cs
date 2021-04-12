@@ -6,6 +6,7 @@ using UnityEngine.AI;
 public class MeshAgent : MonoBehaviour
 {
     public Transform goal;
+    public Terrain terrain;
     private NavMeshAgent agent = null;
 
     // Start is called before the first frame update
