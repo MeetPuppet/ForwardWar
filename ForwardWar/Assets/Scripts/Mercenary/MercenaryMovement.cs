@@ -39,6 +39,9 @@ public class MercenaryMovement : MonoBehaviour
     OperationGuide operationGuide;
     MercenaryState mercenaryState = MercenaryState.Alert;
 
+    public int MaxHP;
+    public int HP;
+
     public float fightRange = 30;
     public float moveSpeed = 7f;
     Animator anim;
@@ -49,12 +52,16 @@ public class MercenaryMovement : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        HP = MaxHP;
         EnemyParent = GameObject.Find("Enemys");
         anim = GetComponentInChildren<Animator>();
         BulletFirePS = BulletFire.GetComponent<ParticleSystem>();
 
-        agent = GetComponent<NavMeshAgent>();
-        agent.speed = moveSpeed;
+        if (agent)
+        {
+            agent = GetComponent<NavMeshAgent>();
+            agent.speed = moveSpeed;
+        }
 
         StartCoroutine("AlertMovement");
     }
@@ -304,6 +311,11 @@ public class MercenaryMovement : MonoBehaviour
             yield return null;
         }
 
+    }
+
+    public void GetDamage(int strengh)
+    {
+        HP -= strengh;
     }
 
     public GameObject BulletFire;

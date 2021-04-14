@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class MercenaryControl : MonoBehaviour
 {
-    public GameObject unit;
-    MercenaryMovement unitMovement;
+    public GameObject Units;
+    MercenaryMovement[] Moves;
 
     public int guideLine
     {
@@ -24,14 +24,12 @@ public class MercenaryControl : MonoBehaviour
     void Start()
     {
         operationGuide = 0;
-        unitMovement = unit.GetComponent<MercenaryMovement>();
-        unitMovement.guideLine = operationGuide;
+        Moves = Units.transform.GetComponentsInChildren<MercenaryMovement>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        unitMovement.guideLine = operationGuide;
         if (Input.GetKeyDown(KeyCode.Tab))
         {
             if(operationGuide == 0)
@@ -42,6 +40,12 @@ public class MercenaryControl : MonoBehaviour
             {
                 operationGuide = 0;
             }
+        }
+
+
+        for (int i =0; i < Moves.Length; ++i)
+        {
+            Moves[i].guideLine = operationGuide;
         }
     }
 
