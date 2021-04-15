@@ -39,8 +39,8 @@ public class MercenaryMovement : MonoBehaviour
     OperationGuide operationGuide;
     MercenaryState mercenaryState = MercenaryState.Alert;
 
-    public int MaxHP;
-    public int HP;
+    public int MaxHP = 10;
+    public int HP = 10;
 
     public float fightRange = 30;
     public float moveSpeed = 7f;
@@ -57,6 +57,7 @@ public class MercenaryMovement : MonoBehaviour
         anim = GetComponentInChildren<Animator>();
         BulletFirePS = BulletFire.GetComponent<ParticleSystem>();
 
+        agent = GetComponent<NavMeshAgent>();
         if (agent)
         {
             agent = GetComponent<NavMeshAgent>();
@@ -69,28 +70,37 @@ public class MercenaryMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.F))
+
+    }
+
+    public void ActiveStateMovement(string orderStr)
+    {
+        switch (mercenaryState)
         {
-            StopAllCoroutines();
-            Ray ray = new Ray(Camera.main.transform.position, Camera.main.transform.forward);
-            RaycastHit hitInfo = new RaycastHit();
+            case MercenaryState.Alert:
+            case MercenaryState.Move:
+            case MercenaryState.Breakaway:
+            case MercenaryState.Attack:
+                StartCoroutine(orderStr);
 
-            if (Physics.Raycast(ray, out hitInfo))
-            {
+                break;
+                //StartCoroutine("FightMoveTranslate", hitInfo.point);
+                break;
+        }
+    }
+    public void ActiveStateMovement(string orderStr, Vector3 option)
+    {
+        switch (mercenaryState)
+        {
+            case MercenaryState.Alert:
+            case MercenaryState.Move:
+            case MercenaryState.Breakaway:
+            case MercenaryState.Attack:
+                StartCoroutine(orderStr, option);
 
-                switch (mercenaryState)
-                {
-                    case MercenaryState.Alert:
-                    case MercenaryState.Move:
-                    case MercenaryState.Breakaway:
-                    case MercenaryState.Attack:
-                        StartCoroutine("MoveTranslate", hitInfo.point);
-
-                        break;
-                        //StartCoroutine("FightMoveTranslate", hitInfo.point);
-                        break;
-                }
-            }
+                break;
+                //StartCoroutine("FightMoveTranslate", hitInfo.point);
+                break;
         }
     }
 
@@ -236,28 +246,38 @@ public class MercenaryMovement : MonoBehaviour
         int targetStep = 0;
         EnemyFSM enemyDatas = insightEnemysArr[targetStep].GetComponent<EnemyFSM>();
 
-        int shortDistArr = 0;
-        for (int i = 0; i < CoverList.transform.childCount; ++i)
+        //생존시간 처리용
         {
-            float dist1 = Vector3.Distance(transform.position, CoverList.transform.GetChild(i).transform.position);
-            float dist2 = Vector3.Distance(transform.position,
-                CoverList.transform.GetChild(shortDistArr).transform.position);
-
-            if (dist1 < dist2)
+            int shortDistArr = -1;
+            float dist1 = 0f;
+            for (int i = 0; i < CoverList.transform.childCount; ++i)
             {
-                shortDistArr = i;
+                if (CoverList.transform.GetChild(i).transform.GetComponent<CoverData>().useLock)
+                    continue;
+
+                dist1 = Vector3.Distance(transform.position, CoverList.transform.GetChild(i).transform.position);
+                float dist2 = Vector3.Distance(transform.position,
+                    CoverList.transform.GetChild(shortDistArr).transform.position);
+
+                if (dist2 < 10 && dist1 < dist2)
+                {
+                    shortDistArr = i;
+                }
+            }
+
+            if (shortDistArr != -1)
+            {
+                agent.destination = CoverList.transform.GetChild(shortDistArr).transform.position;
+                float dist = Vector3.Distance(transform.position, agent.destination);
+                anim.SetFloat("MoveBlend", agent.destination.magnitude);
+                while (dist >= (moveSpeed * moveSpeed * Time.deltaTime) * 2f)
+                {
+                    dist = Vector3.Distance(transform.position, agent.destination);
+                    yield return null;
+                }
+                anim.SetFloat("MoveBlend", 0f);
             }
         }
-
-        agent.destination = CoverList.transform.GetChild(shortDistArr).transform.position;
-        float dist = Vector3.Distance(transform.position, agent.destination);
-        anim.SetFloat("MoveBlend", agent.destination.magnitude);
-        while (dist >= (moveSpeed * moveSpeed * Time.deltaTime) * 2f)
-        {
-            dist = Vector3.Distance(transform.position, agent.destination);
-            yield return null;
-        }
-        anim.SetFloat("MoveBlend", 0f);
 
         Vector3 dir = default;
         Ray ray = new Ray(transform.position, transform.forward);
