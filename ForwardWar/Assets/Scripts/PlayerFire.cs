@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerFire : MonoBehaviour
 {
@@ -23,22 +24,44 @@ public class PlayerFire : MonoBehaviour
     // 발사 무기 공격력
     public int weaponPower = 5;
 
+    //수류탄의 쿨타임 관리
+    public Image skill1image;
+    public float cooldown_skill1 = 7;
+    bool isCooldown_skill1 = false;
+
+    //먹기 관리
+    Transform player;
+    public KeyCode eat;
+    public Image eatimage;
+    public float cooldown_eat = 5;
+    bool isCooldown_eat = false;
+
     //애니메이터 변수
     Animator anim;
     void Start()
     {
+        // 플레이어의 트랜스폼 컴포넌트 받아오기
+        player = GameObject.Find("Player").transform;
+
         // 피격 이펙트 오브젝트에서 파티클 시스템 컴포넌트 가져오기
         ps = bulletEffect.GetComponent<ParticleSystem>();
 
         //애니메이터 컴포넌트 가져오기
         anim = GetComponentInChildren<Animator>();
+
+        //스킬 쿨타임 초기값
+        skill1image.fillAmount = 0f;
+        eatimage.fillAmount = 0f;
     }
 
     void Update()
     {
-        // 마우스 오른쪽 버튼 입력을 받는다.
-        if (Input.GetMouseButtonDown(1))
+        // 마우스 오른쪽 버튼 입력을 받는다.  // 현재 수류탄
+        if (Input.GetMouseButtonDown(1) && isCooldown_skill1 == false)
         {
+            isCooldown_skill1 = true;
+            skill1image.fillAmount = 1f;
+
             // 수류탄 오브젝트를 생성하고, 수류탄의 생성 위치를 발사 위치로 한다.
             GameObject bomb = Instantiate(bombFactory);
             bomb.transform.position = firePosition.transform.position;
@@ -49,6 +72,33 @@ public class PlayerFire : MonoBehaviour
             // 카메라의 정면 방향으로 수류탄에 물리적인 힘을 가한다.
             rb.AddForce(Camera.main.transform.forward * throwPower, ForceMode.Impulse);
         }
+        if (isCooldown_skill1)
+        {
+            skill1image.fillAmount -= 1f / cooldown_skill1 * Time.deltaTime;
+            if(skill1image.fillAmount <= 0f)
+            {
+                skill1image.fillAmount = 0f;
+                isCooldown_skill1 = false;
+            }
+        }
+        if(Input.GetKey(eat) && isCooldown_eat == false)
+        {
+            eatimage.fillAmount = 1f;
+            isCooldown_eat = true;
+            player.GetComponent<PlayerMove>().EatAction();
+        }
+
+        if (isCooldown_eat)
+        {
+            eatimage.fillAmount -= 1f / cooldown_eat * Time.deltaTime;
+            player.GetComponent<PlayerMove>().hp += 5f / cooldown_eat * Time.deltaTime;
+            if (eatimage.fillAmount <= 0f)
+            {
+                eatimage.fillAmount = 0f;
+                isCooldown_eat = false;
+            }
+        }
+
         // 마우스 왼쪽 버튼을 누르면 시선이 바라보는 방향으로 총을 발사하고 싶다.
 
         // 마우스 왼쪽 버튼 입력을 받는다.
