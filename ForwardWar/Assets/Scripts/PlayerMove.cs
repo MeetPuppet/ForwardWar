@@ -25,10 +25,10 @@ public class PlayerMove : MonoBehaviour
     public bool isJumping = false;
 
     // 플레이어 체력 변수
-    public int hp = 20;
+    public float hp = 20;
 
     // 최대 체력 변수
-    int maxHp = 20;
+    float maxHp = 20;
 
     public Slider hpSlider;
 
@@ -36,6 +36,7 @@ public class PlayerMove : MonoBehaviour
 
     //컨트롤할 플렉스 오브젝트
     public GameObject FlexComp;
+
     private FlexSourceActor flexSource;
 
     //물 plane들을 포함한 object
@@ -57,14 +58,12 @@ public class PlayerMove : MonoBehaviour
 
     void Update()
     {
-        // 키보드 <W>, <A>, <S>, <D> 버튼을 입력하면 캐릭터를 그 방향으로 이동시키고 싶다.
-        // 키보드 <Space> 버튼을 입력하면 캐릭터를 수직으로 점프시키고 싶다.
-
-        // 1. 사용자의 입력을 받는다.
+       
+        // 사용자의 입력을 받는다.
         float h = Input.GetAxis("Horizontal");
         float v = Input.GetAxis("Vertical");
 
-        // 2. 이동 방향을 설정한다.
+        // 이동 방향을 설정
         Vector3 dir = new Vector3(h, 0, v);
         dir = dir.normalized;
 
@@ -124,6 +123,21 @@ public class PlayerMove : MonoBehaviour
         //피격 UI 종료
         hitEffect.SetActive(false);
 
+    }
+
+    public void EatAction()
+    {
+        // 에너미의 공격력만큼 플레이어의 체력을 깎는다.
+        if (hp > 0)
+        {
+            StartCoroutine(PlayEatEffect());
+        }
+    }
+    IEnumerator PlayEatEffect()
+    {
+        //먹는 애니메이션 실행
+
+        yield return new WaitForSeconds(0.3f);
     }
 
 
