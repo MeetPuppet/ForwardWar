@@ -11,11 +11,7 @@ public class SpawnEnemy : MonoBehaviour
     void Start()
     {
         enemy = Instantiate<GameObject>(enemyPrefab, transform);
-
-        Vector3 pos = new Vector3(-778.057129f, 366.935852f, 1335.54895f);
-        enemy.transform.localPosition = pos;
-
-
+        enemy.transform.localPosition = Vector3.zero;
     }
 
     // Update is called once per frame
@@ -24,9 +20,12 @@ public class SpawnEnemy : MonoBehaviour
         if(enemy == null)
         {
             enemy = Instantiate<GameObject>(enemyPrefab, transform);
+            enemy.transform.localPosition = Vector3.zero;
 
-            Vector3 pos = new Vector3(-778.057129f, 366.935852f, 1335.54895f);
-            enemy.transform.localPosition = pos;
+            //스포너 밖인 경우
+            //enemy = Instantiate<GameObject>(enemyPrefab, transform);
+            //Vector3 pos = new Vector3(-778.057129f, 366.935852f, 1335.54895f);
+            //enemy.transform.localPosition = pos;
         }
     }
 }

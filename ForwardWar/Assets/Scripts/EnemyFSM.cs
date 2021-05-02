@@ -1,3 +1,4 @@
+using NVIDIA.Flex;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -56,6 +57,7 @@ public class EnemyFSM : MonoBehaviour
     public Slider hpSlider;
 
     Animator anim;
+    public GameObject Blood;
 
     void Start()
     {
@@ -247,6 +249,7 @@ public class EnemyFSM : MonoBehaviour
         // 현재 상태를 이동 상태로 전환한다.
         m_State = EnemyState.Move;
         print("상태 전환: Damaged -> Move");
+        yield break;
     }
 
     // 죽음 상태 함수
@@ -270,5 +273,25 @@ public class EnemyFSM : MonoBehaviour
 
         print("소멸!");
         Destroy(gameObject);
+        yield break;
+    }
+
+    public void BloodActive(RaycastHit ray)
+    {
+        StartCoroutine("FlowBlood", ray);
+    }
+
+
+    IEnumerator FlowBlood(RaycastHit ray)
+    {
+        Blood.transform.position = ray.point;
+        Blood.transform.eulerAngles = ray.normal;
+        FlexSourceActor act = Blood.GetComponent<FlexSourceActor>();
+        act.isActive = true;
+
+        yield return new WaitForSeconds(0.1f);
+        act.isActive = false;
+
+        yield break;
     }
 }

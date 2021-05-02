@@ -131,6 +131,7 @@ public class PlayerFire : MonoBehaviour
                 if (enemy != null)
                 {
                     enemy.HitEnemy(3);
+                    enemy.BloodActive(hitInfo);
                 }
             }
         }
