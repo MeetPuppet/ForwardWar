@@ -310,41 +310,6 @@ namespace NVIDIA.Flex
                     }
                 }
             }
-            else if(collider is TerrainCollider)
-            {
-                TerrainCollider terrainCollider = collider as TerrainCollider;
-                TerrainData data = terrainCollider.terrainData;
-
-                Bounds bounds = data.bounds;
-                //data.
-
-                Vector3 scale = collider.transform.lossyScale;
-                Vector3 min = new Vector3(bounds.min.x * scale.x, bounds.min.y * scale.y, bounds.min.z * scale.z);
-                Vector3 max = new Vector3(bounds.max.x * scale.x, bounds.max.y * scale.y, bounds.max.z* scale.z);
-                Vector3[] vertices = new Vector3[data.alphamapWidth * data.alphamapHeight];
-                int[] triangles = new int[data.detailPatchCount];
-
-
-                int[] uniqueInds = new int[vertices.Length];
-                int[] originalToUniqueMap = new int[vertices.Length];
-                int uniqueVertCount = FlexExt.CreateWeldedMeshIndices(ref vertices[0], vertices.Length, ref uniqueInds[0], ref originalToUniqueMap[0], 0.0001f); // @@@
-                Vector4[] uniqueVerts = new Vector4[uniqueVertCount];
-                for (int i = 0; i < uniqueVertCount; ++i) uniqueVerts[i] = new Vector3(vertices[uniqueInds[i]].x * scale.x, vertices[uniqueInds[i]].y * scale.y, vertices[uniqueInds[i]].z * scale.z);
-                Flex.Buffer vertexBuffer = Flex.AllocBuffer(FlexContainer.library, uniqueVerts.Length, sizeof(float) * 4, Flex.BufferType.Host);
-                FlexUtils.FastCopy(uniqueVerts, Flex.Map(vertexBuffer)); Flex.Unmap(vertexBuffer);
-                int[] indices = new int[triangles.Length];
-                for (int i = 0; i < triangles.Length; ++i) indices[i] = originalToUniqueMap[triangles[i]];
-                Flex.Buffer indexBuffer = Flex.AllocBuffer(FlexContainer.library, indices.Length, sizeof(int), Flex.BufferType.Host);
-                FlexUtils.FastCopy(indices, Flex.Map(indexBuffer)); Flex.Unmap(indexBuffer);
-                m_flexMesh = Flex.CreateTriangleMesh(FlexContainer.library);
-                Flex.UpdateTriangleMesh(FlexContainer.library, m_flexMesh, vertexBuffer, indexBuffer, uniqueVertCount, indices.Length / 3, ref min, ref max);
-                geometry.triMesh.scale = Vector3.one;
-                geometry.triMesh.mesh = m_flexMesh;
-                Flex.FreeBuffer(vertexBuffer);
-                Flex.FreeBuffer(indexBuffer);
-                flags = Flex.MakeShapeFlags(Flex.CollisionShapeType.TriangleMesh, dynamic);
-                Flex.GetTriangleMeshBounds(FlexContainer.library, m_flexMesh, ref shapeMin, ref shapeMax);
-            }
             shapePrevPosition = collider.transform.position + collider.transform.rotation * shapeCenter;
             shapePrevRotation = collider.transform.rotation * shapePreRotation;
         }
