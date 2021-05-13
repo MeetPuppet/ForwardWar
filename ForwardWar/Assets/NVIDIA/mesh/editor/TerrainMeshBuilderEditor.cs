@@ -16,11 +16,21 @@ public class TerrainMeshBuilderEditor : Editor
     {
 
         EditorGUILayout.LabelField("Terrain Size");
-        EditorGUILayout.BeginHorizontal();
+        EditorGUILayout.BeginHorizontal("Box");
         EditorGUILayout.LabelField("Width X Height");
         module.Width = EditorGUILayout.IntField(module.Width);
         module.Height = EditorGUILayout.IntField(module.Height);
         EditorGUILayout.EndHorizontal();
+
+        EditorGUILayout.LabelField("Mesh Size");
+        GUILayout.BeginVertical("Box");
+        {
+            EditorGUILayout.LabelField("Mag");
+            module.Mag = EditorGUILayout.IntField(module.Mag);
+            EditorGUILayout.LabelField("Scale");
+            module.Scale = EditorGUILayout.IntField(module.Scale);
+        }
+        GUILayout.EndVertical();
 
         EditorGUILayout.LabelField("Iterator Control");
         GUILayout.BeginVertical("Box");
@@ -49,7 +59,25 @@ public class TerrainMeshBuilderEditor : Editor
         module.HeightBlock = EditorGUILayout.Toggle(module.HeightBlock);
         EditorGUILayout.EndHorizontal();
 
-        if (GUILayout.Button("generate"))
-            module.generateMesh();
+        EditorGUILayout.LabelField("Generator");
+        EditorGUILayout.BeginVertical("Box");
+        {
+            EditorGUILayout.BeginHorizontal();
+            {
+                if (GUILayout.Button("Vertices"))
+                    module.generateVertices();
+                if (GUILayout.Button("Triangles"))
+                    module.generateTriangles();
+            }
+            EditorGUILayout.EndHorizontal();
+
+            if (GUILayout.Button("GenerateAll"))
+                module.generateMesh();
+
+            //if (GUILayout.Button("DivideGenerate"))
+            //    module.DivideMesh();
+
+        }
+        EditorGUILayout.EndVertical();
     }
 }
