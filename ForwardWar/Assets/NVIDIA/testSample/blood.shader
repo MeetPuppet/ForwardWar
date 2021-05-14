@@ -1,31 +1,48 @@
 Shader "Custom/blood"
 {
-    Properties {
-	_Color("Color", Color) = (0,0,0,1)
+	Properties{
+	_Color("Main Color", Color) = (1,1,1,1)
 	_MainTex("Base (RGB) Trans (A)", 2D) = "white" {}
-	_MainTex2("Fog (RGB) Trans (A)", 2D) = "white" {}
-}
+	}
 
-SubShader {
-	CGPROGRAM
-    #pragma surface surf Lambert alpha:blend
+		SubShader{
+			Tags {"Queue" = "Transparent" "IgnoreProjector" = "True" "RenderType" = "Transparent"}
+			LOD 200
+			Blend SrcAlpha OneMinusSrcAlpha
+			Cull Off
 
-	sampler2D _MainTex;
-	sampler2D _MainTex2;
-	fixed4     _Color;
+			CGPROGRAM
+			#pragma surface surf Lambert alpha:blend
 
-    struct Input {
-        float2 uv_MainTex;
-    };
+			sampler2D _MainTex;
+			fixed4     _Color;
 
-    void surf (Input IN, inout SurfaceOutput o) {
-		fixed4 colorZero = tex2D(_MainTex, IN.uv_MainTex);
-		fixed4 colorMid = tex2D(_MainTex2, IN.uv_MainTex);
+			struct Input {
+				float2 uv_MainTex;
+				float2 location;
+			};
 
-		o.Albedo = _Color;
-		float alpha = 1.0f - colorZero.g - colorMid.g / 4;
-		o.Albedo = alpha;
-    }
-    ENDCG
-}
+			float powerForPos(float4 pos, float2 nearVertex);
+
+			void vert(inout appdata_full vertexData, out Input outData) {
+				float4 pos = UnityObjectToClipPos(vertexData.vertex);
+				float4 posWorld = mul(unity_ObjectToWorld, vertexData.vertex);
+				outData.uv_MainTex = vertexData.texcoord;
+				outData.location = posWorld.xz;
+			}
+
+			void surf(Input IN, inout SurfaceOutput o) {
+				fixed4 baseColor = tex2D(_MainTex, IN.uv_MainTex) * _Color;
+
+				float alpha = baseColor.a;
+
+				o.Albedo = baseColor.rgb;
+				o.Alpha = alpha;
+			}
+
+
+			ENDCG
+	}
+
+		Fallback "Transparent/VertexLit"
 }
