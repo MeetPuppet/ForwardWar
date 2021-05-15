@@ -30,6 +30,8 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
+using MyThread;
+
 namespace NVIDIA.Flex
 {
     [ExecuteInEditMode]
@@ -38,6 +40,7 @@ namespace NVIDIA.Flex
     public class FlexSourceActor : FlexActor
     {
         #region Properties
+
 
         public new FlexSourceAsset asset
         {
@@ -133,6 +136,7 @@ namespace NVIDIA.Flex
 
         void UpdateParticles(FlexContainer.ParticleData _particleData)
         {
+
             if (handle && m_indices != null && m_indices.Length > 0)
             {
                 float dT = Application.isPlaying ? Time.fixedDeltaTime : 0;
@@ -178,6 +182,9 @@ namespace NVIDIA.Flex
 
                 SetIndices(m_indices, m_count);
             }
+
+            if(GameManager.thread != null)
+                GameManager.thread.UpdateParticle(_particleData, m_indices.Length);
         }
 
         [NonSerialized]
