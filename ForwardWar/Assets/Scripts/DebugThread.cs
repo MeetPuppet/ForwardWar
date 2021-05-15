@@ -44,27 +44,32 @@ namespace MyThread
         {
             while (isWork)
             {
-               //if (particleData == null)
-               //    continue;
-               //
-               //for (int i = 0; i < max; ++i)
-               //{
-               //    Vector4 getPart = _particleData.GetParticle(i);
-               //    if (getPart == null)
-               //    {
-               //        Debug.Log($"{i}");
-               //        break;
-               //    }
-               //    else if (getPart != Vector4.zero)
-               //    {
-               //        Debug.Log($"{i}, {getPart}");
-               //    }
-               //
-               //}
+                //if (particleData == null)
+                //    continue;
+                //
+                //for (int i = 0; i < max; ++i)
+                //{
+                //    Vector4 getPart = _particleData.GetParticle(i);
+                //    if (getPart == null)
+                //    {
+                //        Debug.Log($"{i}");
+                //        break;
+                //    }
+                //    else if (getPart != Vector4.zero)
+                //    {
+                //        Debug.Log($"{i}, {getPart}");
+                //    }
+                //
+                //}
 
             }
 
 
+        }
+
+        public void UpdateTexColor(FlexBrushInfo info)
+        {
+            //texInfo = info;
         }
     }
 
