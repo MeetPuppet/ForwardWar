@@ -18,6 +18,9 @@ public class PlayerFire : MonoBehaviour
     // 투척 무기 오브젝트
     public GameObject bombFactory;
 
+    // 투척 무기 오브젝트
+    public GameObject SmokeFactory;
+
     // 투척 파워
     public float throwPower = 15f;
 
@@ -25,9 +28,17 @@ public class PlayerFire : MonoBehaviour
     public int weaponPower = 5;
 
     //수류탄의 쿨타임 관리
+    //public KeyCode skill1;
     public Image skill1image;
     public float cooldown_skill1 = 7;
     bool isCooldown_skill1 = false;
+
+
+    //연막탄의 쿨타임 관리
+    public KeyCode skill2;
+    public Image skill2image;
+    public float cooldown_skill2 = 11;
+    bool isCooldown_skill2 = false;
 
     //먹기 관리
     Transform player;
@@ -51,9 +62,10 @@ public class PlayerFire : MonoBehaviour
 
         //스킬 쿨타임 초기값
         skill1image.fillAmount = 0f;
+        skill2image.fillAmount = 0f;
         eatimage.fillAmount = 0f;
     }
-
+ 
     void Update()
     {
         // 마우스 오른쪽 버튼 입력을 받는다.  // 현재 수류탄
@@ -81,7 +93,34 @@ public class PlayerFire : MonoBehaviour
                 isCooldown_skill1 = false;
             }
         }
-        if(Input.GetKey(eat) && isCooldown_eat == false)
+
+        if (Input.GetKey(skill2) && isCooldown_skill2 == false)
+        {
+            isCooldown_skill2 = true;
+            skill2image.fillAmount = 1f;
+
+            // 수류탄 오브젝트를 생성하고, 수류탄의 생성 위치를 발사 위치로 한다.
+            GameObject smoke_shell = Instantiate(SmokeFactory);
+            smoke_shell.transform.position = firePosition.transform.position;
+
+            // 수류탄 오브젝트의 Rigidbody 컴포넌트를 가져온다.
+            Rigidbody rb = smoke_shell.GetComponent<Rigidbody>();
+
+            // 카메라의 정면 방향으로 수류탄에 물리적인 힘을 가한다.
+            rb.AddForce(Camera.main.transform.forward * throwPower, ForceMode.Impulse);
+        }
+        if (isCooldown_skill2)
+        {
+            skill2image.fillAmount -= 1f / cooldown_skill2 * Time.deltaTime;
+            if (skill2image.fillAmount <= 0f)
+            {
+                skill2image.fillAmount = 0f;
+                isCooldown_skill2 = false;
+            }
+        }
+
+
+        if (Input.GetKey(eat) && isCooldown_eat == false)
         {
             eatimage.fillAmount = 1f;
             isCooldown_eat = true;
@@ -107,7 +146,7 @@ public class PlayerFire : MonoBehaviour
             //만일 이동블렌드 트리 파라미터의 값이 0이면 공격 실행
             if(anim.GetFloat("Blend") == 0)
             {
-                //anim.SetTrigger("Attack");
+                anim.SetTrigger("Attack");
             }
             // 레이를 생성하고 발사될 위치와 진행 방향을 설정한다.
             Ray ray = new Ray(Camera.main.transform.position, Camera.main.transform.forward);
