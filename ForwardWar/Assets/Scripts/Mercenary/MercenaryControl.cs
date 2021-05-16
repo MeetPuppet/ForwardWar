@@ -27,8 +27,6 @@ public class MercenaryControl : MonoBehaviour
         Moves = Units.transform.GetComponentsInChildren<MercenaryMovement>();
     }
 
-
-    public GameObject CoverList;
     // Update is called once per frame
     void Update()
     {

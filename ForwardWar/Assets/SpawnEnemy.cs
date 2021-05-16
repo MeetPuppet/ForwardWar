@@ -4,36 +4,35 @@ using UnityEngine;
 
 public class SpawnEnemy : MonoBehaviour
 {
-    public GameObject BillboadFoward;
     public int maxSpawn = 1;
-    int nowSpawn = 0;
-    public GameObject enemyPrefab;
-    public GameObject enemy;
 
-    // Start is called before the first frame update
+    public GameObject enemyPrefab;
+    public Transform EnemyParent;
+
+    GameObject enemy;
     void Start()
     {
-        enemy = Instantiate<GameObject>(enemyPrefab, transform);
-        enemy.transform.localPosition = Vector3.zero;
-        Billboard bill = enemy.GetComponentInChildren<Billboard>();
-        bill.SetPlayerPos(BillboadFoward.transform);
+        Spawn();
     }
 
     // Update is called once per frame
     void Update()
     {
-        if(enemy == null && nowSpawn < maxSpawn)
+        if(enemy == null && maxSpawn > 0)
         {
-            enemy = Instantiate<GameObject>(enemyPrefab, transform);
-            enemy.transform.localPosition = Vector3.zero;
-            Billboard bill = enemy.GetComponentInChildren<Billboard>();
-            bill.SetPlayerPos(BillboadFoward.transform);
-            ++nowSpawn;
+            //enemy = Instantiate<GameObject>(enemyPrefab, transform);
+            //enemy.transform.localPosition = Vector3.zero;
+            --maxSpawn;
 
             //스포너 밖인 경우
-            //enemy = Instantiate<GameObject>(enemyPrefab, transform);
-            //Vector3 pos = new Vector3(-778.057129f, 366.935852f, 1335.54895f);
-            //enemy.transform.localPosition = pos;
+            Spawn();
         }
+    }
+
+    void Spawn()
+    {
+        enemy = Instantiate<GameObject>(enemyPrefab, EnemyParent);
+        Vector3 pos = new Vector3(transform.position.x, transform.position.y, transform.position.z);
+        enemy.transform.position = pos;
     }
 }

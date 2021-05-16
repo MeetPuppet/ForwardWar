@@ -10,11 +10,6 @@ public class Billboard : MonoBehaviour
     void Update()
     {
         if(target != null)
-            transform.forward = target.forward;
-    }
-
-    public void SetPlayerPos(Transform player)
-    {
-        target = player;
+            transform.forward = Camera.main.transform.forward;
     }
 }
