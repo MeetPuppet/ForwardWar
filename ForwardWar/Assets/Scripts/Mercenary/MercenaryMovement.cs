@@ -24,6 +24,7 @@ public class MercenaryMovement : MonoBehaviour
     public GameObject Commander;
     private NavMeshAgent agent = null;
     public GameObject CoverList;
+    public Transform GuardPosition;
 
     public int guideLine
     {
@@ -142,7 +143,17 @@ public class MercenaryMovement : MonoBehaviour
             Vector3.Lerp(transform.rotation.eulerAngles, Rot, Time.deltaTime * moveSpeed);
 
             insightEnemys = GetSightEnemys();
-            if (insightEnemys != null)
+
+
+            
+
+            float dist = Vector3.Distance(transform.position, Commander.transform.position);
+            if(dist > 30)
+            {
+                StartCoroutine("returnGuradPosition", GuardPosition);
+                yield break;
+            }
+            else if (insightEnemys != null)
             {
                 StartCoroutine("FightEnemys", insightEnemys);
                 yield break;
@@ -153,12 +164,34 @@ public class MercenaryMovement : MonoBehaviour
         insightEnemys = GetSightEnemys();
     }
 
+    IEnumerator returnGuradPosition(Transform GuardPos)
+    {
+        mercenaryState = MercenaryState.Move;
+        agent.destination = GuardPos.position;
+
+        float dist = Vector3.Distance(transform.position, GuardPos.position);
+
+        anim.SetFloat("MoveBlend", agent.destination.magnitude);
+
+        while (dist >= (moveSpeed * moveSpeed * Time.deltaTime) * 2)
+        {
+            agent.destination = GuardPos.position;
+            dist = Vector3.Distance(transform.position, GuardPos.position);
+            yield return null;
+        }
+
+        mercenaryState = MercenaryState.Alert;
+        StartCoroutine("AlertMovement");
+        anim.SetFloat("MoveBlend", 0f);
+        yield break;
+    }
+
     IEnumerator MoveTranslate(Vector3 wayPoint)
     {
         mercenaryState = MercenaryState.Move;
         Vector3 dir = default;
-
         agent.destination = wayPoint;
+
 
 
         float dist = Vector3.Distance(transform.position, wayPoint);
@@ -179,10 +212,12 @@ public class MercenaryMovement : MonoBehaviour
                 StartCoroutine("FightEnemys", insightEnemys);
                 yield break;
             }
+
         }
         mercenaryState = MercenaryState.Alert;
         StartCoroutine("AlertMovement");
         anim.SetFloat("MoveBlend", 0f);
+        yield break;
     }
 
     IEnumerator FightMoveTranslate(Vector3 wayPoint)
@@ -238,6 +273,7 @@ public class MercenaryMovement : MonoBehaviour
         mercenaryState = MercenaryState.Alert;
         StartCoroutine("AlertMovement");
         anim.SetFloat("MoveBlend", 0f);
+        yield break;
     }
 
     IEnumerator FightEnemys(GameObject[] insightEnemysArr)
@@ -256,8 +292,12 @@ public class MercenaryMovement : MonoBehaviour
                     continue;
 
                 dist1 = Vector3.Distance(transform.position, CoverList.transform.GetChild(i).transform.position);
-                float dist2 = Vector3.Distance(transform.position,
-                    CoverList.transform.GetChild(shortDistArr).transform.position);
+                float dist2 = float.MaxValue;
+                if (shortDistArr != -1)
+                {
+                    dist2 = Vector3.Distance(transform.position,
+                       CoverList.transform.GetChild(shortDistArr).transform.position);
+                }
 
                 if (dist2 < 10 && dist1 < dist2)
                 {
@@ -330,6 +370,7 @@ public class MercenaryMovement : MonoBehaviour
 
             yield return null;
         }
+        yield break;
 
     }
 
@@ -350,5 +391,6 @@ public class MercenaryMovement : MonoBehaviour
 
         BulletFirePS.Stop();
         BulletFire.SetActive(false);
+        yield break;
     }
 }
