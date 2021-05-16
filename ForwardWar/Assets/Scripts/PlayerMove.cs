@@ -39,8 +39,8 @@ public class PlayerMove : MonoBehaviour
 
     private FlexSourceActor flexSource;
 
-    //물 plane들을 포함한 object
-    public GameObject waterSector;
+    ////물 plane들을 포함한 object
+    //public GameObject waterSector;
 
     //애니메이터 변수
     Animator anim;
@@ -69,8 +69,6 @@ public class PlayerMove : MonoBehaviour
         dir = dir.normalized;
 
         //변경지점
-
-        //만일 이동블렌드 트리 파라미터의 값이 0이면 공격 실행
         if (hp <= 0f)
         {
             anim.SetBool("Dead", true);
@@ -204,11 +202,11 @@ public class PlayerMove : MonoBehaviour
         }
 
         //waterSector에 존재하는 콜라이더와 접촉시 FlexComp를 작동시킴
-        for (int i = 0; i < waterSector.transform.childCount; ++i)
-        {
-            if (waterSector.transform.GetChild(i).Equals(other.transform))
-                flexSource.isActive = true;
-        }
+        //for (int i = 0; i < waterSector.transform.childCount; ++i)
+        //{
+        //    if (waterSector.transform.GetChild(i).Equals(other.transform))
+        //        flexSource.isActive = true;
+        //}
     }
 
     private void OnTriggerExit(Collider other)
