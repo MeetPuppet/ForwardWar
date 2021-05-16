@@ -5,15 +5,17 @@ using UnityEngine;
 [ExecuteInEditMode]
 public class TerrainMeshBuilder : MonoBehaviour
 {
-    public int Width = 1000;
-    public int Height = 1000;
+    public bool AdvanceMode = false;
+
+    public int Width = 255;
+    public int Height = 255;
     public int Mag = 3;
-    public int Scale = 1;
+    public int Scale = 2;
 
     public int startX = 0;
-    public int endX = 1000;
-    public int startY = 0;
-    public int endY = 1000;
+    public int endX = 171;
+    public int startY = 84;
+    public int endY = 255;
 
     public bool WidthBlock = false;
     public bool HeightBlock = false;
