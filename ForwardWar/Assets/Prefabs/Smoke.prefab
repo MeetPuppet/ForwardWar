@@ -4876,3 +4876,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   destroyTime: 20
+  is_smoke: 1

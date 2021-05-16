@@ -9,10 +9,10 @@ public class DestroyEffect : MonoBehaviour
     private ParticleSystem partS;
     // 경과 시간 측정용 변수
     float currentTime = 0;
-
+    public bool is_smoke = false;
     void Update()
     {
-        if (currentTime > (destroyTime - 14))
+        if (currentTime > (destroyTime - 14) && is_smoke)
         {
             partS = GetComponent<ParticleSystem>();
             partS.Stop();

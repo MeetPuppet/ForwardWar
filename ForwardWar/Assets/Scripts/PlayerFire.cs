@@ -104,10 +104,10 @@ public class PlayerFire : MonoBehaviour
             smoke_shell.transform.position = firePosition.transform.position;
 
             // 수류탄 오브젝트의 Rigidbody 컴포넌트를 가져온다.
-            Rigidbody rb = smoke_shell.GetComponent<Rigidbody>();
+            Rigidbody arb = smoke_shell.GetComponent<Rigidbody>();
 
             // 카메라의 정면 방향으로 수류탄에 물리적인 힘을 가한다.
-            rb.AddForce(Camera.main.transform.forward * throwPower, ForceMode.Impulse);
+            arb.AddForce(Camera.main.transform.forward * throwPower, ForceMode.Impulse);
         }
         if (isCooldown_skill2)
         {
