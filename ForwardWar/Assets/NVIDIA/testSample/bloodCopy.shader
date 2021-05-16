@@ -6,11 +6,8 @@
 Shader "Custom/bloodCopy"
 {
     Properties {
-    _Color ("Main Color", Color) = (1,1,1,1)
+    _Color ("Main Color", Color) = (1,0,0,1)
     _MainTex ("Base (RGB) Trans (A)", 2D) = "white" {}
-    _FogRadius ("FogRadius", Float) = 1.0
-    _FogMaxRadius("FogMaxRadius", Float) = 0.5
-    _Player1_Pos ("_Player1_Pos", Vector) = (0,0,0,1)
 }
 
 SubShader {
@@ -24,9 +21,6 @@ SubShader {
 
     sampler2D _MainTex;
     fixed4     _Color;
-    float     _FogRadius;
-    float     _FogMaxRadius;
-    float4     _Player1_Pos;
 
     struct Input {
         float2 uv_MainTex;
@@ -43,20 +37,13 @@ SubShader {
     }
 
     void surf (Input IN, inout SurfaceOutput o) {
-        fixed4 baseColor = tex2D(_MainTex, IN.uv_MainTex) * _Color;
+        fixed4 baseColor = tex2D(_MainTex, IN.uv_MainTex);
 
-        float alpha = ((baseColor.a + powerForPos(_Player1_Pos, IN.location) ));
-
-        o.Albedo = baseColor.rgb;
-        o.Alpha = alpha;
+		baseColor.rgb = _Color;
+		o.Albedo = baseColor.rgb;
+        o.Alpha = baseColor.a;
     }
 
-    //return 0 if (pos - nearVertex) > _FogRadius
-    float powerForPos(float4 pos, float2 nearVertex) {
-        float atten = clamp(_FogRadius - length(pos.xz - nearVertex.xy), 0.0, _FogRadius);
-
-        return (1.0/_FogMaxRadius)*atten/_FogRadius;
-    }
 
     ENDCG
 }
