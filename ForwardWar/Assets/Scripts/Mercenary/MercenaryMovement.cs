@@ -148,7 +148,7 @@ public class MercenaryMovement : MonoBehaviour
             
 
             float dist = Vector3.Distance(transform.position, Commander.transform.position);
-            if(dist > 30)
+            if(dist > 15)
             {
                 StartCoroutine("returnGuradPosition", GuardPosition);
                 yield break;
@@ -208,6 +208,7 @@ public class MercenaryMovement : MonoBehaviour
             if (insightEnemys != null && dist < fightRange &&
                 operationGuide == OperationGuide.Combat)
             {
+                agent.destination = transform.position;
                 anim.SetFloat("MoveBlend", 0f);
                 StartCoroutine("FightEnemys", insightEnemys);
                 yield break;
@@ -327,6 +328,13 @@ public class MercenaryMovement : MonoBehaviour
 
         while (targetStep < insightEnemysArr.Length)
         {
+            float dist = Vector3.Distance(transform.position, Commander.transform.position);
+            if (dist > 15)
+            {
+                StartCoroutine("returnGuradPosition", GuardPosition);
+                yield break;
+            }
+
             if (insightEnemysArr[targetStep] == null)
             {
                 mercenaryState = MercenaryState.Alert;
@@ -352,6 +360,7 @@ public class MercenaryMovement : MonoBehaviour
                     if (enemyDatas != null)
                     {
                         enemyDatas.HitEnemy(3);
+                        enemyDatas.BloodActive(hitInfo);
                         if (enemyDatas.hp <= 0)
                         {
                             mercenaryState = MercenaryState.Alert;

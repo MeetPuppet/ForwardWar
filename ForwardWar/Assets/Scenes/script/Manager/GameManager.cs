@@ -2,11 +2,15 @@
 using UnityEngine.SceneManagement;
 using System.Collections;
 using MyThread;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
     static GameManager instance;
     public static GameManager Instance { get { Init(); return instance; } }
+
+    public static bool StartGame = false;
+    public static float playTime = 0f;
 
     GameData gameData = new GameData();
     Updater updater = new Updater();
@@ -59,6 +63,10 @@ public class GameManager : MonoBehaviour
     {
         input.OnUpdate();
 
+        if(StartGame)
+        {
+            playTime += Time.deltaTime;
+        }
     }
 
     private void OnApplicationQuit()
@@ -67,13 +75,21 @@ public class GameManager : MonoBehaviour
         thread.Join();
     }
 
-    public void SceneChange(string str)
+
+    public void SceneChange(int SceneNum)
     {
-        SceneManager.LoadScene(1);
+        SceneManager.LoadScene(SceneNum);
+        StartGame = true;
+        playTime = 0f;
     }
 
     public void ExitApp()
     {
         Application.Quit();
+    }
+
+    public static void GameOver()
+    {
+        StartGame = false;
     }
 }
