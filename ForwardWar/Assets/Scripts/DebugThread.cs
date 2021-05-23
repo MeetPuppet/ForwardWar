@@ -14,12 +14,12 @@ namespace MyThread
 
         public void ActiveThread()
         {
-            if (thread != null)
-                return;
-
-            isWork = true;
-            thread = new Thread(() => Run(particleData, maxSize));
-            thread.Start();
+            //if (thread != null)
+            //    return;
+            //
+            //isWork = true;
+            //thread = new Thread(() => Run(particleData, maxSize));
+            //thread.Start();
         }
 
         public void UpdateParticle(FlexContainer.ParticleData _particleData, int _maxSize)
@@ -32,12 +32,12 @@ namespace MyThread
 
         public void Stop()
         {
-            isWork = false;
+            //isWork = false;
         }
 
         public void Join()
         {
-            thread.Join();
+            //thread.Join();
         }
 
         void Run(FlexContainer.ParticleData _particleData, int max)

@@ -86,7 +86,7 @@ namespace NVIDIA.Flex
             m_actor.onAfterRecreate -= OnAfterRecreate;
         }
 
-        void FindMatchingPairs()
+        public void FindMatchingPairs()
         {
             // @@@ Optimize!!!
             List<int> particles = new List<int>();

@@ -34,12 +34,14 @@ namespace NVIDIA.Flex
     [CustomEditor(typeof(FlexClothDeformation))]
     public class FlexClothDeformationEditor : Editor
     {
+        FlexClothDeformation module = null;
         SerializedProperty m_deformationTarget;
         SerializedProperty m_proximityTreshold;
         SerializedProperty m_particleVertexPairt;
 
         void OnEnable()
         {
+            module = target as FlexClothDeformation;
             m_deformationTarget = serializedObject.FindProperty("m_deformationTarget");
             m_proximityTreshold = serializedObject.FindProperty("m_proximityTreshold");
             m_particleVertexPairt = serializedObject.FindProperty("m_particles.Array.size");
@@ -53,6 +55,11 @@ namespace NVIDIA.Flex
             GUI.enabled = false;
             EditorGUILayout.PropertyField(m_particleVertexPairt, new GUIContent("Particle-Vertex Pairs"));
             GUI.enabled = true;
+
+            if (GUILayout.Button("Reset"))
+            {
+                module.FindMatchingPairs();
+            }
 
             if (GUI.changed)
                 serializedObject.ApplyModifiedProperties();

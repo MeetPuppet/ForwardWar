@@ -38,7 +38,7 @@
 
 			void vert(inout appdata_full v)
 			{
-				v.vertex.y += sin((abs(v.texcoord.x * 2 - 1) * 3) + sin(_Time.y * 1)) * 0.1;
+				//v.vertex.y += sin((abs(v.texcoord.x * 2 - 1) * 3) + sin(_Time.y * 1)) * 0.1;
 			}
 
 			void surf(Input IN, inout SurfaceOutput o)

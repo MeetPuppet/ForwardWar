@@ -3,8 +3,9 @@
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
@@ -12,11 +13,11 @@ MonoBehaviour:
   m_Name: FlexContainer
   m_EditorClassIdentifier: 
   m_simpleMode: 1
-  m_simpleMaxParticles: 10000
+  m_simpleMaxParticles: 4608
   m_simpleSubstepCount: 2
   m_simpleIterationCount: 5
   m_simpleGravity: {x: 0, y: -9.81, z: 0}
-  m_simpleParticleSize: 0.15
+  m_simpleParticleSize: 0.1
   m_simpleParticleFriction: 0.1
   m_simpleParticleRestitution: 0
   m_simpleParticleAdhesion: 0
@@ -31,7 +32,7 @@ MonoBehaviour:
   m_simpleFluidAnisotropy: 2
   m_simpleFluidMinScale: 0.2
   m_simpleFluidMaxScale: 1
-  m_maxParticles: 10000
+  m_maxParticles: 4608
   m_maxDiffuse: 0
   m_maxNeighbors: 200
   m_maxContacts: 6
@@ -39,9 +40,9 @@ MonoBehaviour:
   m_substepCount: 2
   m_iterationCount: 5
   m_gravity: {x: 0, y: -9.81, z: 0}
-  m_radius: 0.22500001
-  m_solidRest: 0.15
-  m_fluidRest: 0.1425
+  m_radius: 0.15
+  m_solidRest: 0.1
+  m_fluidRest: 0.095
   m_staticFriction: 0.1
   m_dynamicFriction: 0.1
   m_particleFriction: 0.1
@@ -75,7 +76,7 @@ MonoBehaviour:
   m_diffuseLifetime: 0
   m_plasticThreshold: 0
   m_plasticCreep: 0
-  m_collisionDistance: 0.075
+  m_collisionDistance: 0.05
   m_particleCollisionMargin: 0
   m_shapeCollisionMargin: 0
   m_planes: []

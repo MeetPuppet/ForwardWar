@@ -90,13 +90,15 @@ namespace NVIDIA.Flex
 
         public void Rebuild()
         {
-            if (onBeforeRebuild != null) onBeforeRebuild();
+            if (onBeforeRebuild != null)
+                onBeforeRebuild();
 
             DestroyAsset();
             RebuildAsset();
             CreateAsset();
 
-            if (onAfterRebuild != null) onAfterRebuild();
+            if (onAfterRebuild != null)
+                onAfterRebuild();
         }
 
         #endregion
@@ -113,7 +115,7 @@ namespace NVIDIA.Flex
             DestroyAsset();
         }
 
-        void OnValidate()
+        public void OnValidate()
         {
             ValidateFields();
             if (m_rebuildAsset) Rebuild();
@@ -273,7 +275,7 @@ namespace NVIDIA.Flex
         int[] m_fixedParticles = new int[0];
 
         [SerializeField]
-        bool m_rebuildAsset = false;
+        public bool m_rebuildAsset = false;
 
         #endregion
     }

@@ -121,7 +121,7 @@ namespace NVIDIA.Flex
         }
 
         [SerializeField]
-        Mesh m_boundaryMesh = null;
+        public Mesh m_boundaryMesh = null;
         [SerializeField]
         Vector3 m_meshLocalScale = Vector3.one;
         [SerializeField, Tooltip("Particles will be moved inwards (if negative) or outwards (if positive) from the surface of the mesh according to this factor")]
