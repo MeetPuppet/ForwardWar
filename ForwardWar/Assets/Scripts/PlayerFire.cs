@@ -12,14 +12,20 @@ public class PlayerFire : MonoBehaviour
     // 피격 이펙트 파티클 시스템
     ParticleSystem ps;
 
+    // 발사 이펙트 오브젝트
+    public GameObject shootEffect;
+
     // 발사 위치
     public GameObject firePosition;
+
+    public GameObject shootPosition;
 
     // 투척 무기 오브젝트
     public GameObject bombFactory;
 
-    // 투척 무기 오브젝트
     public GameObject SmokeFactory;
+
+    public GameObject MissileFactory;
 
     // 투척 파워
     public float throwPower = 15f;
@@ -40,13 +46,21 @@ public class PlayerFire : MonoBehaviour
     public float cooldown_skill2 = 11;
     bool isCooldown_skill2 = false;
 
+
+    //미사일의 쿨타임 관리
+    public KeyCode skill3;
+    public Image skill3image;
+    public float cooldown_skill3 = 11;
+    bool isCooldown_skill3 = false;
+
+
     //먹기 관리
     Transform player;
     public KeyCode eat;
     public Image eatimage;
     public float cooldown_eat = 5;
     bool isCooldown_eat = false;
-
+    
     //애니메이터 변수
     Animator anim;
     void Start()
@@ -63,6 +77,7 @@ public class PlayerFire : MonoBehaviour
         //스킬 쿨타임 초기값
         skill1image.fillAmount = 0f;
         skill2image.fillAmount = 0f;
+        skill3image.fillAmount = 0f;
         eatimage.fillAmount = 0f;
     }
  
@@ -119,6 +134,30 @@ public class PlayerFire : MonoBehaviour
             }
         }
 
+        if (Input.GetKey(skill3) && isCooldown_skill3 == false)
+        {
+            isCooldown_skill3 = true;
+            skill3image.fillAmount = 1f;
+
+            // 수류탄 오브젝트를 생성하고, 수류탄의 생성 위치를 발사 위치로 한다.
+            GameObject Missile_pos = Instantiate(MissileFactory);
+            Missile_pos.transform.position = firePosition.transform.position;
+
+            // 수류탄 오브젝트의 Rigidbody 컴포넌트를 가져온다.
+            Rigidbody arb = Missile_pos.GetComponent<Rigidbody>();
+
+            // 카메라의 정면 방향으로 수류탄에 물리적인 힘을 가한다.
+            arb.AddForce(Camera.main.transform.forward * throwPower, ForceMode.Impulse);
+        }
+        if (isCooldown_skill3)
+        {
+            skill3image.fillAmount -= 1f / cooldown_skill3 * Time.deltaTime;
+            if (skill3image.fillAmount <= 0f)
+            {
+                skill3image.fillAmount = 0f;
+                isCooldown_skill3 = false;
+            }
+        }
 
         if (Input.GetKey(eat) && isCooldown_eat == false)
         {
@@ -146,6 +185,13 @@ public class PlayerFire : MonoBehaviour
             // 레이를 생성하고 발사될 위치와 진행 방향을 설정한다.
             Ray ray = new Ray(Camera.main.transform.position, Camera.main.transform.forward);
 
+            // 이펙트 프리팹을 생성한다.
+            GameObject eff = Instantiate(shootEffect);
+            // 이펙트 프리팹의 위치는 player 위치
+            eff.transform.position = shootPosition.transform.position;
+        
+
+
             // 레이가 부딪힌 대상의 정보를 저장할 변수를 생성한다.
             RaycastHit hitInfo = new RaycastHit();
 
@@ -159,7 +205,9 @@ public class PlayerFire : MonoBehaviour
                 bulletEffect.transform.forward = hitInfo.normal;
 
                 // 피격 이펙트를 플레이한다.
+
                 ps.Play();
+                
 
                 EnemyFSM enemy = hitInfo.transform.GetComponent<EnemyFSM>();
                 if (enemy != null)
@@ -168,8 +216,11 @@ public class PlayerFire : MonoBehaviour
                     enemy.BloodActive(hitInfo);
                 }
             }
+
+            //Destroy(eff);
         }
 
         
     }
+
 }
