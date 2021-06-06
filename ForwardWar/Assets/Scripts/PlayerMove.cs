@@ -34,6 +34,7 @@ public class PlayerMove : MonoBehaviour
 
     public GameObject hitEffect;
 
+    public GameObject Cam_pos;
     //컨트롤할 플렉스 오브젝트
     public GameObject FlexComp;
 
@@ -171,7 +172,19 @@ public class PlayerMove : MonoBehaviour
         //피격 UI 실행
         hitEffect.SetActive(true);
         //대기
-        yield return new WaitForSeconds(0.3f);
+        Cam_pos.transform.Translate(0.15f, 0.15f, 0);
+        yield return new WaitForSeconds(0.05f);
+        Cam_pos.transform.Translate(0, -0.3f, 0);
+        yield return new WaitForSeconds(0.05f);
+        Cam_pos.transform.Translate(-0.3f, 0.15f, 0);
+        yield return new WaitForSeconds(0.05f);
+        Cam_pos.transform.Translate(0.15f, -0.15f, 0);
+        yield return new WaitForSeconds(0.05f);
+        Cam_pos.transform.Translate(-0.15f, 0.3f, 0);
+        yield return new WaitForSeconds(0.05f);
+        Cam_pos.transform.Translate(0.15f, 0, 0);
+        yield return new WaitForSeconds(0.05f);
+        Cam_pos.transform.Translate(0, -0.15f, 0);
         //피격 UI 종료
         hitEffect.SetActive(false);
 
@@ -179,7 +192,6 @@ public class PlayerMove : MonoBehaviour
 
     public void EatAction()
     {
-        // 에너미의 공격력만큼 플레이어의 체력을 깎는다.
         if (hp > 0)
         {
             StartCoroutine(PlayEatEffect());

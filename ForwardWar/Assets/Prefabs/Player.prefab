@@ -1,5 +1,35 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1222890484705764417
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7013019406708310409}
+  m_Layer: 0
+  m_Name: FirePos
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7013019406708310409
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1222890484705764417}
+  m_LocalRotation: {x: 0.21877883, y: -0.27734783, z: -0.9294736, w: 0.10626752}
+  m_LocalPosition: {x: 0, y: 0, z: 0.4400157}
+  m_LocalScale: {x: 0.7647155, y: 0.50736856, z: 0.55879945}
+  m_Children: []
+  m_Father: {fileID: 5448162392931596234}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &4774224634594475852
 GameObject:
   m_ObjectHideFlags: 0
@@ -113,7 +143,6 @@ MonoBehaviour:
   hpSlider: {fileID: 0}
   hitEffect: {fileID: 0}
   FlexComp: {fileID: 5065797405755068813}
-  waterSector: {fileID: 0}
 --- !u!114 &4774224634594475888
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -158,9 +187,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bulletEffect: {fileID: 0}
+  shootEffect: {fileID: 0}
   firePosition: {fileID: 4774224634594475852}
+  shootPosition: {fileID: 0}
   bombFactory: {fileID: 0}
   SmokeFactory: {fileID: 0}
+  MissileFactory: {fileID: 0}
   throwPower: 15
   weaponPower: 5
   skill1image: {fileID: 0}
@@ -168,6 +200,9 @@ MonoBehaviour:
   skill2: 114
   skill2image: {fileID: 0}
   cooldown_skill2: 11
+  skill3: 0
+  skill3image: {fileID: 0}
+  cooldown_skill3: 11
   eat: 102
   eatimage: {fileID: 0}
   cooldown_eat: 5
@@ -782,7 +817,8 @@ Transform:
   m_LocalRotation: {x: -0.059080042, y: 0.0027929838, z: 0.5507264, w: 0.83258766}
   m_LocalPosition: {x: -0.10565704, y: 0.028399734, z: -0.0103357695}
   m_LocalScale: {x: 1.116292, y: 1.975944, z: 1.975945}
-  m_Children: []
+  m_Children:
+  - {fileID: 7013019406708310409}
   m_Father: {fileID: 5448162392968990604}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: -5.8229594, y: -3.4820857, z: 67.14352}
