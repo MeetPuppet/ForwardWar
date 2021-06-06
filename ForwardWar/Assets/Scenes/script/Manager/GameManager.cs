@@ -1,7 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.SceneManagement;
 using System.Collections;
-using MyThread;
 using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
@@ -20,7 +19,6 @@ public class GameManager : MonoBehaviour
     public static Updater Updater { get { return Instance.updater; } }
     public static InputManager Input { get { return Instance.input; } }
 
-    public static DebugThread thread;
 
     static GameObject clip;
     void Start()
@@ -48,7 +46,6 @@ public class GameManager : MonoBehaviour
 
             instance = go.GetComponent<GameManager>();
             instance.gameData.Init();
-            thread = new DebugThread();
         }
     }
 
@@ -71,8 +68,6 @@ public class GameManager : MonoBehaviour
 
     private void OnApplicationQuit()
     {
-        thread.Stop();
-        thread.Join();
     }
 
 
