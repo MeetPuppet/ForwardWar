@@ -40,20 +40,12 @@ public class CutPart : MonoBehaviour
         }
     }
 
-    /*
-    private void PushObeject(Vector3 pos)
+    public void PushObeject(Vector3 pos)
     {
         for (int i = 0; i < go.Length; ++i)
         {
-            //대상 방향 확인
-            Vector3 dir = default;
-            dir.x = rda[i].transform.position.x - pos.x;
-            dir.z = rda[i].transform.position.z - pos.z;
-            dir = dir.normalized;
 
-            rda[i].AddForce(dir*5);
 
         }
     }
-    */
 }

@@ -30,6 +30,19 @@ public class BombAction : MonoBehaviour
                 if (cp)
                     cp.Activate();
             }
+
+            //rigidBody가 있는 경우
+            Rigidbody rd = collider[i].GetComponent<Rigidbody>();
+            if(rd)
+            {
+                //대상 방향 확인
+                Vector3 dir = default;
+                dir.x = rd.transform.position.x - transform.position.x;
+                dir.z = rd.transform.position.z - transform.position.z;
+                dir = dir.normalized;
+
+                rd.AddForce(dir * 1000);
+            }
         }
 
         // 자기 자신을 제거한다.
