@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class ControlFence : MonoBehaviour
 {
+    public WerewolfMovement Guard;
+
     public GameObject[] Fense;
 
     void Start()
@@ -13,9 +15,15 @@ public class ControlFence : MonoBehaviour
 
     void Update()
     {
-        
     }
 
+    public void DoorGrav()
+    {
+        for (int i = 0; i < Fense.Length; ++i)
+        {
+            Fense[i].AddComponent<Rigidbody>();
+        }
+    }
     public void OpenDoor()
     {
         for(int i = 0; i < Fense.Length; ++i)

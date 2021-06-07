@@ -39,6 +39,11 @@ public class WerewolfMovement : MonoBehaviour
     public float RushDistance = 10f;
     public float SearchRange = 30f;
 
+    public GameObject FlexParticle;
+    GameObject Particle;
+    public GameObject Del;
+    public ControlFence Gate;
+
     State state = State.Idle;
 
     void Start()
@@ -58,11 +63,19 @@ public class WerewolfMovement : MonoBehaviour
         MachineStateAcitvate();
     }
 
+    bool asd = false;
     void Update()
     {
-        if(state == State.Dead)
+        if(HP <= 0 && asd == false)
         {
             StopAllCoroutines();
+            Particle = Instantiate(FlexParticle, transform);
+            anim.SetInteger("HP", HP);
+            Destroy(Del);
+            Destroy(GetComponent<CapsuleCollider>());
+            Blurs.SwitchBlur(false);
+            Gate.OpenDoor();
+            asd = true;
         }
 
         switch (state)
@@ -369,8 +382,9 @@ public class WerewolfMovement : MonoBehaviour
         yield break;
     }
 
-    public void DamageToWerewolf(int damage)
+    public void HitEnemy(int damage)
     {
         HP -= damage;
+        anim.SetInteger("HP", HP);
     }
 }

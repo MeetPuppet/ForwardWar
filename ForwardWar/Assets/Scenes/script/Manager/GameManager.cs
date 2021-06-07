@@ -81,6 +81,14 @@ public class GameManager : MonoBehaviour
         SceneManager.LoadScene(SceneNum);
         StartGame = true;
         playTime = 0f;
+        if(SceneNum == 1)
+        {
+            Cursor.visible = false;
+        }
+        else
+        {
+            Cursor.visible = true;
+        }
     }
 
     public void ExitApp()

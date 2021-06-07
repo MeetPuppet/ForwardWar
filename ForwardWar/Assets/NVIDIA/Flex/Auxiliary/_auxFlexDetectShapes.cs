@@ -116,7 +116,8 @@ namespace NVIDIA.Flex
 
                     m_geometryBuffer.Set(shapeIndex, shapeData.geometry);
                     m_shapeFlagsBuffer.Set(shapeIndex, shapeData.flags);
-                    m_shapePositionBuffer.Set(shapeIndex, (Vector4)(collider.transform.position + collider.transform.rotation * shapeData.shapeCenter));
+                    if (m_shapePositionBuffer != null)
+                        m_shapePositionBuffer.Set(shapeIndex, (Vector4)(collider.transform.position + collider.transform.rotation * shapeData.shapeCenter));
                     m_shapeRotationBuffer.Set(shapeIndex, collider.transform.rotation * shapeData.shapePreRotation);
                     m_shapePrevPositionBuffer.Set(shapeIndex, (Vector4)shapeData.shapePrevPosition);
                     m_shapePrevRotationBuffer.Set(shapeIndex, shapeData.shapePrevRotation);

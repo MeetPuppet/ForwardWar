@@ -58,6 +58,7 @@ public class EnemyFSM : MonoBehaviour
 
     Animator anim;
     public GameObject Blood;
+    public GameObject DropItem;
 
     void Start()
     {
@@ -272,6 +273,9 @@ public class EnemyFSM : MonoBehaviour
         yield return null;
 
         print("¼Ò¸ê!");
+        GameObject go = Instantiate(DropItem, transform.position, transform.rotation);
+
+        go.GetComponent<Rigidbody>().AddForce(Vector3.up * 100);
         Destroy(gameObject);
         yield break;
     }

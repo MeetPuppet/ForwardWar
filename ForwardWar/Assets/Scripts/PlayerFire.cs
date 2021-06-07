@@ -77,7 +77,7 @@ public class PlayerFire : MonoBehaviour
         //스킬 쿨타임 초기값
         skill1image.fillAmount = 0f;
         skill2image.fillAmount = 0f;
-        skill3image.fillAmount = 0f;
+        //skill3image.fillAmount = 0f;
         eatimage.fillAmount = 0f;
     }
  
@@ -210,10 +210,15 @@ public class PlayerFire : MonoBehaviour
                 
 
                 EnemyFSM enemy = hitInfo.transform.GetComponent<EnemyFSM>();
+                WerewolfMovement wolf = hitInfo.transform.GetComponent<WerewolfMovement>();
                 if (enemy != null)
                 {
                     enemy.HitEnemy(3);
                     enemy.BloodActive(hitInfo);
+                }
+                else if(wolf)
+                {
+                    wolf.HitEnemy(3);
                 }
             }
 

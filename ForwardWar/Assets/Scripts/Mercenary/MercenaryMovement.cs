@@ -150,11 +150,13 @@ public class MercenaryMovement : MonoBehaviour
             float dist = Vector3.Distance(transform.position, Commander.transform.position);
             if(dist > 15)
             {
+                yield return new WaitForSeconds(0.1f);
                 StartCoroutine("returnGuradPosition", GuardPosition);
                 yield break;
             }
             else if (insightEnemys != null)
             {
+                yield return new WaitForSeconds(0.1f);
                 StartCoroutine("FightEnemys", insightEnemys);
                 yield break;
             }
@@ -180,6 +182,7 @@ public class MercenaryMovement : MonoBehaviour
             yield return null;
         }
 
+        yield return new WaitForSeconds(0.1f);
         mercenaryState = MercenaryState.Alert;
         StartCoroutine("AlertMovement");
         anim.SetFloat("MoveBlend", 0f);
@@ -210,12 +213,14 @@ public class MercenaryMovement : MonoBehaviour
             {
                 agent.destination = transform.position;
                 anim.SetFloat("MoveBlend", 0f);
+                yield return new WaitForSeconds(0.1f);
                 StartCoroutine("FightEnemys", insightEnemys);
                 yield break;
             }
 
         }
         mercenaryState = MercenaryState.Alert;
+        yield return new WaitForSeconds(0.1f);
         StartCoroutine("AlertMovement");
         anim.SetFloat("MoveBlend", 0f);
         yield break;
@@ -226,6 +231,7 @@ public class MercenaryMovement : MonoBehaviour
         insightEnemys = GetSightEnemys();
         if (insightEnemys == null)
         {
+            yield return new WaitForSeconds(0.1f);
             StartCoroutine("MoveTranslate", wayPoint);
             yield break;
         }
@@ -272,6 +278,7 @@ public class MercenaryMovement : MonoBehaviour
 
         }
         mercenaryState = MercenaryState.Alert;
+        yield return new WaitForSeconds(0.1f);
         StartCoroutine("AlertMovement");
         anim.SetFloat("MoveBlend", 0f);
         yield break;
@@ -331,12 +338,14 @@ public class MercenaryMovement : MonoBehaviour
             float dist = Vector3.Distance(transform.position, Commander.transform.position);
             if (dist > 15)
             {
+                yield return new WaitForSeconds(0.1f);
                 StartCoroutine("returnGuradPosition", GuardPosition);
                 yield break;
             }
 
             if (insightEnemysArr[targetStep] == null)
             {
+                yield return new WaitForSeconds(0.1f);
                 mercenaryState = MercenaryState.Alert;
                 StartCoroutine("AlertMovement");
                 anim.SetFloat("MoveBlend", 0f);
@@ -363,6 +372,7 @@ public class MercenaryMovement : MonoBehaviour
                         enemyDatas.BloodActive(hitInfo);
                         if (enemyDatas.hp <= 0)
                         {
+                            yield return new WaitForSeconds(0.1f);
                             mercenaryState = MercenaryState.Alert;
                             StartCoroutine("AlertMovement");
                             anim.SetFloat("MoveBlend", 0f);
