@@ -16,6 +16,22 @@ public class BombAction : MonoBehaviour
         // 이펙트 프리팹의 위치는 수류탄 오브젝트 자신의 위치와 동일하다.
         eff.transform.position = transform.position;
 
+
+        //거리 10내의 모든 콜라이더 확인
+        Collider[] collider = Physics.OverlapSphere(transform.position, 10);
+        for (int i = 0; i < collider.Length; ++i)
+        {
+            Transform parent = collider[i].transform.parent;
+            //부모가 있는 경우
+            if (parent)
+            {
+                //CutPart를 불러서 함수 작동
+                CutPart cp = parent.GetComponent<CutPart>();
+                if (cp)
+                    cp.Activate();
+            }
+        }
+
         // 자기 자신을 제거한다.
         Destroy(gameObject);
     }

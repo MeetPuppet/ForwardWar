@@ -22,7 +22,6 @@ public class CutPart : MonoBehaviour
 
             MeshCollider mc = go[i].AddComponent<MeshCollider>();
             mc.convex = true;
-            mc.enabled = false;
             lm.Add(mc);
         }
 
@@ -33,10 +32,28 @@ public class CutPart : MonoBehaviour
 
     public void Activate()
     {
+        // 어떻게 이것만으로 움직이는가
         for (int i = 0; i < go.Length; ++i)
         {
             rda[i].constraints = RigidbodyConstraints.None;
             mca[i].enabled = true;
         }
     }
+
+    /*
+    private void PushObeject(Vector3 pos)
+    {
+        for (int i = 0; i < go.Length; ++i)
+        {
+            //대상 방향 확인
+            Vector3 dir = default;
+            dir.x = rda[i].transform.position.x - pos.x;
+            dir.z = rda[i].transform.position.z - pos.z;
+            dir = dir.normalized;
+
+            rda[i].AddForce(dir*5);
+
+        }
+    }
+    */
 }

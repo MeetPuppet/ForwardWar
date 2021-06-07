@@ -170,7 +170,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 381d73927df486d40b9dc6b790999ffe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Chaser: {fileID: 0}
   anim: {fileID: 2202198803380850214}
   rigid: {fileID: 1624445999936281477}
   agent: {fileID: 371211281163528173}
@@ -179,6 +178,7 @@ MonoBehaviour:
   HP: 10
   Speed: 10
   WanderDistance: 5
+  ThinkTime: 0.5
   RushDistance: 10
   SearchRange: 30
 --- !u!54 &1624445999936281477
@@ -930,6 +930,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2196038169338818086}
   - component: {fileID: 2202198803380850214}
+  - component: {fileID: 8289587802224136515}
   m_Layer: 0
   m_Name: IDLE
   m_TagString: Untagged
@@ -972,6 +973,20 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!136 &8289587802224136515
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5888296228068858561}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  m_Radius: 1.21
+  m_Height: 6.53
+  m_Direction: 1
+  m_Center: {x: 0, y: 3.59, z: 0}
 --- !u!1 &5904367511623367245
 GameObject:
   m_ObjectHideFlags: 0

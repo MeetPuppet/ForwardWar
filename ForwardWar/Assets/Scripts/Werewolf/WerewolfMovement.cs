@@ -100,7 +100,23 @@ public class WerewolfMovement : MonoBehaviour
 
         while (transform.position != agent.destination)
         {
-            //Chaser.transform.position = agent.destination;
+            Ray ray = new Ray(transform.position, transform.forward);
+            RaycastHit hitInfo = new RaycastHit();
+            if (Physics.Raycast(ray, out hitInfo))
+            {
+                if (hitInfo.transform.gameObject.layer == 7
+                    && Vector3.Distance(hitInfo.transform.position, transform.position) < SearchRange)
+                {
+                    Debug.Log(Vector3.Distance(hitInfo.transform.position + Vector3.up, transform.position));
+                    //Debug.Log($"Found Target: {hitInfo.transform.gameObject.name}");
+                    target = hitInfo.transform.gameObject;
+                    anim.SetBool("isFight", true);
+                    anim.SetFloat("TargetDistance", Vector3.Distance(hitInfo.transform.position, transform.position));
+                    yield return waitTime;
+                    yield return StartCoroutine("CombatReady");
+                    yield break;
+                }
+            }
             yield return null;
         }
 
@@ -351,5 +367,10 @@ public class WerewolfMovement : MonoBehaviour
         agent.updateRotation = true;
         yield return StartCoroutine("CombatStart");
         yield break;
+    }
+
+    public void DamageToWerewolf(int damage)
+    {
+        HP -= damage;
     }
 }
