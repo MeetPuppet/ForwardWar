@@ -207,18 +207,13 @@ public class PlayerFire : MonoBehaviour
                 // 피격 이펙트를 플레이한다.
 
                 ps.Play();
-                
 
-                EnemyFSM enemy = hitInfo.transform.GetComponent<EnemyFSM>();
-                WerewolfMovement wolf = hitInfo.transform.GetComponent<WerewolfMovement>();
+
+                EnemyBase enemy = hitInfo.transform.GetComponent<EnemyBase>();
                 if (enemy != null)
                 {
                     enemy.HitEnemy(3);
-                    enemy.BloodActive(hitInfo);
-                }
-                else if(wolf)
-                {
-                    wolf.HitEnemy(3);
+                    //enemy.BloodActive(hitInfo);
                 }
             }
 

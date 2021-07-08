@@ -23,7 +23,7 @@ public class EnemyManager : MonoBehaviour
     {
         EnemyFSM enemy = EnemyList.transform.GetChild(arr).gameObject.GetComponent<EnemyFSM>();
 
-        enemy.hp -= power;
+        enemy.HP -= power;
 
 
         for (int i = 0; i < EnemyList.transform.childCount; ++i)

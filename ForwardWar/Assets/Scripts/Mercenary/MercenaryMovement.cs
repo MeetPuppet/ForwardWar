@@ -265,8 +265,8 @@ public class MercenaryMovement : MonoBehaviour
             if (enemyDatas != null)
             {
                 StartCoroutine("MercenaryHitEffect");
-                enemyDatas.HitEnemy(3);
-                if (enemyDatas.hp <= 0)
+                //enemyDatas.HitEnemy(3);
+                if (enemyDatas.HP <= 0)
                 {
                     mercenaryState = MercenaryState.Move;
                     StartCoroutine("MoveTranslate", wayPoint);
@@ -368,9 +368,9 @@ public class MercenaryMovement : MonoBehaviour
                     StartCoroutine("MercenaryHitEffect");
                     if (enemyDatas != null)
                     {
-                        enemyDatas.HitEnemy(3);
+                        //enemyDatas.HitEnemy(3);
                         enemyDatas.BloodActive(hitInfo);
-                        if (enemyDatas.hp <= 0)
+                        if (enemyDatas.HP <= 0)
                         {
                             yield return new WaitForSeconds(0.1f);
                             mercenaryState = MercenaryState.Alert;

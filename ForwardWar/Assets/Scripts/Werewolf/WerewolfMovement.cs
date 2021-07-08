@@ -4,61 +4,36 @@ using UnityEngine;
 using UnityEngine.AI;
 using Werewolf;
 
-public class WerewolfMovement : MonoBehaviour
+public class WerewolfMovement : EnemyBase
 {
-    enum State
-    {
-        //SearchLine
-        Idle = 0,
-        Wander,
-        Search,
-
-        //BattleLine
-        Run,
-        Attack,
-        Rush,
-        Dodge,
-        Dead
-    }
     //public GameObject Chaser;
-
-    public Animator anim;
-    public Rigidbody rigid;
-    public NavMeshAgent agent;
     public BlurSetter Blurs;
 
-    public int MaxHP = 10;
-    public int HP = 10;
-    public float Speed = 10f;
 
-    private GameObject target;
     public int WanderDistance = 5;
     public float ThinkTime = 0.5f;
+
     private WaitForSeconds waitTime;
+    private GameObject Particle;
 
     public float RushDistance = 10f;
     public float SearchRange = 30f;
 
     public GameObject FlexParticle;
-    GameObject Particle;
     public GameObject Del;
     public ControlFence Gate;
 
-    State state = State.Idle;
 
     void Start()
     {
         if (anim == null)
             anim = GetComponentInChildren<Animator>();
-        if (rigid == null)
-            rigid = GetComponent<Rigidbody>();
         if (agent == null)
             agent = GetComponent<NavMeshAgent>();
         if (Blurs == null)
             Blurs = GetComponent<BlurSetter>();
 
         agent.speed = Speed;
-        state = State.Idle;
         waitTime = new WaitForSeconds(ThinkTime);
         MachineStateAcitvate();
     }
@@ -78,25 +53,6 @@ public class WerewolfMovement : MonoBehaviour
             asd = true;
         }
 
-        switch (state)
-        {
-            case State.Idle:
-                break;
-            case State.Wander:
-                break;
-            case State.Search:
-                break;
-            case State.Run:
-                break;
-            case State.Attack:
-                break;
-            case State.Rush:
-                break;
-            case State.Dodge:
-                break;
-            case State.Dead:
-                break;
-        }
     }
 
     void MachineStateAcitvate()
@@ -122,7 +78,7 @@ public class WerewolfMovement : MonoBehaviour
                 {
                     Debug.Log(Vector3.Distance(hitInfo.transform.position + Vector3.up, transform.position));
                     //Debug.Log($"Found Target: {hitInfo.transform.gameObject.name}");
-                    target = hitInfo.transform.gameObject;
+                    target = hitInfo.transform.gameObject.transform;
                     anim.SetBool("isFight", true);
                     anim.SetFloat("TargetDistance", Vector3.Distance(hitInfo.transform.position, transform.position));
                     yield return waitTime;
@@ -141,8 +97,6 @@ public class WerewolfMovement : MonoBehaviour
     IEnumerator SearchTarget()
     {
         agent.speed = Speed;
-        state = State.Search;
-        Debug.Log(state);
         Debug.Log("SearchTarget");
         anim.SetFloat("Blend", 0f);
 
@@ -169,7 +123,7 @@ public class WerewolfMovement : MonoBehaviour
                 {
                     Debug.Log(Vector3.Distance(hitInfo.transform.position + Vector3.up, transform.position));
                     //Debug.Log($"Found Target: {hitInfo.transform.gameObject.name}");
-                    target = hitInfo.transform.gameObject;
+                    target = hitInfo.transform.gameObject.transform;
                     anim.SetBool("isFight", true);
                     anim.SetFloat("TargetDistance", Vector3.Distance(hitInfo.transform.position, transform.position));
                     yield return waitTime;
