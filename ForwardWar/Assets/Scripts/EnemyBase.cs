@@ -74,6 +74,8 @@ public class EnemyBase : MonoBehaviour
         if (agent == null)
             agent = GetComponent<NavMeshAgent>();
 
+        //agent.path
+
         // 최초의 에너미 상태는 대기 상태(Idle)로 한다.
         m_State = EnemyState.None;
 
@@ -87,6 +89,8 @@ public class EnemyBase : MonoBehaviour
         originPos = transform.position;
         originRot = transform.rotation;
         anim = transform.GetComponentInChildren<Animator>();
+        agent.speed = Speed;
+        agent.updateRotation = false;
     }
 
     void Update()

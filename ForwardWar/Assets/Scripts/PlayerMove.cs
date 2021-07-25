@@ -45,8 +45,12 @@ public class PlayerMove : MonoBehaviour
 
     //애니메이터 변수
     Animator anim;
+
+    public GameObject ActivateButton;
     void Start()
     {
+        if(ActivateButton == null)
+            ActivateButton = GameObject.Find("InteractiveButton");
         flexSource = FlexComp.GetComponent<FlexSourceActor>();
 
         maxHp = hp;
@@ -110,6 +114,18 @@ public class PlayerMove : MonoBehaviour
 
         // 4. 현재 플레이어 hp를 hp 슬라이더에 반영
         hpSlider.value = (float)hp / (float)maxHp;
+
+
+        Ray ray = new Ray(Camera.main.transform.position, Camera.main.transform.forward);
+        RaycastHit hit;
+        if (Physics.Raycast(ray, out hit, 5))
+        {
+            hit.transform.GetComponent<ActSwitchObject>()?.OnActivateButton();
+            if (Input.GetKeyDown(KeyCode.F))
+                hit.transform.GetComponent<ActSwitchObject>()?.ActivateObject();
+        }
+        else
+            ActivateButton.SetActive(false);
     }
 
     void updateOld()

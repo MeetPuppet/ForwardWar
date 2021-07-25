@@ -47,7 +47,7 @@ public class MercenaryControl : MonoBehaviour
             Moves[i].guideLine = operationGuide;
         }
 
-
+        /*
         if (Input.GetKeyDown(KeyCode.F))
         {
             StopAllCoroutines();
@@ -90,6 +90,7 @@ public class MercenaryControl : MonoBehaviour
                 }
             }
         }
+        */
     }
 
 }

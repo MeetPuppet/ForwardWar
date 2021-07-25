@@ -9,6 +9,7 @@ public class EnemyFSM : EnemyBase
     void Start()
     {
         Initialize();
+        //agent.updateRotation = false;
     }
     
     //아래 업데이트 함수를 통해서 행동 조정
@@ -19,14 +20,17 @@ public class EnemyFSM : EnemyBase
     }
     protected override void EnemyUpdateMove()
     {
-        int a = 1;
-        if(a == 1)
+        // 만일 현재 위치가 초기 위치에서 이동 가능 범위를 넘어간다면...
+        if (Vector3.Distance(transform.position, originPos) > moveDistance)
         {
-            Move();
+            // 현재 상태를 Return 상태로 전환한다.
+            m_State = EnemyState.Move;
+            //print("상태 전환: Move -> Return");
+            Return();
         }
         else
         {
-            Return();
+            Move();
         }
     }
     protected override void EnemyUpdateAttack()
@@ -52,16 +56,8 @@ public class EnemyFSM : EnemyBase
 
     void Move()
     {
-        // 만일 현재 위치가 초기 위치에서 이동 가능 범위를 넘어간다면...
-        if (Vector3.Distance(transform.position, originPos) > moveDistance)
-        {
-            // 현재 상태를 Return 상태로 전환한다.
-            m_State = EnemyState.Move;
-            //print("상태 전환: Move -> Return");
-        }
-
         // 만일, 플레이어와의 거리가 공격 범위 밖이라면 플레이어를 향해 이동한다.
-        else if (Vector3.Distance(transform.position, target.position) > attackDistance)
+        if (Vector3.Distance(transform.position, target.position) > attackDistance)
         {
             // 이동 방향 설정
             Vector3 dir = (target.position - transform.position).normalized;
@@ -69,7 +65,7 @@ public class EnemyFSM : EnemyBase
             // 캐릭터 콘트롤러를 이용하여 이동하기
             //cc.Move(dir * moveSpeed * Time.deltaTime);
             //플레이어를 향해 방향을 전환한다.
-            //transform.forward = dir;
+            transform.forward = dir;
 
             agent.destination = target.transform.position;
         }
@@ -89,6 +85,9 @@ public class EnemyFSM : EnemyBase
 
     void Attack()
     {
+        agent.destination = transform.position;
+        Vector3 dir = (target.position - transform.position).normalized;
+        transform.forward = dir;
         // 만일, 플레이어가 공격 범위 이내에 있다면 플레이어를 공격한다.
         if (Vector3.Distance(transform.position, target.position) < attackDistance)
         {
@@ -110,7 +109,7 @@ public class EnemyFSM : EnemyBase
             m_State = EnemyState.Move;
             print("상태 전환: Attack -> Move");
             currentTime = 0;
-
+            
             // 이동 애니메이션 플레이
             anim.SetTrigger("AttackToMove");
         }
@@ -152,7 +151,6 @@ public class EnemyFSM : EnemyBase
             //return;
         }
 
-        // 상속확인용. 이후 변경할 것
         // 플레이어의 공격력만큼 에너미의 체력을 감소시킨다.
         base.HitEnemy(hitPower);
 
