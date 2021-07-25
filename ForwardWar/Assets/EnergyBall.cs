@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class EnergyBall : MonoBehaviour
 {
-    GameObject target;
+    public GameObject target;
     Transform start;
     int power;
 
@@ -21,10 +21,20 @@ public class EnergyBall : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        currentTime += Time.deltaTime;
-        transform.position = Vector3.Lerp(start.position, target.transform.position, currentTime);
+        Vector3 dir = (target.transform.position - transform.position).normalized;
+        transform.forward = dir;
+        transform.position += dir;
 
+        currentTime += Time.deltaTime;
         if (currentTime >= 1f)
             Destroy(gameObject);
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if(other.gameObject.layer == 7)
+        {
+            Destroy(gameObject);
+        }
     }
 }
