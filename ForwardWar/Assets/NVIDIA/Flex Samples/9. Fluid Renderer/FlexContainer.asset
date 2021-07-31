@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: FlexContainer
   m_EditorClassIdentifier: 
   m_simpleMode: 1
-  m_simpleMaxParticles: 15000
+  m_simpleMaxParticles: 50000
   m_simpleSubstepCount: 2
   m_simpleIterationCount: 5
   m_simpleGravity: {x: 0, y: -9.81, z: 0}
@@ -32,7 +32,7 @@ MonoBehaviour:
   m_simpleFluidAnisotropy: 2
   m_simpleFluidMinScale: 0.2
   m_simpleFluidMaxScale: 1
-  m_maxParticles: 15000
+  m_maxParticles: 50000
   m_maxDiffuse: 0
   m_maxNeighbors: 200
   m_maxContacts: 6

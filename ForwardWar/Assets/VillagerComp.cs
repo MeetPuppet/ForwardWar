@@ -49,10 +49,10 @@ public class VillagerComp : ActSwitchObject
     {
         Debug.Log("Activate Villager");
         OffActivateButton();
-        agent.destination = EscPosition.position;
         anim.SetBool("Run", true);
         anim.SetBool("UnderAttack", false);
         anim.SetBool("Safe", false);
+        agent.destination = EscPosition.position;
     }
 
 
