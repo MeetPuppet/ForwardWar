@@ -228,8 +228,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   anim: {fileID: 4225218122081917751}
   agent: {fileID: 7766572830626769914}
-  findDistance: 8
-  attackDistance: 20
+  findDistance: 10
+  attackDistance: 12
   moveSpeed: 5
   attackPower: 5
   moveDistance: 20

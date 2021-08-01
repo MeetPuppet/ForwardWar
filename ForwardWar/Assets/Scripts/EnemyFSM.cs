@@ -206,9 +206,8 @@ public class EnemyFSM : EnemyBase
 
         // 2초 동안 기다린 뒤에 자기 자신을 제거한다.
         //yield return new WaitForSeconds(2f);
-        yield return null;
+        //yield return null;
 
-        print("소멸!");
         GameObject go = Instantiate(DropItem, transform.position, transform.rotation);
 
         go.GetComponent<Rigidbody>().AddForce(Vector3.up * 100);
