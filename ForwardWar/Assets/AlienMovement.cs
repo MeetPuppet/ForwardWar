@@ -27,7 +27,7 @@ public class AlienMovement : EnemyBase
     {
         DeadCheck();
         agent.destination = target.transform.position;
-        if (Vector3.Distance(agent.destination, transform.position) < attackDistance)
+        if (Vector3.Distance(agent.destination, transform.position) < findDistance)
         {
             m_State = EnemyState.Attack;
             agent.destination = transform.position;
@@ -37,7 +37,8 @@ public class AlienMovement : EnemyBase
     protected override void EnemyUpdateAttack()
     {
         DeadCheck();
-        if (Vector3.Distance(agent.destination, transform.position) > attackDistance)
+        Debug.Log(Vector3.Distance(target.transform.position, transform.position));
+        if (Vector3.Distance(target.transform.position, transform.position) > attackDistance)
         {
             m_State = EnemyState.Move;
             anim.SetBool("isMove", true);
