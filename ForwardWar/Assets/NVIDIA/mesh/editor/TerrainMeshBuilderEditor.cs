@@ -32,7 +32,7 @@ public class TerrainMeshBuilderEditor : Editor
                 EditorGUILayout.LabelField("Mag (3)");
                 module.Mag = EditorGUILayout.IntField(module.Mag);
                 EditorGUILayout.LabelField("Scale");
-                module.Scale = EditorGUILayout.IntField(module.Scale);
+                module.Scale = EditorGUILayout.FloatField(module.Scale);
             }
             GUILayout.EndVertical();
 
@@ -66,13 +66,13 @@ public class TerrainMeshBuilderEditor : Editor
         }
         else
         {
-            EditorGUILayout.LabelField("Mesh Size");
-            GUILayout.BeginVertical("Box");
-            {
-                EditorGUILayout.LabelField("Scale");
-                module.Scale = EditorGUILayout.IntField(module.Scale);
-            }
-            GUILayout.EndVertical();
+            //EditorGUILayout.LabelField("Mesh Size");
+            //GUILayout.BeginVertical("Box");
+            //{
+            //    EditorGUILayout.LabelField("Scale");
+            //    module.Scale = EditorGUILayout.FloatField(module.Scale);
+            //}
+            //GUILayout.EndVertical();
         }
 
         EditorGUILayout.LabelField("Generator");

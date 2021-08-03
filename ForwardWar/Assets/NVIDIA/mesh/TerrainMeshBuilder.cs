@@ -5,20 +5,32 @@ using UnityEngine;
 [ExecuteInEditMode]
 public class TerrainMeshBuilder : MonoBehaviour
 {
+    [SerializeField]
     public bool AdvanceMode = false;
 
+    [SerializeField]
     public int Width = 255;
+    [SerializeField]
     public int Height = 255;
+    [SerializeField]
     public int Mag = 3;
-    public int Scale = 2;
+    [SerializeField]
+    public float Scale = 1;
 
+    [SerializeField]
     public int startX = 0;
+    [SerializeField]
     public int endX = 171;
+    [SerializeField]
     public int startY = 84;
+    [SerializeField]
     public int endY = 255;
 
+    [SerializeField]
     public bool WidthBlock = false;
+    [SerializeField]
     public bool HeightBlock = false;
+
     Mesh testMesh = null;
 
     // Start is called before the first frame update
@@ -52,8 +64,9 @@ public class TerrainMeshBuilder : MonoBehaviour
 
         GameObject terrainMesh = new GameObject("terrainMesh");
         terrainMesh.transform.parent = transform;
+        terrainMesh.transform.localPosition = Vector3.zero;
 
-        float strangeScale = 1.17f;
+        float strangeScale = data.size.x * 0.005848f;//1.17
         terrainMesh.transform.localScale = new Vector3(strangeScale * Scale, 1, strangeScale * Scale);
 
         MeshCollider meshCollider = terrainMesh.GetComponent<MeshCollider>();
