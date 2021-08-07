@@ -19,7 +19,7 @@ public class VillagerComp : ActSwitchObject
     protected override void initialize()
     {
         ActivateButton = GameObject.Find("InteractiveButton");
-        OffActivateButton();
+        //OffActivateButton();
 
         MaxHP = HP;
 
@@ -48,7 +48,7 @@ public class VillagerComp : ActSwitchObject
     public override void ActivateObject()
     {
         Debug.Log("Activate Villager");
-        OffActivateButton();
+        //OffActivateButton();
         anim.SetBool("Run", true);
         anim.SetBool("UnderAttack", false);
         anim.SetBool("Safe", false);

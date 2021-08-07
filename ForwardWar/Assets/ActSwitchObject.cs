@@ -20,10 +20,10 @@ public class ActSwitchObject : MonoBehaviour
     {
         ActivateButton.SetActive(true);
     }
-    public virtual void OffActivateButton()
-    {
-        ActivateButton.SetActive(false);
-    }
+    //public virtual void OffActivateButton()
+    //{
+    //    ActivateButton.SetActive(false);
+    //}
 
     //상호작용 작동 시
     public virtual void ActivateObject()
