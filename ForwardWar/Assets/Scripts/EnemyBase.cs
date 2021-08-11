@@ -39,6 +39,7 @@ public class EnemyBase : MonoBehaviour
     //드랍 아이템
     public GameObject DropItem;
 
+
     #endregion
     #region protected
     // 에너미 상태 상수
@@ -91,6 +92,7 @@ public class EnemyBase : MonoBehaviour
         anim = transform.GetComponentInChildren<Animator>();
         agent.speed = Speed;
         agent.updateRotation = false;
+
     }
 
     void Update()
@@ -138,5 +140,20 @@ public class EnemyBase : MonoBehaviour
         Debug.Log("Base");
         // 플레이어의 공격력만큼 에너미의 체력을 감소시킨다.
         HP -= hitPower;
+        if(HP <= 0)
+        {
+            m_State = EnemyState.Dead;
+            GameManager.Score.editScore(100);
+            Destroy(gameObject, 3);
+        }
     }
+
+    public void OnCollisionEnter(Collision collision)
+    {
+        if (HP <= 0)
+        {
+            //collision.gameObject.GetComponent
+        }
+    }
+
 }

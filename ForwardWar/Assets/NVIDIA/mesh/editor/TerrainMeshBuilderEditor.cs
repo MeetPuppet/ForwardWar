@@ -31,7 +31,7 @@ public class TerrainMeshBuilderEditor : Editor
             {
                 EditorGUILayout.LabelField("Mag (3)");
                 module.Mag = EditorGUILayout.IntField(module.Mag);
-                EditorGUILayout.LabelField("Scale");
+                EditorGUILayout.LabelField("Scale (1)");
                 module.Scale = EditorGUILayout.FloatField(module.Scale);
             }
             GUILayout.EndVertical();

@@ -61,6 +61,7 @@ public class EnemyFSM : EnemyBase
         {
             // 이동 방향 설정
             Vector3 dir = (target.position - transform.position).normalized;
+            dir.y = 0;
 
             // 캐릭터 콘트롤러를 이용하여 이동하기
             //cc.Move(dir * moveSpeed * Time.deltaTime);
@@ -87,6 +88,7 @@ public class EnemyFSM : EnemyBase
     {
         agent.destination = transform.position;
         Vector3 dir = (target.position - transform.position).normalized;
+        dir.y = 0;
         transform.forward = dir;
         // 만일, 플레이어가 공격 범위 이내에 있다면 플레이어를 공격한다.
         if (Vector3.Distance(transform.position, target.position) < attackDistance)

@@ -26,12 +26,14 @@ public class TerrainMeshBuilder : MonoBehaviour
     [SerializeField]
     public int endY = 255;
 
+
+
     [SerializeField]
     public bool WidthBlock = false;
     [SerializeField]
     public bool HeightBlock = false;
 
-    Mesh testMesh = null;
+    protected Mesh testMesh = null;
 
     // Start is called before the first frame update
     void Start()

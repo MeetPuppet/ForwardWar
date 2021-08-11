@@ -183,8 +183,8 @@ namespace NVIDIA.Flex
                 SetIndices(m_indices, m_count);
             }
 
-            if(GameManager.thread != null)
-                GameManager.thread.UpdateParticle(_particleData, m_indices.Length);
+            //if(GameManager.thread != null)
+            //    GameManager.thread.UpdateParticle(_particleData, m_indices.Length);
         }
 
         [NonSerialized]

@@ -15,12 +15,15 @@ public class GameManager : MonoBehaviour
     GameData gameData = new GameData();
     Updater updater = new Updater();
     InputManager input = new InputManager();
+    ScoreInfo score = new ScoreInfo();
 
     public static GameData Data { get { return Instance.gameData; } }
     public static Updater Updater { get { return Instance.updater; } }
     public static InputManager Input { get { return Instance.input; } }
+    public static ScoreInfo Score { get { return Instance.score; } }
 
-    public static DebugThread thread;
+
+    //public static DebugThread thread;
 
     static GameObject clip;
     void Start()
@@ -48,7 +51,8 @@ public class GameManager : MonoBehaviour
 
             instance = go.GetComponent<GameManager>();
             instance.gameData.Init();
-            thread = new DebugThread();
+            //thread = new DebugThread();
+            Score.InfoReset();
         }
     }
 
@@ -71,14 +75,15 @@ public class GameManager : MonoBehaviour
 
     private void OnApplicationQuit()
     {
-        thread.Stop();
-        thread.Join();
+        //thread.Stop();
+        //thread.Join();
     }
 
 
     public void SceneChange(int SceneNum)
     {
         SceneManager.LoadScene(SceneNum);
+        Score.InfoReset();
         StartGame = true;
         playTime = 0f;
         if(SceneNum == 1)

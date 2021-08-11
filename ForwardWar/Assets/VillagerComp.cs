@@ -80,6 +80,7 @@ public class VillagerComp : ActSwitchObject
         if (Vector2.Distance(villPos, EscPos) <= 0.1f)
         {
             anim.SetBool("Safe", true);
+            GameManager.Score.editScore(100);
             Destroy(gameObject, 2);
         }
     }

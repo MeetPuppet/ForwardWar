@@ -6,339 +6,231 @@ using Werewolf;
 
 public class WerewolfMovement : EnemyBase
 {
-    //public GameObject Chaser;
-    public BlurSetter Blurs;
-
-
-    public int WanderDistance = 5;
-    public float ThinkTime = 0.5f;
-
-    private WaitForSeconds waitTime;
-    private GameObject Particle;
-
-    public float RushDistance = 10f;
-    public float SearchRange = 30f;
-
-    public GameObject FlexParticle;
-    public GameObject Del;
-    public ControlFence Gate;
-
-
     void Start()
     {
-        if (anim == null)
-            anim = GetComponentInChildren<Animator>();
-        if (agent == null)
-            agent = GetComponent<NavMeshAgent>();
-        if (Blurs == null)
-            Blurs = GetComponent<BlurSetter>();
-
-        agent.speed = Speed;
-        waitTime = new WaitForSeconds(ThinkTime);
-        MachineStateAcitvate();
+        Initialize();
+        //agent.updateRotation = false;
     }
 
-    bool asd = false;
-    void Update()
+    //아래 업데이트 함수를 통해서 행동 조정
+    protected override void EnemyUpdateNone()
     {
-        if(HP <= 0 && asd == false)
+        //Debug.Log("FSM");
+        Idle();
+    }
+    protected override void EnemyUpdateMove()
+    {
+        // 만일 현재 위치가 초기 위치에서 이동 가능 범위를 넘어간다면...
+        if (Vector3.Distance(transform.position, originPos) > moveDistance)
         {
-            StopAllCoroutines();
-            Particle = Instantiate(FlexParticle, transform);
-            anim.SetInteger("HP", HP);
-            Destroy(Del);
-            Destroy(GetComponent<CapsuleCollider>());
-            Blurs.SwitchBlur(false);
-            Gate.OpenDoor();
-            asd = true;
+            // 현재 상태를 Return 상태로 전환한다.
+            m_State = EnemyState.Move;
+            //print("상태 전환: Move -> Return");
+            Return();
         }
-
-    }
-
-    void MachineStateAcitvate()
-    {
-        StartCoroutine("Wander");
-    }
-
-    IEnumerator Wander()
-    {
-        agent.speed = Speed;
-        Debug.Log("Wander");
-        anim.SetFloat("Blend", 1f);
-        agent.destination = transform.position + (transform.forward * WanderDistance);
-
-        while (transform.position != agent.destination)
+        else
         {
-            Ray ray = new Ray(transform.position, transform.forward);
-            RaycastHit hitInfo = new RaycastHit();
-            if (Physics.Raycast(ray, out hitInfo))
+            Move();
+        }
+    }
+    protected override void EnemyUpdateAttack()
+    {
+        Attack();
+    }
+    protected override void EnemyUpdateDead()
+    {
+        Die();
+    }
+
+    void Idle()
+    {
+        // 만일, 플레이어와의 거리가 액션 시작 범위 이내라면 Move 상태로 전환한다.
+        if (Vector3.Distance(transform.position, target.position) < findDistance)
+        {
+            m_State = EnemyState.Move;
+            print("상태 전환: Idle -> Move");
+
+            anim.SetTrigger("IdleToMove");
+        }
+    }
+
+    void Move()
+    {
+        // 만일, 플레이어와의 거리가 공격 범위 밖이라면 플레이어를 향해 이동한다.
+        if (Vector3.Distance(transform.position, target.position) > attackDistance)
+        {
+            // 이동 방향 설정
+            Vector3 dir = (target.position - transform.position).normalized;
+            dir.y = 0;
+
+            // 캐릭터 콘트롤러를 이용하여 이동하기
+            //cc.Move(dir * moveSpeed * Time.deltaTime);
+            //플레이어를 향해 방향을 전환한다.
+            transform.forward = dir;
+
+            agent.destination = target.transform.position;
+        }
+        // 그렇지 않다면, 현재 상태를 Attack 상태로 전환한다.
+        else
+        {
+            m_State = EnemyState.Attack;
+            print("상태 전환: Move -> Attack");
+
+            // 누적 시간을 공격 딜레이 시간만큼 미리 진행시켜놓는다.
+            currentTime = attackDelay;
+
+            // 공격 대기 애니메이션 플레이
+            anim.SetTrigger("MoveToAttackDelay");
+        }
+    }
+
+    void Attack()
+    {
+        agent.destination = transform.position;
+        Vector3 dir = (target.position - transform.position).normalized;
+        dir.y = 0;
+        transform.forward = dir;
+        // 만일, 플레이어가 공격 범위 이내에 있다면 플레이어를 공격한다.
+        if (Vector3.Distance(transform.position, target.position) < attackDistance)
+        {
+            // 일정한 시간마다 플레이어를 공격한다.
+            currentTime += Time.deltaTime;
+            if (currentTime > attackDelay)
             {
-                if (hitInfo.transform.gameObject.layer == 7
-                    && Vector3.Distance(hitInfo.transform.position, transform.position) < SearchRange)
-                {
-                    Debug.Log(Vector3.Distance(hitInfo.transform.position + Vector3.up, transform.position));
-                    //Debug.Log($"Found Target: {hitInfo.transform.gameObject.name}");
-                    target = hitInfo.transform.gameObject.transform;
-                    anim.SetBool("isFight", true);
-                    anim.SetFloat("TargetDistance", Vector3.Distance(hitInfo.transform.position, transform.position));
-                    yield return waitTime;
-                    yield return StartCoroutine("CombatReady");
-                    yield break;
-                }
+                target.GetComponent<PlayerMove>().DamageAction(attackPower);
+                print("공격");
+                currentTime = 0;
+
+                // 공격 애니메이션 플레이
+                anim.SetTrigger("StartAttack");
             }
-            yield return null;
+        }
+        // 그렇지 않다면, 현재 상태를 Move 상태로 전환한다(재 추격 실시).
+        else
+        {
+            m_State = EnemyState.Move;
+            print("상태 전환: Attack -> Move");
+            currentTime = 0;
+
+            // 이동 애니메이션 플레이
+            anim.SetTrigger("AttackToMove");
+        }
+    }
+
+    void Return()
+    {
+        // 만일, 초기 위치에서의 거리가 0.1f 이상이라면 초기 위치 쪽으로 이동한다.
+        if (Vector3.Distance(transform.position, originPos) > 0.1f)
+        {
+            //Vector3 dir = (originPos - transform.position).normalized;
+            //cc.Move(dir * moveSpeed * Time.deltaTime);
+
+            //원래 자리를 향해 방향을 전환한다.
+            //transform.forward = dir;
+
+            agent.destination = originPos;
+        }
+        // 그렇지 않다면, 자신의 위치를 초기 위치로 조정하고 현재 상태를 대기 상태로 전환한다.
+        else
+        {
+            transform.position = originPos;
+            transform.rotation = originRot;
+
+            m_State = EnemyState.None;
+            print("상태 전환: Return -> Idle");
+
+            anim.SetTrigger("MoveToIdle");
+        }
+    }
+
+    //// 데미지 실행 함수
+    public override void HitEnemy(int hitPower)
+    {
+        Debug.Log("FSM");
+        // 만일, 이미 피격 상태이거나 사망 상태 또는 복귀 상태라면 아무런 처리도 하지 않고 함수를 종료한다.
+        if (m_State == EnemyState.Dead)
+        {
+            //return;
         }
 
-        yield return waitTime;
-        yield return StartCoroutine("SearchTarget");
+        // 플레이어의 공격력만큼 에너미의 체력을 감소시킨다.
+        base.HitEnemy(hitPower);
+
+        // 에너미의 체력이 0보다 크면 피격 상태로 전환한다.
+        if (HP > 0)
+        {
+            print("상태 전환: Any state -> Damaged");
+
+            Damaged();
+        }
+        // 그렇지 않다면, 죽음 상태로 전환한다.
+        else
+        {
+            m_State = EnemyState.Dead;
+            print("상태 전환: Any state -> Die");
+
+            Die();
+        }
+    }
+
+    void Damaged()
+    {
+        // 피격 상태를 처리하기 위한 코루틴을 실행한다.
+        StartCoroutine(DamageProcess());
+    }
+
+    //// 데미지 처리용 코루틴 함수
+    IEnumerator DamageProcess()
+    {
+        // 피격 모션 시간만큼 기다린다.
+        yield return new WaitForSeconds(0.5f);
+
+        // 현재 상태를 이동 상태로 전환한다.
+        m_State = EnemyState.Move;
+        print("상태 전환: Damaged -> Move");
         yield break;
     }
 
-    IEnumerator SearchTarget()
+    // 죽음 상태 함수
+    void Die()
     {
-        agent.speed = Speed;
-        Debug.Log("SearchTarget");
-        anim.SetFloat("Blend", 0f);
+        // 진행중인 피격 코루틴을 중지한다.
+        StopAllCoroutines();
 
-        Vector3 SearchDir = transform.forward * -1;
+        // 죽음 상태를 처리하기 위한 코루틴을 실행한다.
+        StartCoroutine(DieProcess());
+    }
 
-        float time = 0f;
-        while (SearchDir != transform.forward)
-        {
-            Quaternion lookRotation = Quaternion.LookRotation(SearchDir);
+    IEnumerator DieProcess()
+    {
+        // 캐릭터 콘트롤러 컴포넌트를 비활성화한다.
+        //cc.enabled = false;
 
-            time += Time.deltaTime * 0.5f;
-            if (time > 1f)
-                time = 1f;
+        // 2초 동안 기다린 뒤에 자기 자신을 제거한다.
+        //yield return new WaitForSeconds(2f);
+        //yield return null;
 
-            Vector3 rotation = Quaternion.LerpUnclamped(transform.rotation, lookRotation, time).eulerAngles;
-            transform.rotation = Quaternion.Euler(0f, rotation.y, 0f);
+        GameObject go = Instantiate(DropItem, transform.position, transform.rotation);
 
-            Ray ray = new Ray(transform.position, transform.forward);
-            RaycastHit hitInfo = new RaycastHit();
-            if (Physics.Raycast(ray, out hitInfo))
-            {
-                if (hitInfo.transform.gameObject.layer == 7
-                    && Vector3.Distance(hitInfo.transform.position, transform.position) < SearchRange)
-                {
-                    Debug.Log(Vector3.Distance(hitInfo.transform.position + Vector3.up, transform.position));
-                    //Debug.Log($"Found Target: {hitInfo.transform.gameObject.name}");
-                    target = hitInfo.transform.gameObject.transform;
-                    anim.SetBool("isFight", true);
-                    anim.SetFloat("TargetDistance", Vector3.Distance(hitInfo.transform.position, transform.position));
-                    yield return waitTime;
-                    yield return StartCoroutine("CombatReady");
-                    yield break;
-                }
-            }
-
-            yield return null;
-        }
-
-        yield return waitTime;
-        yield return StartCoroutine("Wander");
+        go.GetComponent<Rigidbody>().AddForce(Vector3.up * 100);
+        Destroy(gameObject);
         yield break;
     }
 
-    IEnumerator CombatReady()
+    public void BloodActive(RaycastHit ray)
     {
-        if(target == null)
-        {
-            yield return waitTime;
-            yield return StartCoroutine("SearchTarget");
-            yield break;
-        }
+        StartCoroutine("FlowBlood", ray);
+    }
 
-        Debug.Log("CombatReady");
-        agent.speed = Speed * 4;
 
-        float distance = Vector3.Distance(transform.position, target.transform.position);
-        anim.SetFloat("TargetDistance", distance);
-        Debug.Log(distance);
-        if (distance < RushDistance)
-        {
-            yield return waitTime;
-            yield return StartCoroutine("CombatStart");
-            yield break;
-        }
+    IEnumerator FlowBlood(RaycastHit ray)
+    {
+        Blood.transform.position = ray.point;
+        Blood.transform.eulerAngles = ray.normal;
 
-        Vector3 dir = default;
-        dir.x = target.transform.position.x - transform.position.x;
-        dir.z = target.transform.position.z - transform.position.z;
-        dir = dir.normalized;
+        yield return new WaitForSeconds(0.1f);
 
-        agent.destination = target.transform.position - (dir * RushDistance);
-        //Chaser.transform.position = agent.destination;
-        anim.SetFloat("TargetDistance", distance);
-
-        distance = Vector3.Distance(transform.position, agent.destination);
-        while (distance > 0.1f)
-        {
-            dir.x = target.transform.position.x - transform.position.x;
-            dir.z = target.transform.position.z - transform.position.z;
-            dir = dir.normalized;
-
-            agent.destination = target.transform.position - (dir * RushDistance);
-            //Chaser.transform.position = agent.destination;
-            distance = Vector3.Distance(transform.position, agent.destination);
-
-            yield return null;
-        }
-
-        distance = Vector3.Distance(transform.position, target.transform.position);
-        anim.SetFloat("TargetDistance", distance);
-        yield return waitTime;
-        Blurs.SwitchBlur(true);
-        yield return StartCoroutine("CombatStart");
         yield break;
     }
 
-    IEnumerator CombatStart()
-    {
-        if (target == null)
-        {
-            yield return waitTime;
-            yield return StartCoroutine("SearchTarget");
-            yield break;
-        }
-        Debug.Log("CombatStart");
-
-        Vector3 dir = default;
-        dir.x = target.transform.position.x - transform.position.x;
-        dir.z = target.transform.position.z - transform.position.z;
-        dir = dir.normalized;
-
-        float time = 0f;
-        while (dir != transform.forward)
-        {
-            Quaternion lookRotation = Quaternion.LookRotation(dir);
-
-            time += Time.deltaTime * agent.speed;
-            if (time > 1f)
-                time = 1f;
-
-            Vector3 rotation = Quaternion.LerpUnclamped(transform.rotation, lookRotation, time).eulerAngles;
-            transform.rotation = Quaternion.Euler(0f, rotation.y, 0f);
-            yield return null;
-        }
-        agent.updateRotation = true;
-
-        float distance = Vector3.Distance(transform.position,
-            target.transform.position);
-        anim.SetFloat("TargetDistance", distance);
-
-        Debug.Log(distance);
-        if (distance < 2)
-        {
-            yield return waitTime;
-            yield return StartCoroutine("AttackTarget");
-            yield break;
-        }
-        else if(distance < RushDistance + 1)
-        {
-            agent.speed = Speed * 10;
-            distance = Vector3.Distance(transform.position, target.transform.position);
-            anim.SetFloat("TargetDistance", distance);
-            yield return waitTime;
-            yield return StartCoroutine("RushTarget");
-            yield break;
-        }
-
-        yield return waitTime;
-        yield return StartCoroutine("CombatReady");
-        yield break;
-    }
-
-    IEnumerator AttackTarget()
-    {
-        if (target == null)
-        {
-            yield return waitTime;
-            yield return StartCoroutine("SearchTarget");
-            yield break;
-        }
-
-        Debug.Log("AttackTarget");
-
-
-        for (int i = 0; i < 4; ++i)
-            yield return waitTime;
-        yield return StartCoroutine("CombatStart");
-        yield break;
-    }
-
-    IEnumerator RushTarget()
-    {
-        if (target == null)
-        {
-            yield return StartCoroutine("SearchTarget");
-            yield break;
-        }
-        agent.updateRotation = false;
-        Debug.Log("RushTarget");
-
-        float distance = Vector3.Distance(transform.position, target.transform.position) - 2;
-        Vector3 dir = default;
-        dir.x = target.transform.position.x - transform.position.x;
-        dir.z = target.transform.position.z - transform.position.z;
-        anim.SetFloat("TargetDistance", distance);
-
-        float time = 0f;
-        agent.destination = transform.position + (transform.forward * distance);
-        //Chaser.transform.position = agent.destination;
-        while (transform.position != agent.destination)
-        {
-            distance = Vector3.Distance(transform.position, target.transform.position);
-
-            Quaternion lookRotation = Quaternion.LookRotation(dir);
-
-            time += Time.deltaTime * agent.speed;
-            if (time > 1f)
-                time = 1f;
-
-            Vector3 rotation = Quaternion.LerpUnclamped(transform.rotation, lookRotation, time).eulerAngles;
-            transform.rotation = Quaternion.Euler(0f, rotation.y, 0f);
-            yield return null;
-        }
-
-        anim.SetFloat("TargetDistance", distance);
-        agent.speed = Speed * 4;
-        agent.updateRotation = true;
-
-        for (int i = 0; i < 4; ++i)
-            yield return waitTime;
-        yield return StartCoroutine("CombatStart");
-        yield break;
-    }
-    IEnumerator Dodge()
-    {
-        Debug.Log("Dodge");
-
-        agent.destination = transform.position + (transform.right * RushDistance);
-        Vector3 dir = default;
-        dir.x = target.transform.position.x - transform.position.x;
-        dir.z = target.transform.position.z - transform.position.z;
-        dir = dir.normalized;
-        //Chaser.transform.position = agent.destination;
-        while (transform.position != agent.destination)
-        {
-            yield return null;
-        }
-
-        agent.updateRotation = false;
-
-
-
-
-        yield return waitTime;
-        agent.updateRotation = true;
-        yield return StartCoroutine("CombatStart");
-        yield break;
-    }
-
-    public void HitEnemy(int damage)
-    {
-        HP -= damage;
-        anim.SetInteger("HP", HP);
-    }
 }
