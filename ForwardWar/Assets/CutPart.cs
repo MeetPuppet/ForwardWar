@@ -4,23 +4,29 @@ using UnityEngine;
 
 public class CutPart : MonoBehaviour
 {
-    public GameObject[] go;
+    public Transform[] go;
     public Rigidbody[] rda;
     public MeshCollider[] mca;
 
     // Start is called before the first frame update
     void Start()
     {
+        go = GetComponentsInChildren<Transform>();
+
         List<Rigidbody> lr = new List<Rigidbody>();
         List<MeshCollider> lm = new List<MeshCollider>();
-
-        for (int i = 0; i < go.Length; ++i)
+        int i = 0;
+        if(go.Length != 1)
         {
-            Rigidbody rd = go[i].AddComponent<Rigidbody>();
+            i = 1;
+        }
+        for (; i < go.Length; ++i)
+        {
+            Rigidbody rd = go[i].gameObject.AddComponent<Rigidbody>();
             rd.constraints = RigidbodyConstraints.FreezeAll;
             lr.Add(rd);
 
-            MeshCollider mc = go[i].AddComponent<MeshCollider>();
+            MeshCollider mc = go[i].gameObject.AddComponent<MeshCollider>();
             mc.convex = true;
             lm.Add(mc);
         }
@@ -33,7 +39,7 @@ public class CutPart : MonoBehaviour
     public void Activate()
     {
         // 어떻게 이것만으로 움직이는가
-        for (int i = 0; i < go.Length; ++i)
+        for (int i = 0; i < rda.Length; ++i)
         {
             rda[i].constraints = RigidbodyConstraints.None;
             mca[i].enabled = true;
@@ -42,7 +48,7 @@ public class CutPart : MonoBehaviour
 
     public void PushObeject(Vector3 pos)
     {
-        for (int i = 0; i < go.Length; ++i)
+        for (int i = 0; i < rda.Length; ++i)
         {
 
 

@@ -29,6 +29,11 @@ public class BombAction : MonoBehaviour
                 CutPart cp = parent.GetComponent<CutPart>();
                 if (cp)
                     cp.Activate();
+                else
+                {
+                    CutPart ccp = collider[i].GetComponent<CutPart>();
+                    ccp?.Activate();
+                }
             }
 
             //rigidBody가 있는 경우
