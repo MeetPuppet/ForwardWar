@@ -6,7 +6,17 @@ ModelImporter:
   - first:
       74: -8186898503773078634
     second: "\uC6A9\uBCD1 \uC4F0\uB7EC\uC9C0\uAE30 \uC560\uB2C8\uBA54\uC774\uC158"
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: MP44
+    second: {fileID: 2100000, guid: 9577a2f17d6a7b942bcbd7dd932eed32, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: "\uC6A9\uBCD1"
+    second: {fileID: 2100000, guid: ee5af9a6df6dab24abccf21a64a5b98d, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0
@@ -33,7 +43,36 @@ ModelImporter:
     animationWrapMode: 0
     extraExposedTransformPaths: []
     extraUserProperties: []
-    clipAnimations: []
+    clipAnimations:
+    - serializedVersion: 16
+      name: "\uC6A9\uBCD1 \uC4F0\uB7EC\uC9C0\uAE30 \uC560\uB2C8\uBA54\uC774\uC158"
+      takeName: "\uC6A9\uBCD1 \uC4F0\uB7EC\uC9C0\uAE30 \uC560\uB2C8\uBA54\uC774\uC158"
+      internalID: 0
+      firstFrame: 60
+      lastFrame: 60
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 1
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask: []
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
     isReadable: 0
   meshes:
     lODScreenPercentages: []

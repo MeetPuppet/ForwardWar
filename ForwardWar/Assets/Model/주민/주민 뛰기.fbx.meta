@@ -6,7 +6,12 @@ ModelImporter:
   - first:
       74: 1196356084310635755
     second: "\uC8FC\uBBFC \uB6F0\uAE30"
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: 01 - Default
+    second: {fileID: 2100000, guid: 1a03a11ed1cb2594ea1e3748fec94b5d, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0
