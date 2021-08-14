@@ -26,6 +26,7 @@ public class PlayerMove : MonoBehaviour
 
     // 플레이어 체력 변수
     public float hp = 20;
+    public Text Thp;
 
     // 최대 체력 변수
     float maxHp = 20;
@@ -126,6 +127,11 @@ public class PlayerMove : MonoBehaviour
         }
         else
             ActivateButton.SetActive(false);
+
+        if(Thp)
+        {
+            Thp.text = (hp / maxHp * 100).ToString() + "%";
+        }
     }
 
     void updateOld()
