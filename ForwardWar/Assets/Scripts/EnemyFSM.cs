@@ -218,11 +218,15 @@ public class EnemyFSM : EnemyBase
         // 2초 동안 기다린 뒤에 자기 자신을 제거한다.
         //yield return new WaitForSeconds(2f);
         //yield return null;
+        if (DeadCheck)
+            yield break;
 
         GameObject go = Instantiate(DropItem, transform.position, transform.rotation);
-
+        DeadCheck = true;
+        agent.destination = transform.position;
+        anim.Play("Dead");
         go.GetComponent<Rigidbody>().AddForce(Vector3.up * 100);
-        Destroy(gameObject);
+        Destroy(gameObject, 2);
         yield break;
     }
 

@@ -43,6 +43,7 @@ public class EnemyBase : MonoBehaviour
     #endregion
     #region protected
     // 에너미 상태 상수
+    protected bool DeadCheck = false;
     protected enum EnemyState
     {
         None, // 대기

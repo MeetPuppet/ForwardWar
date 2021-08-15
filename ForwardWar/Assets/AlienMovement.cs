@@ -59,12 +59,25 @@ public class AlienMovement : EnemyBase
     {
         m_State = EnemyState.Dead;
     }
+
+    public override void HitEnemy(int hitPower)
+    {
+        HP -= hitPower;
+        if (HP <= 0)
+        {
+            m_State = EnemyState.Dead;
+            anim.SetBool("isDead", true);
+            GameManager.Score.editScore(100);
+            Destroy(gameObject, 3);
+        }
+    }
     void DeadCheck()
     {
         if (HP <= 0)
         {
             m_State = EnemyState.Dead;
             anim.SetBool("isDead", true);
+            anim.Play("Dead");
         }
         Vector3 dir = (target.position - transform.position).normalized;
         transform.forward = dir;

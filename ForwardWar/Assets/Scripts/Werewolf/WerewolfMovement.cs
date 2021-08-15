@@ -217,11 +217,15 @@ public class WerewolfMovement : EnemyBase
         // 2초 동안 기다린 뒤에 자기 자신을 제거한다.
         //yield return new WaitForSeconds(2f);
         //yield return null;
-
+        if (DeadCheck)
+            yield break;
         GameObject go = Instantiate(DropItem, transform.position, transform.rotation);
+        DeadCheck = true;
+        agent.destination = transform.position;
 
         go.GetComponent<Rigidbody>().AddForce(Vector3.up * 100);
-        Destroy(gameObject);
+        anim.Play("Dead");
+        Destroy(gameObject,2);
         yield break;
     }
 
