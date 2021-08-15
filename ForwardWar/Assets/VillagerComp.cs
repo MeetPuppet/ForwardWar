@@ -15,6 +15,7 @@ public class VillagerComp : ActSwitchObject
     public Transform EscPosition;
     public float Speed = 10f;
     public NavMeshAgent agent;
+    int state = 0;
 
     protected override void initialize()
     {
@@ -42,6 +43,12 @@ public class VillagerComp : ActSwitchObject
     {
         hpSlider.value = HP / MaxHP;
         SafeCheck();
+        switch (state)
+        {
+            case 1:
+                agent.destination = EscPosition.position;
+                break;
+        }
     }
 
     //상호작용 작동 시
@@ -52,15 +59,12 @@ public class VillagerComp : ActSwitchObject
         anim.SetBool("Run", true);
         anim.SetBool("UnderAttack", false);
         anim.SetBool("Safe", false);
-        agent.destination = EscPosition.position;
+        state = 1;
     }
 
 
     public void HitVillager(int power)
     {
-        agent.destination = transform.position;
-        anim.SetBool("UnderAttack", true);
-
         HP -= power;
         if (HP <= 0)
         {
@@ -70,6 +74,7 @@ public class VillagerComp : ActSwitchObject
         }
     }
 
+    bool score = false;
     private void SafeCheck()
     {
         //Debug.Log(Vector3.Distance(transform.position, agent.destination));
@@ -79,8 +84,12 @@ public class VillagerComp : ActSwitchObject
 
         if (Vector2.Distance(villPos, EscPos) <= 0.1f)
         {
+            if (!score)
+            {
+                GameManager.Score.editScore(100 * HP);
+                score = true;
+            }
             anim.SetBool("Safe", true);
-            GameManager.Score.editScore(100);
             Destroy(gameObject, 2);
         }
     }

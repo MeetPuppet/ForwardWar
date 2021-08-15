@@ -102,7 +102,21 @@ public class EnemyBase : MonoBehaviour
     }
     void EnemyUpdate()
     {
-        switch (m_State)
+        if(target == null)
+        {
+            target = GameObject.Find("Player").transform;
+        }
+        else
+        {
+            Collider[] collider = Physics.OverlapSphere(transform.position, 10);
+            for (int i = 0; i < collider.Length; ++i)
+            {
+                VillagerComp villager = collider[i].GetComponent<VillagerComp>();
+                if(villager)
+                    target = villager.transform;
+            }
+        }
+            switch (m_State)
         {
             case EnemyState.None:
                 EnemyUpdateNone();

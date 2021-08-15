@@ -60,7 +60,9 @@ public class PlayerFire : MonoBehaviour
     public Image eatimage;
     public float cooldown_eat = 5;
     bool isCooldown_eat = false;
-    
+
+    public AudioSource gun;
+
     //애니메이터 변수
     Animator anim;
     void Start()
@@ -79,6 +81,10 @@ public class PlayerFire : MonoBehaviour
         skill2image.fillAmount = 0f;
         //skill3image.fillAmount = 0f;
         eatimage.fillAmount = 0f;
+
+        gun.mute = false;
+        gun.loop = false;
+        gun.playOnAwake = false;
     }
  
     void Update()
@@ -182,6 +188,7 @@ public class PlayerFire : MonoBehaviour
         // 마우스 왼쪽 버튼 입력을 받는다.
         if (Input.GetMouseButtonDown(0) && anim.GetFloat("Blend") == 0)
         {
+            gun.Play();
             // 레이를 생성하고 발사될 위치와 진행 방향을 설정한다.
             Ray ray = new Ray(Camera.main.transform.position, Camera.main.transform.forward);
 

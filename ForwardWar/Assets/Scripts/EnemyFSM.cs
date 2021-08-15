@@ -97,8 +97,17 @@ public class EnemyFSM : EnemyBase
             currentTime += Time.deltaTime;
             if (currentTime > attackDelay)
             {
-                target.GetComponent<PlayerMove>().DamageAction(attackPower);
-                print("공격");
+                PlayerMove pm = target.GetComponent<PlayerMove>();
+                if(pm == null)
+                {
+                    VillagerComp vc = target.GetComponent<VillagerComp>();
+                    vc.HitVillager(attackPower);
+                }
+                else
+                {
+                    pm.DamageAction(attackPower);
+                }
+                //print("공격");
                 currentTime = 0;
 
                 // 공격 애니메이션 플레이

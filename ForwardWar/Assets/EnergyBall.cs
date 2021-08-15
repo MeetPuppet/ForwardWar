@@ -34,6 +34,19 @@ public class EnergyBall : MonoBehaviour
     {
         if(other.gameObject.layer == 7)
         {
+            PlayerMove pm = other.GetComponent<PlayerMove>();
+            VillagerComp vill = other.GetComponent<VillagerComp>();
+            if (pm == null && vill == null)
+            {
+            }
+            else if (pm != null)
+            {
+                pm.DamageAction(2);
+            }
+            else if (vill != null)
+            {
+                vill.HitVillager(2);
+            }
             Destroy(gameObject);
         }
     }
