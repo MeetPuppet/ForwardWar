@@ -2083,7 +2083,7 @@ MonoBehaviour:
   TesselationFactor: 0.75
   TesselationMaxDistance: 1000
   _waterGUID: 7dc79a8b6fcabad499bd01cbaaa63a21
-  currentCamera: {fileID: 963194227}
+  currentCamera: {fileID: 0}
   tempGameObject: {fileID: 0}
   InteractPos: {x: 0, y: 0, z: 0}
 --- !u!4 &158453680
@@ -8291,7 +8291,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &245563112
 RectTransform:
   m_ObjectHideFlags: 0
@@ -12829,7 +12829,7 @@ Light:
   m_BounceIntensity: 1
   m_ColorTemperature: 6570
   m_UseColorTemperature: 0
-  m_BoundingSphereOverride: {x: 0, y: 0, z: 0, w: 0}
+  m_BoundingSphereOverride: {x: 0, y: -403.36548, z: 4.5904e-41, w: 0}
   m_UseBoundingSphereOverride: 0
   m_UseViewFrustumForShadowCasterCull: 1
   m_ShadowRadius: 0
@@ -34062,6 +34062,10 @@ PrefabInstance:
       propertyPath: playableDirector
       value: 
       objectReference: {fileID: 2035032216}
+    - target: {fileID: 4774224634594475889, guid: 18055dcb56250e44ab4858c1bc527914, type: 3}
+      propertyPath: playableDirector_end
+      value: 
+      objectReference: {fileID: 1074269246}
     - target: {fileID: 4774224634594475889, guid: 18055dcb56250e44ab4858c1bc527914, type: 3}
       propertyPath: playableDirector_start
       value: 

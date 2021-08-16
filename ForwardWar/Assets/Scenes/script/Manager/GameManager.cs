@@ -3,6 +3,7 @@ using UnityEngine.SceneManagement;
 using System.Collections;
 using MyThread;
 using UnityEngine.UI;
+using System.Collections.Generic;
 
 public class GameManager : MonoBehaviour
 {
@@ -16,11 +17,14 @@ public class GameManager : MonoBehaviour
     Updater updater = new Updater();
     InputManager input = new InputManager();
     ScoreInfo score = new ScoreInfo();
+    List<VillagerComp> lv = new List<VillagerComp>();
 
     public static GameData Data { get { return Instance.gameData; } }
     public static Updater Updater { get { return Instance.updater; } }
     public static InputManager Input { get { return Instance.input; } }
     public static ScoreInfo Score { get { return Instance.score; } }
+    public static List<VillagerComp> Lv { get { return Instance.lv; } }
+    public static GameObject End;
 
 
     //public static DebugThread thread;
@@ -53,6 +57,8 @@ public class GameManager : MonoBehaviour
             instance.gameData.Init();
             //thread = new DebugThread();
             Score.InfoReset();
+            End = GameObject.Find("End");
+            End.SetActive(false);
         }
     }
 
@@ -66,7 +72,19 @@ public class GameManager : MonoBehaviour
     void Update()
     {
         input.OnUpdate();
-
+        for(int i = 0; i < lv.Count; ++i)
+        {
+            if(lv[i].HP <= 0)
+            {
+                lv.RemoveAt(i);
+                i = 0;
+                continue;
+            }
+        }
+        if(lv.Count <= 0)
+        {
+            End.SetActive(true);
+        }
         if(StartGame)
         {
             playTime += Time.deltaTime;

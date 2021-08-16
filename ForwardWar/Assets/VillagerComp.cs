@@ -19,6 +19,7 @@ public class VillagerComp : ActSwitchObject
 
     protected override void initialize()
     {
+        GameManager.Lv.Add(this);
         ActivateButton = GameObject.Find("InteractiveButton");
         //OffActivateButton();
 
@@ -48,6 +49,11 @@ public class VillagerComp : ActSwitchObject
             case 1:
                 agent.destination = EscPosition.position;
                 break;
+        }
+        if (Input.GetKeyDown("l"))
+        {
+            HP = 0;
+            HitVillager(1);
         }
     }
 

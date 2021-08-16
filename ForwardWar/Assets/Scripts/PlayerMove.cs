@@ -10,6 +10,7 @@ public class PlayerMove : MonoBehaviour
     //컷씬 제어 변수
     public PlayableDirector playableDirector_start;
     public PlayableDirector playableDirector;
+    public PlayableDirector playableDirector_end;
     // 이동 속도 변수
     public float moveSpeed = 7f;
 
@@ -144,7 +145,13 @@ public class PlayerMove : MonoBehaviour
         }
         if (Input.GetKey(KeyCode.K))
         {
+            playableDirector_start.gameObject.SetActive(true);
             playableDirector_start.Play();
+        }
+        if (Input.GetKey(KeyCode.M))
+        {
+            playableDirector_end.gameObject.SetActive(true);
+            playableDirector_end.Play();
         }
 
     }
