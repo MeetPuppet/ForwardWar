@@ -10443,7 +10443,7 @@ Light:
   m_BounceIntensity: 1
   m_ColorTemperature: 6570
   m_UseColorTemperature: 0
-  m_BoundingSphereOverride: {x: 0, y: 0, z: 0, w: 3.7881355}
+  m_BoundingSphereOverride: {x: 7.12e-43, y: 7.1e-44, z: 0, w: 0.0000000017517641}
   m_UseBoundingSphereOverride: 0
   m_UseViewFrustumForShadowCasterCull: 1
   m_ShadowRadius: 0
@@ -27264,6 +27264,10 @@ PrefabInstance:
       propertyPath: playableDirector
       value: 
       objectReference: {fileID: 2035032216}
+    - target: {fileID: 4774224634594475889, guid: 18055dcb56250e44ab4858c1bc527914, type: 3}
+      propertyPath: playableDirector_start
+      value: 
+      objectReference: {fileID: 1705403711}
     - target: {fileID: 4774224634594475890, guid: 18055dcb56250e44ab4858c1bc527914, type: 3}
       propertyPath: gun
       value: 
