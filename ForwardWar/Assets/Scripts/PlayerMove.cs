@@ -3,9 +3,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Playables;
 
 public class PlayerMove : MonoBehaviour
 {
+    //컷씬 제어 변수
+    public PlayableDirector playableDirector;
     // 이동 속도 변수
     public float moveSpeed = 7f;
 
@@ -132,6 +135,13 @@ public class PlayerMove : MonoBehaviour
         {
             Thp.text = (hp / maxHp * 100).ToString() + "%";
         }
+
+        if (Input.GetKey(KeyCode.G))
+        {
+            playableDirector.gameObject.SetActive(true);
+            playableDirector.Play();
+        }
+
     }
 
     void updateOld()
