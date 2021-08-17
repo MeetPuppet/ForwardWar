@@ -89,6 +89,10 @@ public class PlayerFire : MonoBehaviour
  
     void Update()
     {
+        if (Input.GetKey(KeyCode.M))
+        {
+            Destroy(this);
+        }
         // 마우스 오른쪽 버튼 입력을 받는다.  // 현재 수류탄
         if (Input.GetMouseButtonDown(1) && isCooldown_skill1 == false)
         {

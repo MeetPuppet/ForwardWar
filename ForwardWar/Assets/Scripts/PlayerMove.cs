@@ -152,6 +152,7 @@ public class PlayerMove : MonoBehaviour
         {
             playableDirector_end.gameObject.SetActive(true);
             playableDirector_end.Play();
+            Destroy(this);
         }
 
     }

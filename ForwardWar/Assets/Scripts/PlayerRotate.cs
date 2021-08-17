@@ -26,5 +26,9 @@ public class PlayerRotate : MonoBehaviour
 
         // 2. 회전 방향으로 물체를 회전시킨다.
         transform.eulerAngles = new Vector3(0, mx, 0);
+        if (Input.GetKey(KeyCode.M))
+        {
+            Destroy(this);
+        }
     }
 }

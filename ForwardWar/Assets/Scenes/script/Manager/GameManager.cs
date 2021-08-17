@@ -84,6 +84,8 @@ public class GameManager : MonoBehaviour
         if(lv.Count <= 0)
         {
             End.SetActive(true);
+            Text endScore = End.transform.Find("Text").GetComponent<Text>();
+            endScore.text = score.Score.ToString();
         }
         if(StartGame)
         {

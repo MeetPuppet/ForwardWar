@@ -13,6 +13,10 @@ public class CamRotate : MonoBehaviour
 
     void Update()
     {
+        if (Input.GetKey(KeyCode.M))
+        {
+            Destroy(this);
+        }
         // 사용자의 마우스 입력을 받아서 물체를 회전시키고 싶다.       
         // 1. 마우스 입력을 받는다.
         float mouse_X = Input.GetAxis("Mouse X");
