@@ -225,7 +225,7 @@ public class PlayerFire : MonoBehaviour
                 {
                     enemy.HitEnemy(3);
                     GameManager.Score.editScore(10);
-                    //enemy.BloodActive(hitInfo);
+                    enemy.BloodActive(hitInfo);
                 }
             }
 

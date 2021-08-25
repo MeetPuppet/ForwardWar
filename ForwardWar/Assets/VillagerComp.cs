@@ -58,7 +58,7 @@ public class VillagerComp : ActSwitchObject
     }
 
     //상호작용 작동 시
-    public override void ActivateObject()
+    public override void ActivateObject(PlayerMove player)
     {
         Debug.Log("Activate Villager");
         //OffActivateButton();
@@ -76,11 +76,12 @@ public class VillagerComp : ActSwitchObject
         {
             //플렉스 추가
             Destroy(gameObject);
+            villagerManager.VillagerUpdate();
             Debug.Log("Dead");
         }
     }
 
-    bool score = false;
+    public bool score = false;
     private void SafeCheck()
     {
         //Debug.Log(Vector3.Distance(transform.position, agent.destination));
@@ -93,6 +94,7 @@ public class VillagerComp : ActSwitchObject
             if (!score)
             {
                 GameManager.Score.editScore(100 * HP);
+                villagerManager.VillagerUpdate();
                 score = true;
             }
             anim.SetBool("Safe", true);

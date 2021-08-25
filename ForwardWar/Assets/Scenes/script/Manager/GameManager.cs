@@ -58,7 +58,7 @@ public class GameManager : MonoBehaviour
             //thread = new DebugThread();
             Score.InfoReset();
             End = GameObject.Find("End");
-            End.SetActive(false);
+            End?.SetActive(false);
         }
     }
 
@@ -103,17 +103,11 @@ public class GameManager : MonoBehaviour
     public void SceneChange(int SceneNum)
     {
         SceneManager.LoadScene(SceneNum);
+
         Score.InfoReset();
         StartGame = true;
         playTime = 0f;
-        if(SceneNum == 1)
-        {
-            Cursor.visible = false;
-        }
-        else
-        {
-            Cursor.visible = true;
-        }
+        Cursor.visible = false;
     }
 
     public void ExitApp()

@@ -230,22 +230,4 @@ public class EnemyFSM : EnemyBase
         yield break;
     }
 
-    public void BloodActive(RaycastHit ray)
-    {
-        StartCoroutine("FlowBlood", ray);
-    }
-
-
-    IEnumerator FlowBlood(RaycastHit ray)
-    {
-        Blood.transform.position = ray.point;
-        Blood.transform.eulerAngles = ray.normal;
-        FlexSourceActor act = Blood.GetComponent<FlexSourceActor>();
-        act.isActive = true;
-
-        yield return new WaitForSeconds(0.1f);
-        act.isActive = false;
-
-        yield break;
-    }
 }

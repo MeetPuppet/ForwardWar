@@ -6,7 +6,7 @@ public class ItemComp : MonoBehaviour
 {
     float StartPointY;
     bool check = true;
-    public float MoveRange;
+    public float MoveRange = 0.0005f;
     float MoveSpeed;
 
     public float RotSpeed = 4;

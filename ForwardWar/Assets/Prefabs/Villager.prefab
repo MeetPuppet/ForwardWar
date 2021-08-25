@@ -107,7 +107,7 @@ GameObject:
   - component: {fileID: 4340535966178036895}
   m_Layer: 7
   m_Name: Villager
-  m_TagString: Untagged
+  m_TagString: Villager
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

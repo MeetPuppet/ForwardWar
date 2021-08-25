@@ -23,11 +23,41 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1222890484705764417}
-  m_LocalRotation: {x: 0.21877883, y: -0.27734783, z: -0.9294736, w: 0.10626752}
-  m_LocalPosition: {x: 0, y: 0, z: 0.4400157}
-  m_LocalScale: {x: 0.7647155, y: 0.50736856, z: 0.55879945}
+  m_LocalRotation: {x: 0.21877901, y: -0.27734783, z: -0.9294736, w: 0.10626731}
+  m_LocalPosition: {x: -0.000028661669, y: 0, z: 0.44001615}
+  m_LocalScale: {x: 0.76471525, y: 0.5073685, z: 0.5587994}
   m_Children: []
-  m_Father: {fileID: 1347633682740573723}
+  m_Father: {fileID: 8915285895779390543}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1873313081461663606
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1895912926715997105}
+  m_Layer: 0
+  m_Name: FirePos
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1895912926715997105
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1873313081461663606}
+  m_LocalRotation: {x: 0.3085637, y: -0.25834256, z: -0.9152174, w: 0.02061043}
+  m_LocalPosition: {x: -0.110621594, y: -0.17797242, z: 10.058719}
+  m_LocalScale: {x: 1.4382316, y: 1.0172539, z: 1.4881229}
+  m_Children: []
+  m_Father: {fileID: 6712594446293579583}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &4774224634594475852
@@ -83,7 +113,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 69e5337d67bcfe64c991d0da05bc202c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playableDirector_start: {fileID: 0}
+  playableDirector: {fileID: 0}
+  playableDirector_end: {fileID: 0}
   moveSpeed: 5
+  Weapon: {fileID: 0}
   yVelocity: 0
   jumpPower: 5
   isJumping: 0
@@ -157,6 +191,7 @@ MonoBehaviour:
   eat: 101
   eatimage: {fileID: 0}
   cooldown_eat: 5
+  gun: {fileID: 0}
 --- !u!136 &6110654062654653397
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -428,6 +463,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 5448162392438982518}
     m_Modifications:
+    - target: {fileID: 1638236870780618428, guid: b46c5f063d394614785629ed241ed375, type: 3}
+      propertyPath: m_RootOrder
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3468536551871227340, guid: b46c5f063d394614785629ed241ed375, type: 3}
+      propertyPath: m_RootOrder
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6424388600781792097, guid: b46c5f063d394614785629ed241ed375, type: 3}
       propertyPath: m_Layer
       value: 7
@@ -703,9 +746,14 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 6424388602855382436, guid: b46c5f063d394614785629ed241ed375, type: 3}
   m_PrefabInstance: {fileID: 5448162392444055939}
   m_PrefabAsset: {fileID: 0}
---- !u!4 &1347633682740573723 stripped
+--- !u!4 &8915285895779390543 stripped
 Transform:
-  m_CorrespondingSourceObject: {fileID: 6424388602169345944, guid: b46c5f063d394614785629ed241ed375, type: 3}
+  m_CorrespondingSourceObject: {fileID: 3468536551871227340, guid: b46c5f063d394614785629ed241ed375, type: 3}
+  m_PrefabInstance: {fileID: 5448162392444055939}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &6712594446293579583 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 1638236870780618428, guid: b46c5f063d394614785629ed241ed375, type: 3}
   m_PrefabInstance: {fileID: 5448162392444055939}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &5448162393053022791

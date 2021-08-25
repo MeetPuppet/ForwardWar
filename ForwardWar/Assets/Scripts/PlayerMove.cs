@@ -44,6 +44,8 @@ public class PlayerMove : MonoBehaviour
     //컨트롤할 플렉스 오브젝트
     public GameObject FlexComp;
 
+    public Transform[] Weapons;
+
     private FlexSourceActor flexSource;
 
     ////물 plane들을 포함한 object
@@ -55,7 +57,8 @@ public class PlayerMove : MonoBehaviour
     public GameObject ActivateButton;
     void Start()
     {
-        if(ActivateButton == null)
+        Cursor.visible = false;
+        if (ActivateButton == null)
             ActivateButton = GameObject.Find("InteractiveButton");
         flexSource = FlexComp.GetComponent<FlexSourceActor>();
 
@@ -121,17 +124,22 @@ public class PlayerMove : MonoBehaviour
         // 4. 현재 플레이어 hp를 hp 슬라이더에 반영
         hpSlider.value = (float)hp / (float)maxHp;
 
-
         Ray ray = new Ray(Camera.main.transform.position, Camera.main.transform.forward);
         RaycastHit hit;
         if (Physics.Raycast(ray, out hit, 5))
         {
-            hit.transform.GetComponent<ActSwitchObject>()?.OnActivateButton();
-            if (Input.GetKeyDown(KeyCode.F))
-                hit.transform.GetComponent<ActSwitchObject>()?.ActivateObject();
+            ActSwitchObject ASO = hit.transform.GetComponent<ActSwitchObject>();
+            if (ASO)
+            {
+                ASO.OnActivateButton();
+                if (Input.GetKeyDown(KeyCode.F))
+                    hit.transform.GetComponent<ActSwitchObject>()?.ActivateObject(this);
+            }
+            else
+            {
+                ActivateButton.SetActive(false);
+            }
         }
-        else
-            ActivateButton.SetActive(false);
 
         if(Thp)
         {
@@ -274,6 +282,17 @@ public class PlayerMove : MonoBehaviour
         }
     }
 
+    public void RefreshItem(int num)
+    {
+        if (Weapons.Length <= num)
+            return;
+
+        for(int i = 0; i < Weapons.Length; ++i)
+        {
+            Weapons[i].gameObject.SetActive(false);
+        }
+        Weapons[num].gameObject.SetActive(true);
+    }
     //IEnumerator TriggerControl()
     //{
     //}

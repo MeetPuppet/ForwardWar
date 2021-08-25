@@ -26,7 +26,7 @@ public class ActSwitchObject : MonoBehaviour
     //}
 
     //상호작용 작동 시
-    public virtual void ActivateObject()
+    public virtual void ActivateObject(PlayerMove player)
     {
         Debug.Log("Activate");
     }
