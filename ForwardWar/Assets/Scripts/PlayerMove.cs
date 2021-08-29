@@ -52,11 +52,12 @@ public class PlayerMove : MonoBehaviour
     //public GameObject waterSector;
 
     //애니메이터 변수
-    Animator anim;
+    public Animator anim;
 
     public GameObject ActivateButton;
     void Start()
     {
+        RefreshItem(1);
         Cursor.visible = false;
         if (ActivateButton == null)
             ActivateButton = GameObject.Find("InteractiveButton");
@@ -68,7 +69,16 @@ public class PlayerMove : MonoBehaviour
         cc = GetComponent<CharacterController>();
 
         //
-        anim = GetComponentInChildren<Animator>();
+        //anim = GetComponentInChildren<Animator>();
+
+        //AnimationClip[] clips = anim.runtimeAnimatorController.animationClips;
+        //int i = 0;
+        //foreach (AnimationClip ac in clips)
+        //{
+        //    clips[i++] = ac;
+        //}
+
+
         Debug.Log("start");
     }
 
@@ -87,11 +97,12 @@ public class PlayerMove : MonoBehaviour
         {
             anim.SetBool("Dead", true);
         }
-        else if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(0))
         {
             anim.SetTrigger("Shoot");
         }
         anim.SetFloat("Blend", dir.magnitude);
+        Debug.Log(dir.magnitude);
         //변경지점
 
         // 2-1. 메인 카메라를 기준으로 방향을 변환한다.
@@ -292,6 +303,9 @@ public class PlayerMove : MonoBehaviour
             Weapons[i].gameObject.SetActive(false);
         }
         Weapons[num].gameObject.SetActive(true);
+
+        anim.SetInteger("AnimInit", num);
+        anim.Play($"Idle {num}");
     }
     //IEnumerator TriggerControl()
     //{
