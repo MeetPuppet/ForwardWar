@@ -14,9 +14,16 @@ public class NaviComp : MonoBehaviour
     }
     private void Update()
     {
-        if(Vector3.Distance(agent.destination, transform.position) <= 0.1f)
+        if(agent.destination != transform.position &&
+            Vector3.Distance(agent.destination, transform.position) <= 3f)
         {
-            Destroy(gameObject, 1);
+            agent.destination = transform.position;
+            Destroy(gameObject, 2);
         }
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        Destroy(gameObject);
     }
 }

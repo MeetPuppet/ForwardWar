@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 public class Compass : MonoBehaviour
 {
-    const float MaximunSprite = 20f;
+    public float MaximunSpriteSize = 30f;
     public GameObject iconPrefab;
     List<QuestMarker> questMarkers = new List<QuestMarker>();
     List<float> MarkersDistance = new List<float>();
@@ -35,7 +35,7 @@ public class Compass : MonoBehaviour
             Markers[i].image.rectTransform.anchoredPosition = GetPosOnCompass(Markers[i]);
 
             float distance = Vector3.Distance(Markers[i].transform.position, player.position);
-            float size = (1 - distance / (distance + distance)) * MaximunSprite;
+            float size = (1 - distance / (MaximunSpriteSize + distance)) * MaximunSpriteSize;
             Markers[i].image.rectTransform.sizeDelta = new Vector2(size, size);
             MarkersDistance[i] = distance;
         }
@@ -50,11 +50,10 @@ public class Compass : MonoBehaviour
             }
         }
 
-        if (Input.GetKey(KeyCode.P))
+        if (Input.GetKeyDown(KeyCode.P))
         {
             player.GetComponent<PlayerMove>().FindWay(CloseObject());
         }
-        Debug.Log(CloseObject());
     }
 
     public void AddQuestMarker (QuestMarker marker)

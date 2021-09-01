@@ -10374,6 +10374,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 341631473}
     - target: {fileID: 4198143656494704474, guid: 31e11648c57d1b141be8f5392f2f3cc1, type: 3}
+      propertyPath: MaximunSpriteSize
+      value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 4198143656494704474, guid: 31e11648c57d1b141be8f5392f2f3cc1, type: 3}
       propertyPath: Markers.Array.size
       value: 3
       objectReference: {fileID: 0}
@@ -14674,7 +14678,7 @@ Light:
   m_BounceIntensity: 1
   m_ColorTemperature: 6570
   m_UseColorTemperature: 0
-  m_BoundingSphereOverride: {x: 5.83e-43, y: -2.4381707e+29, z: 5.83e-43, w: -1.7691148e+29}
+  m_BoundingSphereOverride: {x: 8.95e-43, y: 19.80925, z: 8.95e-43, w: -2.0000002}
   m_UseBoundingSphereOverride: 0
   m_UseViewFrustumForShadowCasterCull: 1
   m_ShadowRadius: 0
@@ -43572,6 +43576,10 @@ PrefabInstance:
     - target: {fileID: 1280507602566607241, guid: 492d42b60c3762d4f934c6d72626e99a, type: 3}
       propertyPath: m_Name
       value: Villager
+      objectReference: {fileID: 0}
+    - target: {fileID: 3076141119497203100, guid: 492d42b60c3762d4f934c6d72626e99a, type: 3}
+      propertyPath: m_StoppingDistance
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5892896195021599157, guid: 492d42b60c3762d4f934c6d72626e99a, type: 3}
       propertyPath: m_AnchorMax.y
