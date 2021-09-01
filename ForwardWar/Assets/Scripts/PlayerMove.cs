@@ -157,9 +157,6 @@ public class PlayerMove : MonoBehaviour
             Thp.text = (hp / maxHp * 100).ToString() + "%";
         }
 
-        if (Physics.Raycast(ray, out hit))
-            if (Input.GetKeyDown(KeyCode.F))
-            FindWay(hit.point);
         if (Input.GetKey(KeyCode.G))
         {
             playableDirector.gameObject.SetActive(true);
@@ -312,7 +309,7 @@ public class PlayerMove : MonoBehaviour
     }
 
     public GameObject Navi;
-    void FindWay(Vector3 dest)
+    public void FindWay(Vector3 dest)
     {
         GameObject go = Instantiate(Navi, transform.position, transform.rotation);
         go.GetComponent<NaviComp>().Find(dest);

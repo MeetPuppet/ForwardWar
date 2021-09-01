@@ -10373,6 +10373,22 @@ PrefabInstance:
       propertyPath: player
       value: 
       objectReference: {fileID: 341631473}
+    - target: {fileID: 4198143656494704474, guid: 31e11648c57d1b141be8f5392f2f3cc1, type: 3}
+      propertyPath: Markers.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 4198143656494704474, guid: 31e11648c57d1b141be8f5392f2f3cc1, type: 3}
+      propertyPath: Markers.Array.data[0]
+      value: 
+      objectReference: {fileID: 1446248167}
+    - target: {fileID: 4198143656494704474, guid: 31e11648c57d1b141be8f5392f2f3cc1, type: 3}
+      propertyPath: Markers.Array.data[1]
+      value: 
+      objectReference: {fileID: 568173825}
+    - target: {fileID: 4198143656494704474, guid: 31e11648c57d1b141be8f5392f2f3cc1, type: 3}
+      propertyPath: Markers.Array.data[2]
+      value: 
+      objectReference: {fileID: 1555596172}
     - target: {fileID: 4198143656494704475, guid: 31e11648c57d1b141be8f5392f2f3cc1, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -14658,7 +14674,7 @@ Light:
   m_BounceIntensity: 1
   m_ColorTemperature: 6570
   m_UseColorTemperature: 0
-  m_BoundingSphereOverride: {x: -0, y: -0, z: 1, w: 0}
+  m_BoundingSphereOverride: {x: 5.83e-43, y: -2.4381707e+29, z: 5.83e-43, w: -1.7691148e+29}
   m_UseBoundingSphereOverride: 0
   m_UseViewFrustumForShadowCasterCull: 1
   m_ShadowRadius: 0
