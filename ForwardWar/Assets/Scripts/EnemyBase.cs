@@ -159,7 +159,7 @@ public class EnemyBase : MonoBehaviour
             m_State = EnemyState.Dead;
             GameManager.Score.editScore(100);
             Destroy(gameObject, 3);
-            Destroy(Blood, 3);
+
         }
     }
 
@@ -178,10 +178,9 @@ public class EnemyBase : MonoBehaviour
 
     IEnumerator FlowBlood(RaycastHit ray)
     {
-        Blood.transform.position = ray.point;
-        Blood.transform.eulerAngles = ray.normal;
+        GameObject flow = Instantiate(Blood, ray.point, transform.rotation);
 
-        yield return new WaitForSeconds(0.1f);
+        yield return new WaitForSeconds(3f);
 
         yield break;
     }

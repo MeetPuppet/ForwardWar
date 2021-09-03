@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -6,6 +7,7 @@ public class PlayerFire : MonoBehaviour
     // 피격 이펙트 오브젝트
     public GameObject bulletEffect;
     System.Random rand = new System.Random(0);
+    public PlayerMove pm;
 
     // 발사 이펙트 오브젝트
     public GameObject shootEffect;
@@ -28,8 +30,8 @@ public class PlayerFire : MonoBehaviour
 
     // 발사 무기 공격력
     public int weaponPower = 1;
-    int WeaponNum = -1;
-    int Ammor = -1;
+    public int WeaponNum = -1;
+    public int Ammor = -1;
 
     //수류탄의 쿨타임 관리
     //public KeyCode skill1;
@@ -180,6 +182,9 @@ public class PlayerFire : MonoBehaviour
             }
         }
 
+        if (block)
+            return;
+
         switch(WeaponNum)
         {
             case 0:
@@ -198,7 +203,6 @@ public class PlayerFire : MonoBehaviour
                 HandGun();
                 break;
         }
-        
     }
 
     public void GunSetting(int WNum, int power, int ammor)
@@ -249,7 +253,13 @@ public class PlayerFire : MonoBehaviour
                 }
             }
             anim.SetBool("Shoot", false);
-            Destroy(shootPosition);
+            Destroy(shootPosition,0.1f);
+            --Ammor;
+            pm.AddVertical(0.1f);
+            if (WeaponNum != -1 && Ammor <= 0)
+            {
+                GunSoundChange(pm.Weapons[0].GetComponent<AudioSource>());
+            }
         }
     }
     void AssaultRifle()
@@ -265,8 +275,9 @@ public class PlayerFire : MonoBehaviour
         }
         if (Input.GetMouseButtonUp(0))
         {
-            anim.SetBool("Shoot", false);
             Destroy(shootPosition);
+            shootPosition = null;
+            anim.SetBool("Shoot", false);
         }
         // 마우스 왼쪽 버튼 입력을 받는다.
         if (Input.GetMouseButton(0) && !gun.isPlaying)
@@ -295,6 +306,15 @@ public class PlayerFire : MonoBehaviour
                     enemy.HitEnemy(weaponPower);
                     GameManager.Score.editScore(10);
                     enemy.BloodActive(hitInfo);
+                }
+            }
+            --Ammor;
+            if (Ammor <= 0)
+            {
+                GunSoundChange(pm.Weapons[0].GetComponent<AudioSource>());
+                if (shootPosition != null)
+                {
+                    Destroy(shootPosition);
                 }
             }
         }
@@ -353,6 +373,12 @@ public class PlayerFire : MonoBehaviour
             ps = shootPosition.GetComponent<ParticleSystem>();
             ps.Play();
             anim.SetBool("Shoot", false);
+            shootPosition = null;
+            --Ammor;
+            if (Ammor <= 0)
+            {
+                GunSoundChange(pm.Weapons[0].GetComponent<AudioSource>());
+            }
         }
         if (anim.GetCurrentAnimatorStateInfo(0).IsName($"Reload {WeaponNum}")
             && !Reload.isPlaying)
@@ -396,10 +422,34 @@ public class PlayerFire : MonoBehaviour
             }
             anim.SetBool("Shoot", false);
             Destroy(shootPosition);
+            --Ammor;
+            if (Ammor <= 0)
+            {
+                GunSoundChange(pm.Weapons[0].GetComponent<AudioSource>());
+            }
         }
         if (anim.GetCurrentAnimatorStateInfo(0).IsName($"Reload {WeaponNum}")
             && !Reload.isPlaying)
             Reload.Play();
 
+    }
+
+    public void GunSoundChange(AudioSource GunSound)
+    {
+        GameManager.Updater.Add(ResetSoundChange(GunSound));
+    }
+
+    bool block = false;
+    IEnumerator ResetSoundChange(AudioSource GunSound)
+    {
+        block = true;
+        while (gun.isPlaying)
+            yield return null;
+
+        gun = GunSound;
+        pm.RefreshItem(-1);
+        GunSetting(-1, 1, -1);
+        block = false;
+        yield break;
     }
 }

@@ -31,4 +31,5 @@ public class PlayerRotate : MonoBehaviour
             Destroy(this);
         }
     }
+
 }

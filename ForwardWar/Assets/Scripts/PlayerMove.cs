@@ -172,11 +172,13 @@ public class PlayerMove : MonoBehaviour
 
     }
 
+    float h;
+    float v;
     void updateOld()
     {
         // 사용자의 입력을 받는다.
-        float h = Input.GetAxis("Horizontal");
-        float v = Input.GetAxis("Vertical");
+        h = Input.GetAxis("Horizontal");
+        v = Input.GetAxis("Vertical");
 
         // 이동 방향을 설정
         Vector3 dir = new Vector3(h, 0, v);
@@ -215,7 +217,10 @@ public class PlayerMove : MonoBehaviour
         // 4. 현재 플레이어 hp를 hp 슬라이더에 반영
         hpSlider.value = (float)hp / (float)maxHp;
     }
-
+    public void AddVertical(float num)
+    {
+        v += num;
+    }
     // 플레이어의 피격 함수
     public void DamageAction(int damage)
     {
@@ -292,10 +297,10 @@ public class PlayerMove : MonoBehaviour
     public int WeapoenNum;
     public void RefreshItem(int num)
     {
-        if (Weapons.Length <= num)
-            return;
+        if (Weapons.Length <= num || num < 0)
+            num = 0;
 
-        for(int i = 0; i < Weapons.Length; ++i)
+        for (int i = 0; i < Weapons.Length; ++i)
         {
             Weapons[i].gameObject.SetActive(false);
         }

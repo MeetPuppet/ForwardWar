@@ -788,6 +788,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bulletEffect: {fileID: 2746820045019265008, guid: b322b37a47bc884458929cb1c701e6ce, type: 3}
+  pm: {fileID: 5942499318067754128}
+  pr: {fileID: 5942499318067754131}
   shootEffect: {fileID: 8123483055166860908, guid: fed57a1ef3561274a91c20b2a2766264, type: 3}
   firePosition: {fileID: 5942499318067754120}
   shootPosition: {fileID: 5942499318728183840}
@@ -796,6 +798,8 @@ MonoBehaviour:
   MissileFactory: {fileID: 0}
   throwPower: 15
   weaponPower: 1
+  WeaponNum: -1
+  Ammor: -1
   skill1image: {fileID: 0}
   cooldown_skill1: 7
   skill2: 114
