@@ -25,7 +25,7 @@ public class MissileAction : MonoBehaviour
         missile.transform.LookAt(target.transform.position);
 
         Destroy(gameObject);
-        StartCoroutine(Launch(missile));
+        GameManager.Updater.Add(Launch(missile));
     }
 
     public IEnumerator Launch(GameObject missile)

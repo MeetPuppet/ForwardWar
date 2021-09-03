@@ -93,9 +93,6 @@ public class EnemyBase : MonoBehaviour
         anim = transform.GetComponentInChildren<Animator>();
         agent.speed = Speed;
         agent.updateRotation = false;
-
-        isBlood = false;
-        bloodTime = 0f;
     }
 
     void Update()
@@ -103,27 +100,8 @@ public class EnemyBase : MonoBehaviour
         EnemyUpdate();
         hpSlider.value = (float)HP / (float)MaxHP;
     }
-    void bloodoff()
-    {
-        if (!isBlood || bloodTime > 0f)
-            return;
-
-        FlexSourceActor act = Blood.GetComponent<FlexSourceActor>();
-        act.isActive = false;
-        isBlood = false;
-    }
     void EnemyUpdate()
     {
-        if (bloodTime > 0f)
-        {
-            bloodTime -= Time.deltaTime;
-        }
-        else
-        {
-            bloodoff();
-        }
-
-
         if (target == null)
         {
             target = GameObject.Find("Player").transform;
@@ -181,7 +159,6 @@ public class EnemyBase : MonoBehaviour
             m_State = EnemyState.Dead;
             GameManager.Score.editScore(100);
             Destroy(gameObject, 3);
-            bloodTime = 0;
             Destroy(Blood, 3);
         }
     }
@@ -196,18 +173,17 @@ public class EnemyBase : MonoBehaviour
 
     public void BloodActive(RaycastHit ray)
     {
-        StartCoroutine("FlowBlood", ray);
+        GameManager.Updater.Add(FlowBlood(ray));
     }
 
-    bool isBlood;
-    float bloodTime;
-    void FlowBlood(RaycastHit ray)
+    IEnumerator FlowBlood(RaycastHit ray)
     {
         Blood.transform.position = ray.point;
-        Blood.transform.eulerAngles = -ray.normal;
-        FlexSourceActor act = Blood.GetComponent<FlexSourceActor>();
-        act.isActive = true;
-        isBlood = true;
-        bloodTime = Time.deltaTime;
+        Blood.transform.eulerAngles = ray.normal;
+
+        yield return new WaitForSeconds(0.1f);
+
+        yield break;
     }
+
 }

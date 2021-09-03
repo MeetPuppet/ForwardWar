@@ -65,7 +65,7 @@ public class MercenaryMovement : MonoBehaviour
             agent.speed = moveSpeed;
         }
 
-        StartCoroutine("AlertMovement");
+        GameManager.Updater.Add(AlertMovement());
     }
 
     // Update is called once per frame
@@ -82,6 +82,7 @@ public class MercenaryMovement : MonoBehaviour
             case MercenaryState.Move:
             case MercenaryState.Breakaway:
             case MercenaryState.Attack:
+                GameManager.Updater.Add(AlertMovement());
                 StartCoroutine(orderStr);
 
                 break;

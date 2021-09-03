@@ -231,7 +231,7 @@ public class WerewolfMovement : EnemyBase
 
     public void BloodActive(RaycastHit ray)
     {
-        StartCoroutine("FlowBlood", ray);
+        GameManager.Updater.Add(FlowBlood(ray));
     }
 
 

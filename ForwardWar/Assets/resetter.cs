@@ -10,7 +10,7 @@ public class resetter : MonoBehaviour
     void Start()
     {
         prefab.transform.position = transform.position;
-        StartCoroutine("summon");
+        GameManager.Updater.Add(summon());
     }
 
     // Update is called once per frame

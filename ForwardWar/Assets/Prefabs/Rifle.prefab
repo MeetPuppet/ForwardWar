@@ -206,6 +206,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ActivateButton: {fileID: 0}
   ItemNum: 3
+  Power: 20
+  Ammor: 5
 --- !u!1001 &1353902676728521695
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -11,6 +11,7 @@ public class PlayerMove : MonoBehaviour
     public PlayableDirector playableDirector_start;
     public PlayableDirector playableDirector;
     public PlayableDirector playableDirector_end;
+    public PlayerFire pf;
     // 이동 속도 변수
     public float moveSpeed = 7f;
 
@@ -57,7 +58,7 @@ public class PlayerMove : MonoBehaviour
     public GameObject ActivateButton;
     void Start()
     {
-        RefreshItem(1);
+        RefreshItem(0);
         Cursor.visible = false;
         if (ActivateButton == null)
             ActivateButton = GameObject.Find("InteractiveButton");
@@ -77,7 +78,6 @@ public class PlayerMove : MonoBehaviour
         //{
         //    clips[i++] = ac;
         //}
-
 
         Debug.Log("start");
     }
@@ -224,7 +224,7 @@ public class PlayerMove : MonoBehaviour
 
         if (hp > 0)
         {
-            StartCoroutine(PlayHitEffect());
+            GameManager.Updater.Add(PlayHitEffect());
         }
     }
     IEnumerator PlayHitEffect()
@@ -254,7 +254,7 @@ public class PlayerMove : MonoBehaviour
     {
         if (hp > 0)
         {
-            StartCoroutine(PlayEatEffect());
+            GameManager.Updater.Add(PlayEatEffect());
         }
     }
     IEnumerator PlayEatEffect()
