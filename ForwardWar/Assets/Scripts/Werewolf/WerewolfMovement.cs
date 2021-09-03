@@ -229,10 +229,6 @@ public class WerewolfMovement : EnemyBase
         yield break;
     }
 
-    public void BloodActive(RaycastHit ray)
-    {
-        GameManager.Updater.Add(FlowBlood(ray));
-    }
 
 
     IEnumerator FlowBlood(RaycastHit ray)

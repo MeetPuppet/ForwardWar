@@ -25,6 +25,9 @@ public class ItemComp : MonoBehaviour
     {
         transform.Rotate(rot);
 
+        if (MoveRange <= 0f)
+            return;
+
         if (transform.localPosition.y > StartPointY + MoveRange)
         {
             check = true;

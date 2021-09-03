@@ -113,6 +113,128 @@ namespace MeshCutter
             return new GameObject[] { leftSideObj };
 
         }
+        public static GameObject[] Cut(GameObject victim, Vector3 anchorPoint, Vector3 normalDirection, Material capMaterial)
+        {
+            _blade = new Plane(victim.transform.InverseTransformDirection(-normalDirection),
+                victim.transform.InverseTransformPoint(anchorPoint));
+
+            _victim_mesh = victim.GetComponent<MeshFilter>().mesh;
+
+            _leftSide.Clear();
+            _rightSide.Clear();
+            _newVerticesCache.Clear();
+
+
+            int index_1, index_2, index_3;
+
+            var mesh_vertices = _victim_mesh.vertices;
+            var mesh_normals = _victim_mesh.normals;
+            var mesh_uvs = _victim_mesh.uv;
+            var mesh_tangents = _victim_mesh.tangents;
+            if (mesh_tangents != null && mesh_tangents.Length == 0)
+                mesh_tangents = null;
+
+            for (int submeshIterator = 0; submeshIterator < _victim_mesh.subMeshCount; submeshIterator++)
+            {
+
+                var indices = _victim_mesh.GetTriangles(submeshIterator);
+
+                for (int i = 0; i < indices.Length; i += 3)
+                {
+
+                    index_1 = indices[i];
+                    index_2 = indices[i + 1];
+                    index_3 = indices[i + 2];
+
+                    _triangleCache.vertices[0] = mesh_vertices[index_1];
+                    _triangleCache.vertices[1] = mesh_vertices[index_2];
+                    _triangleCache.vertices[2] = mesh_vertices[index_3];
+
+                    _triangleCache.normals[0] = mesh_normals[index_1];
+                    _triangleCache.normals[1] = mesh_normals[index_2];
+                    _triangleCache.normals[2] = mesh_normals[index_3];
+
+                    _triangleCache.uvs[0] = mesh_uvs[index_1];
+                    _triangleCache.uvs[1] = mesh_uvs[index_2];
+                    _triangleCache.uvs[2] = mesh_uvs[index_3];
+
+                    if (mesh_tangents != null)
+                    {
+                        _triangleCache.tangents[0] = mesh_tangents[index_1];
+                        _triangleCache.tangents[1] = mesh_tangents[index_2];
+                        _triangleCache.tangents[2] = mesh_tangents[index_3];
+                    }
+                    else
+                    {
+                        _triangleCache.tangents[0] = Vector4.zero;
+                        _triangleCache.tangents[1] = Vector4.zero;
+                        _triangleCache.tangents[2] = Vector4.zero;
+                    }
+
+                    _isLeftSideCache[0] = _blade.GetSide(mesh_vertices[index_1]);
+                    _isLeftSideCache[1] = _blade.GetSide(mesh_vertices[index_2]);
+                    _isLeftSideCache[2] = _blade.GetSide(mesh_vertices[index_3]);
+
+
+                    if (_isLeftSideCache[0] == _isLeftSideCache[1] && _isLeftSideCache[0] == _isLeftSideCache[2])
+                    {
+
+                        if (_isLeftSideCache[0])
+                            _leftSide.AddTriangle(_triangleCache, submeshIterator);
+                        else
+                            _rightSide.AddTriangle(_triangleCache, submeshIterator);
+
+                    }
+                    else
+                    {
+
+                        Cut_this_Face(ref _triangleCache, submeshIterator);
+                    }
+                }
+            }
+
+            Material[] mats = victim.GetComponent<MeshRenderer>().sharedMaterials;
+            if (mats[mats.Length - 1].name != capMaterial.name)
+            {
+                Material[] newMats = new Material[mats.Length + 1];
+                mats.CopyTo(newMats, 0);
+                newMats[mats.Length] = capMaterial;
+                mats = newMats;
+            }
+            _capMatSub = mats.Length - 1;
+
+            Cap_the_Cut();
+
+
+            Mesh left_HalfMesh = _leftSide.GetMesh();
+            left_HalfMesh.name = "Split Mesh Left";
+
+            Mesh right_HalfMesh = _rightSide.GetMesh();
+            right_HalfMesh.name = "Split Mesh Right";
+
+            victim.name = "left side";
+            victim.GetComponent<MeshFilter>().mesh = left_HalfMesh;
+            victim.GetComponent<MeshCollider>().sharedMesh = left_HalfMesh;
+
+            GameObject leftSideObj = victim;
+
+            GameObject rightSideObj = new GameObject("right side", typeof(MeshFilter), typeof(MeshRenderer));
+            rightSideObj.transform.position = victim.transform.position;
+            rightSideObj.transform.rotation = victim.transform.rotation;
+            rightSideObj.GetComponent<MeshFilter>().mesh = right_HalfMesh;
+
+            if (victim.transform.parent != null)
+            {
+                rightSideObj.transform.parent = victim.transform.parent;
+            }
+
+            rightSideObj.transform.localScale = victim.transform.localScale;
+
+            leftSideObj.GetComponent<MeshRenderer>().materials = mats;
+            rightSideObj.GetComponent<MeshRenderer>().materials = mats;
+
+            return new GameObject[] { leftSideObj, rightSideObj };
+        }
         public static GameObject[] MeshSlice(GameObject victim, Vector3 anchorPoint, Vector3 normalDirection, Material capMaterial)
         {
 

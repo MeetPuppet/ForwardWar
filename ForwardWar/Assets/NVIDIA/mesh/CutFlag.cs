@@ -46,7 +46,7 @@ public class CutFlag : MonoBehaviour
         colliders.transform.position = transform.position;
         PartCutter cutter = colliders.GetComponent<PartCutter>();
 
-        cutter.ActivateBlades();
+        //cutter.ActivateBlades();
 
         //command.FlagOff();
     }

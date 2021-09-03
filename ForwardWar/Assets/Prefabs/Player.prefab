@@ -105,7 +105,7 @@ GameObject:
   - component: {fileID: 5942499317725792502}
   - component: {fileID: 5942499317725792489}
   - component: {fileID: 7330192969707835566}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: HandGun
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -406,7 +406,7 @@ GameObject:
   - component: {fileID: 5942499317854654286}
   - component: {fileID: 5942499317854654273}
   - component: {fileID: 1098254663505228756}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: "\uCD1D"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -789,7 +789,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   bulletEffect: {fileID: 2746820045019265008, guid: b322b37a47bc884458929cb1c701e6ce, type: 3}
   pm: {fileID: 5942499318067754128}
-  pr: {fileID: 5942499318067754131}
   shootEffect: {fileID: 8123483055166860908, guid: fed57a1ef3561274a91c20b2a2766264, type: 3}
   firePosition: {fileID: 5942499318067754120}
   shootPosition: {fileID: 5942499318728183840}
@@ -2158,7 +2157,7 @@ GameObject:
   - component: {fileID: 5942499318817924561}
   - component: {fileID: 5942499318817924560}
   - component: {fileID: 4914324301878190379}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: "\uC0F7\uAC74"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2521,7 +2520,7 @@ GameObject:
   - component: {fileID: 5942499319070911712}
   - component: {fileID: 5942499319070911715}
   - component: {fileID: 2497456465047429052}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: "\uAE38\uACE0 \uC587\uC740 \uCD1D"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3043,7 +3042,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5942499319235203361}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: FirePos
   m_TagString: Untagged
   m_Icon: {fileID: 0}

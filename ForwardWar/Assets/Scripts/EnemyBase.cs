@@ -176,12 +176,22 @@ public class EnemyBase : MonoBehaviour
         GameManager.Updater.Add(FlowBlood(ray));
     }
 
+    bool block = false;
     IEnumerator FlowBlood(RaycastHit ray)
     {
-        GameObject flow = Instantiate(Blood, ray.point, transform.rotation);
+        Blood.transform.position = ray.point;
+        Blood.transform.forward = ray.normal;
+        if (block)
+            yield break;
 
-        yield return new WaitForSeconds(3f);
+        block = true;
+        FlexSourceActor fsa = Blood.GetComponent<FlexSourceActor>();
+        fsa.isActive = true;
 
+        yield return new WaitForSeconds(0.1f);
+
+        fsa.isActive = false;
+        block = false;
         yield break;
     }
 

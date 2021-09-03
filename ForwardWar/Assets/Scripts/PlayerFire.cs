@@ -75,7 +75,7 @@ public class PlayerFire : MonoBehaviour
         skill1image.fillAmount = 0f;
         skill2image.fillAmount = 0f;
         //skill3image.fillAmount = 0f;
-        eatimage.fillAmount = 0f;
+        //eatimage.fillAmount = 0f;
 
         gun.mute = false;
         gun.loop = false;
@@ -251,6 +251,11 @@ public class PlayerFire : MonoBehaviour
                     GameManager.Score.editScore(10);
                     enemy.BloodActive(hitInfo);
                 }
+                PartCutter pc = hitInfo.transform.GetComponent<PartCutter>();
+                if(pc != null)
+                {
+                    pc.ActivateBlades(hitInfo);
+                }
             }
             anim.SetBool("Shoot", false);
             Destroy(shootPosition,0.1f);
@@ -306,6 +311,11 @@ public class PlayerFire : MonoBehaviour
                     enemy.HitEnemy(weaponPower);
                     GameManager.Score.editScore(10);
                     enemy.BloodActive(hitInfo);
+                }
+                PartCutter pc = hitInfo.transform.GetComponent<PartCutter>();
+                if (pc != null)
+                {
+                    pc.ActivateBlades(hitInfo);
                 }
             }
             --Ammor;
@@ -368,6 +378,11 @@ public class PlayerFire : MonoBehaviour
                         GameManager.Score.editScore(10);
                         enemy.BloodActive(hitInfo);
                     }
+                    PartCutter pc = hitInfo.transform.GetComponent<PartCutter>();
+                    if (pc != null)
+                    {
+                        pc.ActivateBlades(hitInfo);
+                    }
                 }
             }
             ps = shootPosition.GetComponent<ParticleSystem>();
@@ -418,6 +433,11 @@ public class PlayerFire : MonoBehaviour
                     enemy.HitEnemy(weaponPower);
                     GameManager.Score.editScore(10);
                     enemy.BloodActive(hitInfo);
+                }
+                PartCutter pc = hitInfo.transform.GetComponent<PartCutter>();
+                if (pc != null)
+                {
+                    pc.ActivateBlades(hitInfo);
                 }
             }
             anim.SetBool("Shoot", false);
