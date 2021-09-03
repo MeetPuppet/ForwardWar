@@ -5,12 +5,9 @@ using UnityEngine.UI;
 
 public class PlayerFire : MonoBehaviour
 {
-
+    PlayerMove pm;
     // 피격 이펙트 오브젝트
     public GameObject bulletEffect;
-
-    // 피격 이펙트 파티클 시스템
-    ParticleSystem ps;
 
     // 발사 이펙트 오브젝트
     public GameObject shootEffect;
@@ -19,6 +16,7 @@ public class PlayerFire : MonoBehaviour
     public GameObject firePosition;
 
     public GameObject shootPosition;
+    ParticleSystem ps;
 
     // 투척 무기 오브젝트
     public GameObject bombFactory;
@@ -64,17 +62,12 @@ public class PlayerFire : MonoBehaviour
     public AudioSource gun;
 
     //애니메이터 변수
-    Animator anim;
+    public Animator anim;
     void Start()
     {
         // 플레이어의 트랜스폼 컴포넌트 받아오기
         player = GameObject.Find("Player").transform;
-
-        // 피격 이펙트 오브젝트에서 파티클 시스템 컴포넌트 가져오기
-        ps = bulletEffect.GetComponent<ParticleSystem>();
-
-        //애니메이터 컴포넌트 가져오기
-        anim = GetComponentInChildren<Animator>();
+        pm = transform.GetComponent<PlayerMove>();
 
         //스킬 쿨타임 초기값
         skill1image.fillAmount = 0f;
@@ -187,37 +180,51 @@ public class PlayerFire : MonoBehaviour
             }
         }
 
+        switch(pm.WeapoenNum)
+        {
+            case 1:
+                AssaultRifle();
+                break;
+        }
+        
+    }
+
+    void AssaultRifle()
+    {
         // 마우스 왼쪽 버튼을 누르면 시선이 바라보는 방향으로 총을 발사하고 싶다.
 
-        // 마우스 왼쪽 버튼 입력을 받는다.
-        if (Input.GetMouseButtonDown(0) && anim.GetFloat("Blend") == 0)
+        if (Input.GetMouseButtonDown(0))
         {
-            gun.Play();
+            //GameManager.Updater.Add(Shoot());
+            anim.SetBool("Shoot", true);
+            // 이펙트 프리팹을 생성한다.
+            shootPosition = Instantiate(shootEffect);
+            ps = shootPosition.GetComponent<ParticleSystem>();
+        }
+        if (Input.GetMouseButtonUp(0))
+        {
+            anim.SetBool("Shoot", false);
+            Destroy(shootPosition);
+        }
+        // 마우스 왼쪽 버튼 입력을 받는다.
+        if (Input.GetMouseButton(0) && !gun.isPlaying)
+        {
+            anim.Play($"Shoot {pm.WeapoenNum}");
+            ps.Play();
             // 레이를 생성하고 발사될 위치와 진행 방향을 설정한다.
             Ray ray = new Ray(Camera.main.transform.position, Camera.main.transform.forward);
 
-            // 이펙트 프리팹을 생성한다.
-            GameObject eff = Instantiate(shootEffect);
-            // 이펙트 프리팹의 위치는 player 위치
-            eff.transform.position = shootPosition.transform.position;
-        
-
-
             // 레이가 부딪힌 대상의 정보를 저장할 변수를 생성한다.
             RaycastHit hitInfo = new RaycastHit();
-
             // 레이를 발사하고, 만일 부딪힌 물체가 있으면...
             if (Physics.Raycast(ray, out hitInfo))
             {
                 // 피격 이펙트의 위치를 레이가 부딪힌 지점으로 이동시킨다.
-                bulletEffect.transform.position = hitInfo.point;
+                shootPosition.transform.position = hitInfo.point;
 
                 // 피격 이펙트의 forward 방향을 레이가 부딪힌 지점의 법선 벡터와 일치시킨다.
-                bulletEffect.transform.forward = hitInfo.normal;
-
-                // 피격 이펙트를 플레이한다.
-
-                ps.Play();
+                shootPosition.transform.forward = hitInfo.normal;
+                gun.Play();
 
 
                 EnemyBase enemy = hitInfo.transform.GetComponent<EnemyBase>();
@@ -228,11 +235,6 @@ public class PlayerFire : MonoBehaviour
                     enemy.BloodActive(hitInfo);
                 }
             }
-
-            //Destroy(eff);
         }
-
-        
     }
-
 }

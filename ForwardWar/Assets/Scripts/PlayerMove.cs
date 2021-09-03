@@ -95,11 +95,7 @@ public class PlayerMove : MonoBehaviour
         //변경지점
         if (hp <= 0f)
         {
-            anim.SetBool("Dead", true);
-        }
-        if (Input.GetMouseButtonDown(0))
-        {
-            anim.SetTrigger("Shoot");
+            anim.SetTrigger("Dead");
         }
         anim.SetFloat("Blend", dir.magnitude);
         Debug.Log(dir.magnitude);
@@ -293,6 +289,7 @@ public class PlayerMove : MonoBehaviour
         }
     }
 
+    public int WeapoenNum;
     public void RefreshItem(int num)
     {
         if (Weapons.Length <= num)
@@ -304,6 +301,7 @@ public class PlayerMove : MonoBehaviour
         }
         Weapons[num].gameObject.SetActive(true);
 
+        WeapoenNum = num;
         anim.SetInteger("AnimInit", num);
         anim.Play($"Idle {num}");
     }

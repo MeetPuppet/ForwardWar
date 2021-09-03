@@ -11,13 +11,13 @@ public class Updater : Monosingleton<Updater>
         => IList = new List<IEnumerator>();
 
 
-    public static void Add(IEnumerator iEnum)
+    public void Add(IEnumerator iEnum)
     => Get.IList.Add(iEnum);
     
-    public static void Remove(IEnumerator iEnum)
+    public void Remove(IEnumerator iEnum)
     => Get.IList.Remove(iEnum);
     
-    public static void RemoveAt(int index)
+    public void RemoveAt(int index)
     => Get.IList.RemoveAt(index);
     
 
