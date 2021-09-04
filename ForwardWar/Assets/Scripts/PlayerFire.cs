@@ -203,8 +203,64 @@ public class PlayerFire : MonoBehaviour
                 HandGun();
                 break;
         }
+
+        if (Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            pm.RefreshItem(0);
+            gun = pm.Weapons[0].GetComponent<AudioSource>();
+            GunSetting(0, -1, -1);
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha2))
+        {
+            pm.RefreshItem(1);
+            gun = pm.Weapons[1].GetComponent<AudioSource>();
+            GunSetting(1, 1, 30);
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha3))
+        {
+            pm.RefreshItem(2);
+            gun = pm.Weapons[2].GetComponent<AudioSource>();
+            GunSetting(2, 2, 6);
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha4))
+        {
+            pm.RefreshItem(3);
+            gun = pm.Weapons[3].GetComponent<AudioSource>();
+            GunSetting(3, 20, 5);
+        }
+        if (Input.GetKeyDown(KeyCode.Z))
+        {
+            ++WeaponNum;
+            if (WeaponNum >= 4)
+            {
+                WeaponNum = 0;
+                pm.RefreshItem(0);
+                gun = pm.Weapons[0].GetComponent<AudioSource>();
+                GunSetting(0, -1, -1);
+            }
+            else
+            {
+                pm.RefreshItem(WeaponNum);
+                gun = pm.Weapons[WeaponNum].GetComponent<AudioSource>();
+                switch (WeaponNum)
+                {
+                    case 1:
+                        GunSetting(1, 1, 30);
+                        break;
+                    case 2:
+                        GunSetting(2, 2, 6);
+                        break;
+                    case 3:
+                        GunSetting(3, 20, 5);
+                        break;
+                }
+            }
+
+
+        }
     }
 
+    //무기 번호, 위력, 탄약수
     public void GunSetting(int WNum, int power, int ammor)
     {
         WeaponNum = WNum;
@@ -214,10 +270,6 @@ public class PlayerFire : MonoBehaviour
         while (anim.GetInteger("AnimInit") != WNum) ;
         anim.Play("AnimInit");
         Reload.Play();
-    }
-    void DefaultGun()
-    {
-
     }
     void HandGun()
     {
