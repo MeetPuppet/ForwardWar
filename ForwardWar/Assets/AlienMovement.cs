@@ -37,7 +37,7 @@ public class AlienMovement : EnemyBase
     protected override void EnemyUpdateAttack()
     {
         DeadCheck();
-        Debug.Log(Vector3.Distance(target.transform.position, transform.position));
+        //Debug.Log(Vector3.Distance(target.transform.position, transform.position));
         if (Vector3.Distance(target.transform.position, transform.position) > attackDistance)
         {
             m_State = EnemyState.Move;
@@ -80,6 +80,7 @@ public class AlienMovement : EnemyBase
             anim.Play("Dead");
         }
         Vector3 dir = (target.position - transform.position).normalized;
+        dir.y = 0;
         transform.forward = dir;
     }
 

@@ -6,9 +6,9 @@ using UnityEngine.UI;
 public class villagerManager : Monosingleton<villagerManager>
 {
     public Text all;
-    public Text left;
+    public Text Rescue;
+    static string Num;
     static List<VillagerComp> lv = new List<VillagerComp>();
-    static VillagerComp[] gos;
     // Start is called before the first frame update
     void Start()
     {
@@ -16,27 +16,29 @@ public class villagerManager : Monosingleton<villagerManager>
         {
             lv.Add(go.GetComponent<VillagerComp>());
         }
-        gos = lv.ToArray();
-
-        all.text = gos.Length.ToString();
-        left.text = gos.Length.ToString();
+        Num = "0";
+        Rescue.text = Num;
+        all.text = lv.Count.ToString();
     }
 
     // Update is called once per frame
     void Update()
     {
-        gos = lv.ToArray();
-        left.text = gos.Length.ToString();
+        Rescue.text = Num;
     }
 
-    public static void VillagerUpdate()
+    public static void VillagerRemove(VillagerComp villager)
     {
         foreach (GameObject go in GameObject.FindGameObjectsWithTag("Villager"))
         {
             VillagerComp vc = go.GetComponent<VillagerComp>();
-            if(vc.score == false)
+            if(vc == villager)
+            {
                 lv.Add(go.GetComponent<VillagerComp>());
+                int RescueNum = int.Parse(Num) + 1;
+                Num = RescueNum.ToString();
+                break;
+            }
         }
-        gos = lv.ToArray();
     }
 }

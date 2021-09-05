@@ -4,35 +4,26 @@ using UnityEngine;
 
 public class SpawnEnemy : MonoBehaviour
 {
-    public int maxSpawn = 1;
-
     public GameObject enemyPrefab;
-    public Transform EnemyParent;
-
     GameObject enemy;
+    public GameObject Sample;
+
     void Start()
     {
-        Spawn();
+        Destroy(Sample);
     }
 
-    // Update is called once per frame
-    void Update()
+    public void Spawn()
     {
-        if(enemy == null && maxSpawn > 0)
-        {
-            //enemy = Instantiate<GameObject>(enemyPrefab, transform);
-            //enemy.transform.localPosition = Vector3.zero;
-            --maxSpawn;
-
-            //스포너 밖인 경우
-            Spawn();
-        }
+        if (enemyPrefab == null)
+            return;
+        enemy = Instantiate(enemyPrefab, transform.position, transform.rotation);
+        enemyPrefab = null;
     }
-
-    void Spawn()
+    public bool isDead()
     {
-        enemy = Instantiate<GameObject>(enemyPrefab, EnemyParent);
-        Vector3 pos = new Vector3(transform.position.x, transform.position.y, transform.position.z);
-        enemy.transform.position = pos;
+        if (enemy)
+            return false;
+        return true;
     }
 }

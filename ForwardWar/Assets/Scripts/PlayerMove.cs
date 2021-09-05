@@ -61,7 +61,7 @@ public class PlayerMove : MonoBehaviour
         RefreshItem(0);
         Cursor.visible = false;
         if (ActivateButton == null)
-            ActivateButton = GameObject.Find("InteractiveButton");
+            ActivateButton = GameManager.Button;
         flexSource = FlexComp.GetComponent<FlexSourceActor>();
 
         maxHp = hp;

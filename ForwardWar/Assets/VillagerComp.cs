@@ -20,7 +20,8 @@ public class VillagerComp : ActSwitchObject
     protected override void initialize()
     {
         GameManager.Lv.Add(this);
-        ActivateButton = GameObject.Find("InteractiveButton");
+        ActivateButton = GameManager.Button;
+        EscPosition = GameObject.Find("escape").transform;
         //OffActivateButton();
 
         MaxHP = HP;
@@ -76,7 +77,7 @@ public class VillagerComp : ActSwitchObject
         {
             //플렉스 추가
             Destroy(gameObject);
-            villagerManager.VillagerUpdate();
+            villagerManager.VillagerRemove(this);
             Debug.Log("Dead");
         }
     }
@@ -94,7 +95,7 @@ public class VillagerComp : ActSwitchObject
             if (!score)
             {
                 GameManager.Score.editScore(100 * HP);
-                villagerManager.VillagerUpdate();
+                villagerManager.VillagerRemove(this);
                 score = true;
             }
             anim.SetBool("Safe", true);

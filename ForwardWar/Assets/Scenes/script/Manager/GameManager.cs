@@ -25,6 +25,19 @@ public class GameManager : MonoBehaviour
     public static ScoreInfo Score { get { return Instance.score; } }
     public static List<VillagerComp> Lv { get { return Instance.lv; } }
     public static GameObject End;
+    static GameObject button;
+    public static GameObject Button
+    {
+        get
+        {
+            if (button == null)
+            {
+                button = GameObject.Find("InteractiveButton");
+                button.SetActive(false);
+            }
+            return button;
+        }
+    }
 
 
     //public static DebugThread thread;

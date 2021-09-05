@@ -141,12 +141,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ActivateButton: {fileID: 0}
-  HP: 10
+  HP: 20
   hpSlider: {fileID: 8884765906970077669}
   anim: {fileID: 4172645443798064999}
   EscPosition: {fileID: 0}
   Speed: 10
   agent: {fileID: 4340535966178036895}
+  score: 0
 --- !u!136 &8388787607752274990
 CapsuleCollider:
   m_ObjectHideFlags: 0

@@ -13,7 +13,7 @@ public class ActSwitchObject : MonoBehaviour
     }
     protected virtual void initialize()
     {
-        ActivateButton = GameObject.Find("InteractiveButton");
+        ActivateButton = GameManager.Button;
     }
 
     public virtual void OnActivateButton()
