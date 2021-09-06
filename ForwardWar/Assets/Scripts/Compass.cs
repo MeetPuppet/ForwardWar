@@ -6,6 +6,7 @@ public class Compass : MonoBehaviour
 {
     public float MaximunSpriteSize = 30f;
     public GameObject iconPrefab;
+    public GameObject Arrow;
     List<QuestMarker> questMarkers = new List<QuestMarker>();
     List<float> MarkersDistance = new List<float>();
 
@@ -15,7 +16,6 @@ public class Compass : MonoBehaviour
     float compassUnit;
 
     public QuestMarker[] Markers;
-    private float shortDist = float.MaxValue;
     private int shortInex;
     private void Start()
     {
@@ -25,6 +25,8 @@ public class Compass : MonoBehaviour
         {
             AddQuestMarker(q);
         }
+        shortInex = 0;
+        Arrow.SetActive(false);
     }
     private void Update()
     {
@@ -42,9 +44,8 @@ public class Compass : MonoBehaviour
 
         for (int i = 0; i < MarkersDistance.Count; ++i)
         {
-            if (shortDist > MarkersDistance[i])
+            if (MarkersDistance[shortInex] > MarkersDistance[i])
             {
-                shortDist = MarkersDistance[i];
                 shortInex = i;
                 Debug.Log($"shortTrack Update: {i}");
             }
@@ -53,7 +54,10 @@ public class Compass : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.P))
         {
             player.GetComponent<PlayerMove>().FindWay(CloseObject());
+            GameManager.Updater.Add(ActiveArrow());
         }
+        Vector3 dir = (CloseObject() - Arrow.transform.position).normalized;
+        Arrow.transform.forward = dir;
     }
 
     public void AddQuestMarker (QuestMarker marker)
@@ -85,5 +89,20 @@ public class Compass : MonoBehaviour
         float angle = Vector2.SignedAngle(marker.position - playerPos, playerFwd);
 
         return new Vector2(compassUnit * angle, -7.5f);
+    }
+
+    IEnumerator ActiveArrow()
+    {
+        Arrow.SetActive(true);
+
+        float time = 0f;
+        while(time < 5f)
+        {
+            time += Time.deltaTime;
+            yield return null;
+        }
+
+        Arrow.SetActive(false);
+        yield break;
     }
 }

@@ -18,6 +18,8 @@ public class PartCutter : MonoBehaviour
         capMaterial);
 
         if (!pieces[1].GetComponent<Rigidbody>())
+        {
             pieces[1].AddComponent<Rigidbody>();
+        }
     }
 }

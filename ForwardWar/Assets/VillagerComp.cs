@@ -15,13 +15,14 @@ public class VillagerComp : ActSwitchObject
     public Transform EscPosition;
     public float Speed = 10f;
     public NavMeshAgent agent;
+    villagerManager manager;
     int state = 0;
 
     protected override void initialize()
     {
-        GameManager.Lv.Add(this);
         ActivateButton = GameManager.Button;
         EscPosition = GameObject.Find("escape").transform;
+        manager = GameObject.Find("VillagerManager").GetComponent<villagerManager>();
         //OffActivateButton();
 
         MaxHP = HP;
@@ -48,7 +49,7 @@ public class VillagerComp : ActSwitchObject
         switch (state)
         {
             case 1:
-                agent.destination = EscPosition.position;
+                agent.SetDestination(EscPosition.position);
                 break;
         }
         if (Input.GetKeyDown("l"))
@@ -77,7 +78,7 @@ public class VillagerComp : ActSwitchObject
         {
             //플렉스 추가
             Destroy(gameObject);
-            villagerManager.VillagerRemove(this);
+            manager.VillagerRemove(this);
             Debug.Log("Dead");
         }
     }
@@ -95,7 +96,7 @@ public class VillagerComp : ActSwitchObject
             if (!score)
             {
                 GameManager.Score.editScore(100 * HP);
-                villagerManager.VillagerRemove(this);
+                manager.VillagerRemove(this);
                 score = true;
             }
             anim.SetBool("Safe", true);

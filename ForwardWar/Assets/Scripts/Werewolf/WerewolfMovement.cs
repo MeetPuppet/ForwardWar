@@ -68,7 +68,7 @@ public class WerewolfMovement : EnemyBase
             //플레이어를 향해 방향을 전환한다.
             transform.forward = dir;
 
-            agent.destination = target.transform.position;
+            agent.SetDestination(target.transform.position);
         }
         // 그렇지 않다면, 현재 상태를 Attack 상태로 전환한다.
         else
@@ -86,7 +86,7 @@ public class WerewolfMovement : EnemyBase
 
     void Attack()
     {
-        agent.destination = transform.position;
+        agent.SetDestination(transform.position);
         Vector3 dir = (target.position - transform.position).normalized;
         dir.y = 0;
         transform.forward = dir;
@@ -136,7 +136,7 @@ public class WerewolfMovement : EnemyBase
             //원래 자리를 향해 방향을 전환한다.
             //transform.forward = dir;
 
-            agent.destination = originPos;
+            agent.SetDestination(originPos);
         }
         // 그렇지 않다면, 자신의 위치를 초기 위치로 조정하고 현재 상태를 대기 상태로 전환한다.
         else
@@ -221,7 +221,7 @@ public class WerewolfMovement : EnemyBase
             yield break;
         GameObject go = Instantiate(DropItem, transform.position, transform.rotation);
         DeadCheck = true;
-        agent.destination = transform.position;
+        agent.SetDestination(transform.position);
 
         go.GetComponent<Rigidbody>().AddForce(Vector3.up * 100);
         anim.Play("Dead");

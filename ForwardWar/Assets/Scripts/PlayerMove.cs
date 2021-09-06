@@ -7,10 +7,6 @@ using UnityEngine.Playables;
 
 public class PlayerMove : MonoBehaviour
 {
-    //컷씬 제어 변수
-    public PlayableDirector playableDirector_start;
-    public PlayableDirector playableDirector;
-    public PlayableDirector playableDirector_end;
     public PlayerFire pf;
     // 이동 속도 변수
     public float moveSpeed = 7f;
@@ -46,6 +42,8 @@ public class PlayerMove : MonoBehaviour
     public GameObject FlexComp;
 
     public Transform[] Weapons;
+    public GameObject[] WeaponsUI;
+    public bool[] WeaponEnables;
 
     private FlexSourceActor flexSource;
 
@@ -58,6 +56,8 @@ public class PlayerMove : MonoBehaviour
     public GameObject ActivateButton;
     void Start()
     {
+        GameObject go = GameManager.Button;
+        go = null;
         RefreshItem(0);
         Cursor.visible = false;
         if (ActivateButton == null)
@@ -68,6 +68,13 @@ public class PlayerMove : MonoBehaviour
 
         // 캐릭터 콘트롤러 컴포넌트 받아오기
         cc = GetComponent<CharacterController>();
+
+        WeaponEnables = new bool[4];
+        WeaponEnables[0] = true;
+        for (int i=1;i< WeaponEnables.Length; ++i)
+        {
+            WeaponEnables[i] = false;
+        }
 
         //
         //anim = GetComponentInChildren<Animator>();
@@ -152,24 +159,6 @@ public class PlayerMove : MonoBehaviour
         {
             Thp.text = (hp / maxHp * 100).ToString() + "%";
         }
-
-        if (Input.GetKey(KeyCode.G))
-        {
-            playableDirector.gameObject.SetActive(true);
-            playableDirector.Play();
-        }
-        if (Input.GetKey(KeyCode.K))
-        {
-            playableDirector_start.gameObject.SetActive(true);
-            playableDirector_start.Play();
-        }
-        if (Input.GetKey(KeyCode.M))
-        {
-            playableDirector_end.gameObject.SetActive(true);
-            playableDirector_end.Play();
-            Destroy(this);
-        }
-
     }
 
     float h;
@@ -288,7 +277,7 @@ public class PlayerMove : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-        if (flexSource == null || flexSource.isActive == true)
+        if (flexSource != null && flexSource.isActive == true)
         {
             flexSource.isActive = false;
         }
@@ -303,9 +292,11 @@ public class PlayerMove : MonoBehaviour
         for (int i = 0; i < Weapons.Length; ++i)
         {
             Weapons[i].gameObject.SetActive(false);
+            WeaponsUI[i].gameObject.SetActive(false);
         }
-        Weapons[num].gameObject.SetActive(true);
 
+        Weapons[num].gameObject.SetActive(true);
+        WeaponsUI[num].gameObject.SetActive(true);
         WeapoenNum = num;
         anim.SetInteger("AnimInit", num);
         anim.Play($"Idle {num}");

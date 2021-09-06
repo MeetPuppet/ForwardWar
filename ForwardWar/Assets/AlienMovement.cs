@@ -26,11 +26,11 @@ public class AlienMovement : EnemyBase
     protected override void EnemyUpdateMove()
     {
         DeadCheck();
-        agent.destination = target.transform.position;
+        agent.SetDestination(target.transform.position);
         if (Vector3.Distance(agent.destination, transform.position) < findDistance)
         {
             m_State = EnemyState.Attack;
-            agent.destination = transform.position;
+            agent.SetDestination(transform.position);
             anim.SetBool("isFight", true);
         }
     }

@@ -17,14 +17,11 @@ public class GameManager : MonoBehaviour
     Updater updater = new Updater();
     InputManager input = new InputManager();
     ScoreInfo score = new ScoreInfo();
-    List<VillagerComp> lv = new List<VillagerComp>();
 
     public static GameData Data { get { return Instance.gameData; } }
     public static Updater Updater { get { return Instance.updater; } }
     public static InputManager Input { get { return Instance.input; } }
     public static ScoreInfo Score { get { return Instance.score; } }
-    public static List<VillagerComp> Lv { get { return Instance.lv; } }
-    public static GameObject End;
     static GameObject button;
     public static GameObject Button
     {
@@ -33,7 +30,8 @@ public class GameManager : MonoBehaviour
             if (button == null)
             {
                 button = GameObject.Find("InteractiveButton");
-                button.SetActive(false);
+                if(button)
+                    button.SetActive(false);
             }
             return button;
         }
@@ -70,8 +68,6 @@ public class GameManager : MonoBehaviour
             instance.gameData.Init();
             //thread = new DebugThread();
             Score.InfoReset();
-            End = GameObject.Find("End");
-            End?.SetActive(false);
         }
     }
 
@@ -85,21 +81,6 @@ public class GameManager : MonoBehaviour
     void Update()
     {
         input.OnUpdate();
-        for(int i = 0; i < lv.Count; ++i)
-        {
-            if(lv[i].HP <= 0)
-            {
-                lv.RemoveAt(i);
-                i = 0;
-                continue;
-            }
-        }
-        if(lv.Count <= 0)
-        {
-            End.SetActive(true);
-            Text endScore = End.transform.Find("Text").GetComponent<Text>();
-            endScore.text = score.Score.ToString();
-        }
         if(StartGame)
         {
             playTime += Time.deltaTime;
@@ -117,10 +98,18 @@ public class GameManager : MonoBehaviour
     {
         SceneManager.LoadScene(SceneNum);
 
-        Score.InfoReset();
-        StartGame = true;
-        playTime = 0f;
-        Cursor.visible = false;
+        if(SceneNum == 1)
+        {
+            Score.InfoReset();
+            StartGame = true;
+            playTime = 0f;
+            Cursor.visible = false;
+        }
+        else
+        {
+            Cursor.visible = true;
+        }
+
     }
 
     public void ExitApp()

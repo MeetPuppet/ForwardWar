@@ -471,7 +471,6 @@ GameObject:
   m_Component:
   - component: {fileID: 5508486767502656978}
   - component: {fileID: 5508486767502656976}
-  - component: {fileID: 5508486767502656977}
   m_Layer: 5
   m_Name: background
   m_TagString: Untagged
@@ -506,33 +505,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5508486767502656979}
   m_CullTransparentMesh: 1
---- !u!114 &5508486767502656977
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5508486767502656979}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1344c3c82d62a2a41a3576d8abb8e3ea, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Material: {fileID: 0}
-  m_Color: {r: 0.21568628, g: 0.21568628, b: 0.21568628, a: 0.60784316}
-  m_RaycastTarget: 1
-  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
-  m_Maskable: 1
-  m_OnCullStateChanged:
-    m_PersistentCalls:
-      m_Calls: []
-  m_Texture: {fileID: 0}
-  m_UVRect:
-    serializedVersion: 2
-    x: 0
-    y: 0
-    width: 1
-    height: 1
 --- !u!1 &5508486768037879669
 GameObject:
   m_ObjectHideFlags: 0
@@ -701,14 +673,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bulletEffect: {fileID: 100002, guid: 1f57945075083b843899cd5c1dc1f072, type: 3}
+  pm: {fileID: 0}
   shootEffect: {fileID: 0}
   firePosition: {fileID: 0}
   shootPosition: {fileID: 0}
+  bloodEffect: {fileID: 0}
+  bloodPosition: {fileID: 0}
   bombFactory: {fileID: 0}
   SmokeFactory: {fileID: 0}
   MissileFactory: {fileID: 0}
   throwPower: 15
   weaponPower: 5
+  WeaponNum: -1
+  Ammor: -1
+  AmmorUI: {fileID: 0}
   skill1image: {fileID: 5508486768465506700}
   cooldown_skill1: 7
   skill2: 0
@@ -720,6 +698,9 @@ MonoBehaviour:
   eat: 107
   eatimage: {fileID: 5508486768219631428}
   cooldown_eat: 5
+  Reload: {fileID: 0}
+  gun: {fileID: 0}
+  anim: {fileID: 0}
 --- !u!1 &5508486768465506703
 GameObject:
   m_ObjectHideFlags: 0
@@ -809,14 +790,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bulletEffect: {fileID: 100002, guid: 1f57945075083b843899cd5c1dc1f072, type: 3}
+  pm: {fileID: 0}
   shootEffect: {fileID: 0}
   firePosition: {fileID: 0}
   shootPosition: {fileID: 0}
+  bloodEffect: {fileID: 0}
+  bloodPosition: {fileID: 0}
   bombFactory: {fileID: 0}
   SmokeFactory: {fileID: 0}
   MissileFactory: {fileID: 0}
   throwPower: 15
   weaponPower: 5
+  WeaponNum: -1
+  Ammor: -1
+  AmmorUI: {fileID: 0}
   skill1image: {fileID: 5508486768465506700}
   cooldown_skill1: 7
   skill2: 0
@@ -828,6 +815,9 @@ MonoBehaviour:
   eat: 0
   eatimage: {fileID: 5508486768219631428}
   cooldown_eat: 5
+  Reload: {fileID: 0}
+  gun: {fileID: 0}
+  anim: {fileID: 0}
 --- !u!1 &5508486768630584725
 GameObject:
   m_ObjectHideFlags: 0

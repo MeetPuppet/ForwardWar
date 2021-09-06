@@ -18,6 +18,10 @@ public class PlayerFire : MonoBehaviour
     public GameObject shootPosition;
     ParticleSystem ps;
 
+    ParticleSystem bloodPs;
+    public GameObject bloodEffect;
+    public GameObject bloodPosition;
+
     // 투척 무기 오브젝트
     public GameObject bombFactory;
 
@@ -32,6 +36,7 @@ public class PlayerFire : MonoBehaviour
     public int weaponPower = 1;
     public int WeaponNum = -1;
     public int Ammor = -1;
+    public Text AmmorUI;
 
     //수류탄의 쿨타임 관리
     //public KeyCode skill1;
@@ -80,6 +85,7 @@ public class PlayerFire : MonoBehaviour
         gun.mute = false;
         gun.loop = false;
         gun.playOnAwake = false;
+        AmmorUI.text = Ammor.ToString();
     }
  
     void Update()
@@ -185,11 +191,16 @@ public class PlayerFire : MonoBehaviour
         if (block)
             return;
 
-        switch(WeaponNum)
+        if (WeaponNum > 0 && Ammor <= 0)
         {
-            case 0:
-                HandGun();
-                break;
+            WeaponNum = 0;
+            pm.RefreshItem(0);
+            gun = pm.Weapons[0].GetComponent<AudioSource>();
+            GunSetting(0, 2, Ammor);
+        }
+
+        switch (WeaponNum)
+        {
             case 1:
                 AssaultRifle();
                 break;
@@ -208,25 +219,52 @@ public class PlayerFire : MonoBehaviour
         {
             pm.RefreshItem(0);
             gun = pm.Weapons[0].GetComponent<AudioSource>();
-            GunSetting(0, -1, -1);
+            GunSetting(0, 2, Ammor);
         }
         if (Input.GetKeyDown(KeyCode.Alpha2))
         {
-            pm.RefreshItem(1);
-            gun = pm.Weapons[1].GetComponent<AudioSource>();
-            GunSetting(1, 1, 30);
+            if (pm.WeaponEnables[1] == false)
+            {
+                pm.RefreshItem(0);
+                gun = pm.Weapons[0].GetComponent<AudioSource>();
+                GunSetting(0, 2, Ammor);
+            }
+            else
+            {
+                pm.RefreshItem(1);
+                gun = pm.Weapons[1].GetComponent<AudioSource>();
+                GunSetting(1, 2, Ammor);
+            }
         }
         if (Input.GetKeyDown(KeyCode.Alpha3))
         {
-            pm.RefreshItem(2);
-            gun = pm.Weapons[2].GetComponent<AudioSource>();
-            GunSetting(2, 2, 6);
+            if (pm.WeaponEnables[2] == false)
+            {
+                pm.RefreshItem(0);
+                gun = pm.Weapons[0].GetComponent<AudioSource>();
+                GunSetting(0, 2, Ammor);
+            }
+            else
+            {
+                pm.RefreshItem(2);
+                gun = pm.Weapons[2].GetComponent<AudioSource>();
+                GunSetting(2, 2, Ammor);
+            }
         }
         if (Input.GetKeyDown(KeyCode.Alpha4))
         {
-            pm.RefreshItem(3);
-            gun = pm.Weapons[3].GetComponent<AudioSource>();
-            GunSetting(3, 20, 5);
+            if (pm.WeaponEnables[3] == false)
+            {
+                pm.RefreshItem(0);
+                gun = pm.Weapons[0].GetComponent<AudioSource>();
+                GunSetting(0, 2, Ammor);
+            }
+            else
+            {
+                pm.RefreshItem(3);
+                gun = pm.Weapons[3].GetComponent<AudioSource>();
+                GunSetting(3, 20, Ammor);
+            }
         }
         if (Input.GetKeyDown(KeyCode.Z))
         {
@@ -236,22 +274,31 @@ public class PlayerFire : MonoBehaviour
                 WeaponNum = 0;
                 pm.RefreshItem(0);
                 gun = pm.Weapons[0].GetComponent<AudioSource>();
-                GunSetting(0, -1, -1);
+                GunSetting(0, 2, Ammor);
             }
             else
             {
+                if(Ammor <= 0 || pm.WeaponEnables[WeaponNum] == false)
+                {
+                    WeaponNum = 0;
+                }
                 pm.RefreshItem(WeaponNum);
                 gun = pm.Weapons[WeaponNum].GetComponent<AudioSource>();
                 switch (WeaponNum)
                 {
                     case 1:
-                        GunSetting(1, 1, 30);
+                        GunSetting(1, 1, Ammor);
                         break;
                     case 2:
-                        GunSetting(2, 2, 6);
+                        GunSetting(2, 2, Ammor);
                         break;
                     case 3:
-                        GunSetting(3, 20, 5);
+                        GunSetting(3, 20, Ammor);
+                        break;
+                    default:
+                        pm.RefreshItem(0);
+                        gun = pm.Weapons[0].GetComponent<AudioSource>();
+                        GunSetting(0, 2, Ammor);
                         break;
                 }
             }
@@ -275,6 +322,7 @@ public class PlayerFire : MonoBehaviour
     {
         if (Input.GetMouseButtonDown(0))
         {
+            gun.Play();
             anim.SetBool("Shoot", true);
             shootPosition = Instantiate(shootEffect);
             ps = shootPosition.GetComponent<ParticleSystem>();
@@ -286,19 +334,27 @@ public class PlayerFire : MonoBehaviour
             // 레이가 부딪힌 대상의 정보를 저장할 변수를 생성한다.
             RaycastHit hitInfo = new RaycastHit();
             // 레이를 발사하고, 만일 부딪힌 물체가 있으면...
-            if (Physics.Raycast(ray, out hitInfo))
+            if (Physics.Raycast(ray, out hitInfo,float.MaxValue, -1, QueryTriggerInteraction.Ignore))
             {
-                // 피격 이펙트의 위치를 레이가 부딪힌 지점으로 이동시킨다.
-                shootPosition.transform.position = hitInfo.point;
+                if (shootPosition)
+                {
+                    // 피격 이펙트의 위치를 레이가 부딪힌 지점으로 이동시킨다.
+                    shootPosition.transform.position = hitInfo.point;
 
-                // 피격 이펙트의 forward 방향을 레이가 부딪힌 지점의 법선 벡터와 일치시킨다.
-                shootPosition.transform.forward = hitInfo.normal;
-                gun.Play();
+                    // 피격 이펙트의 forward 방향을 레이가 부딪힌 지점의 법선 벡터와 일치시킨다.
+                    shootPosition.transform.forward = hitInfo.normal;
+                }
 
 
                 EnemyBase enemy = hitInfo.transform.GetComponent<EnemyBase>();
                 if (enemy != null)
                 {
+                    bloodPosition = Instantiate(bloodEffect);
+                    bloodPs = bloodPosition.GetComponent<ParticleSystem>();
+                    bloodPs.Play();
+                    bloodPosition.transform.forward = hitInfo.normal;
+                    bloodPosition.transform.position = hitInfo.point;
+
                     enemy.HitEnemy(weaponPower);
                     GameManager.Score.editScore(10);
                     enemy.BloodActive(hitInfo);
@@ -310,8 +366,8 @@ public class PlayerFire : MonoBehaviour
                 }
             }
             anim.SetBool("Shoot", false);
-            Destroy(shootPosition,0.1f);
-            --Ammor;
+            Destroy(shootPosition, 0.1f);
+            Destroy(bloodPosition, 0.1f);
             pm.AddVertical(0.1f);
             if (WeaponNum != -1 && Ammor <= 0)
             {
@@ -329,9 +385,12 @@ public class PlayerFire : MonoBehaviour
             // 이펙트 프리팹을 생성한다.
             shootPosition = Instantiate(shootEffect);
             ps = shootPosition.GetComponent<ParticleSystem>();
+            bloodPosition = Instantiate(bloodEffect);
+            bloodPs = bloodPosition.GetComponent<ParticleSystem>();
         }
         if (Input.GetMouseButtonUp(0))
         {
+            Destroy(bloodPosition);
             Destroy(shootPosition);
             shootPosition = null;
             anim.SetBool("Shoot", false);
@@ -339,6 +398,7 @@ public class PlayerFire : MonoBehaviour
         // 마우스 왼쪽 버튼 입력을 받는다.
         if (Input.GetMouseButton(0) && !gun.isPlaying)
         {
+            gun.Play();
             anim.Play($"Shoot {WeaponNum}");
             ps.Play();
             // 레이를 생성하고 발사될 위치와 진행 방향을 설정한다.
@@ -347,19 +407,25 @@ public class PlayerFire : MonoBehaviour
             // 레이가 부딪힌 대상의 정보를 저장할 변수를 생성한다.
             RaycastHit hitInfo = new RaycastHit();
             // 레이를 발사하고, 만일 부딪힌 물체가 있으면...
-            if (Physics.Raycast(ray, out hitInfo))
+            if (Physics.Raycast(ray, out hitInfo, float.MaxValue, -1, QueryTriggerInteraction.Ignore))
             {
-                // 피격 이펙트의 위치를 레이가 부딪힌 지점으로 이동시킨다.
-                shootPosition.transform.position = hitInfo.point;
+                if(shootPosition)
+                {
+                    // 피격 이펙트의 위치를 레이가 부딪힌 지점으로 이동시킨다.
+                    shootPosition.transform.position = hitInfo.point;
 
-                // 피격 이펙트의 forward 방향을 레이가 부딪힌 지점의 법선 벡터와 일치시킨다.
-                shootPosition.transform.forward = hitInfo.normal;
-                gun.Play();
+                    // 피격 이펙트의 forward 방향을 레이가 부딪힌 지점의 법선 벡터와 일치시킨다.
+                    shootPosition.transform.forward = hitInfo.normal;
+                }
 
 
                 EnemyBase enemy = hitInfo.transform.GetComponent<EnemyBase>();
                 if (enemy != null)
                 {
+                    bloodPs.Play();
+                    bloodPosition.transform.forward = hitInfo.normal;
+                    bloodPosition.transform.position = hitInfo.point;
+
                     enemy.HitEnemy(weaponPower);
                     GameManager.Score.editScore(10);
                     enemy.BloodActive(hitInfo);
@@ -371,12 +437,14 @@ public class PlayerFire : MonoBehaviour
                 }
             }
             --Ammor;
+            AmmorUI.text = Ammor.ToString();
             if (Ammor <= 0)
             {
                 GunSoundChange(pm.Weapons[0].GetComponent<AudioSource>());
                 if (shootPosition != null)
                 {
                     Destroy(shootPosition);
+                    Destroy(bloodPosition);
                 }
             }
         }
@@ -388,6 +456,7 @@ public class PlayerFire : MonoBehaviour
             && !anim.GetCurrentAnimatorStateInfo(0).IsName($"Shoot {WeaponNum}")
             && !anim.GetCurrentAnimatorStateInfo(0).IsName($"Reload {WeaponNum}"))
         {
+            gun.Play();
             anim.SetBool("Shoot", true);
             anim.Play($"Shoot {WeaponNum}");
 
@@ -412,20 +481,30 @@ public class PlayerFire : MonoBehaviour
             {
                 shootPosition = Instantiate(shootEffect);
                 Destroy(shootPosition, 0.5f);
-                // 레이를 발사하고, 만일 부딪힌 물체가 있으면...
-                if (Physics.Raycast(ray[i], out hitInfo))
-                {
-                    // 피격 이펙트의 위치를 레이가 부딪힌 지점으로 이동시킨다.
-                    shootPosition.transform.position = hitInfo.point;
 
-                    // 피격 이펙트의 forward 방향을 레이가 부딪힌 지점의 법선 벡터와 일치시킨다.
-                    shootPosition.transform.forward = hitInfo.normal;
-                    gun.Play();
+                // 레이를 발사하고, 만일 부딪힌 물체가 있으면...
+                if (Physics.Raycast(ray[i], out hitInfo, float.MaxValue, -1, QueryTriggerInteraction.Ignore))
+                {
+                    if (shootPosition)
+                    {
+                        // 피격 이펙트의 위치를 레이가 부딪힌 지점으로 이동시킨다.
+                        shootPosition.transform.position = hitInfo.point;
+
+                        // 피격 이펙트의 forward 방향을 레이가 부딪힌 지점의 법선 벡터와 일치시킨다.
+                        shootPosition.transform.forward = hitInfo.normal;
+                    }
 
 
                     EnemyBase enemy = hitInfo.transform.GetComponent<EnemyBase>();
                     if (enemy != null)
                     {
+                        bloodPosition = Instantiate(bloodEffect);
+                        bloodPs = bloodPosition.GetComponent<ParticleSystem>();
+                        bloodPs.Play();
+                        bloodPosition.transform.forward = hitInfo.normal;
+                        bloodPosition.transform.position = hitInfo.point;
+                        Destroy(bloodPosition, 0.5f);
+
                         enemy.HitEnemy(weaponPower);
                         GameManager.Score.editScore(10);
                         enemy.BloodActive(hitInfo);
@@ -442,6 +521,7 @@ public class PlayerFire : MonoBehaviour
             anim.SetBool("Shoot", false);
             shootPosition = null;
             --Ammor;
+            AmmorUI.text = Ammor.ToString();
             if (Ammor <= 0)
             {
                 GunSoundChange(pm.Weapons[0].GetComponent<AudioSource>());
@@ -458,6 +538,7 @@ public class PlayerFire : MonoBehaviour
             && !anim.GetCurrentAnimatorStateInfo(0).IsName($"Shoot {WeaponNum}")
             && !anim.GetCurrentAnimatorStateInfo(0).IsName($"Reload {WeaponNum}"))
         {
+            gun.Play();
             anim.SetBool("Shoot", true);
             shootPosition = Instantiate(shootEffect);
             ps = shootPosition.GetComponent<ParticleSystem>();
@@ -469,19 +550,26 @@ public class PlayerFire : MonoBehaviour
             // 레이가 부딪힌 대상의 정보를 저장할 변수를 생성한다.
             RaycastHit hitInfo = new RaycastHit();
             // 레이를 발사하고, 만일 부딪힌 물체가 있으면...
-            if (Physics.Raycast(ray, out hitInfo))
+            if (Physics.Raycast(ray, out hitInfo, float.MaxValue, -1, QueryTriggerInteraction.Ignore))
             {
-                // 피격 이펙트의 위치를 레이가 부딪힌 지점으로 이동시킨다.
-                shootPosition.transform.position = hitInfo.point;
+                if (shootPosition)
+                {
+                    // 피격 이펙트의 위치를 레이가 부딪힌 지점으로 이동시킨다.
+                    shootPosition.transform.position = hitInfo.point;
 
-                // 피격 이펙트의 forward 방향을 레이가 부딪힌 지점의 법선 벡터와 일치시킨다.
-                shootPosition.transform.forward = hitInfo.normal;
-                gun.Play();
+                    // 피격 이펙트의 forward 방향을 레이가 부딪힌 지점의 법선 벡터와 일치시킨다.
+                    shootPosition.transform.forward = hitInfo.normal;
+                }
 
 
                 EnemyBase enemy = hitInfo.transform.GetComponent<EnemyBase>();
                 if (enemy != null)
                 {
+                    bloodPosition = Instantiate(bloodEffect);
+                    bloodPs = bloodPosition.GetComponent<ParticleSystem>();
+                    bloodPs.Play();
+                    bloodPosition.transform.forward = hitInfo.normal;
+                    bloodPosition.transform.position = hitInfo.point;
                     enemy.HitEnemy(weaponPower);
                     GameManager.Score.editScore(10);
                     enemy.BloodActive(hitInfo);
@@ -494,7 +582,9 @@ public class PlayerFire : MonoBehaviour
             }
             anim.SetBool("Shoot", false);
             Destroy(shootPosition);
+            Destroy(bloodPosition);
             --Ammor;
+            AmmorUI.text = Ammor.ToString();
             if (Ammor <= 0)
             {
                 GunSoundChange(pm.Weapons[0].GetComponent<AudioSource>());
@@ -519,8 +609,8 @@ public class PlayerFire : MonoBehaviour
             yield return null;
 
         gun = GunSound;
-        pm.RefreshItem(-1);
-        GunSetting(-1, 1, -1);
+        pm.RefreshItem(0);
+        GunSetting(0, 2, Ammor);
         block = false;
         yield break;
     }

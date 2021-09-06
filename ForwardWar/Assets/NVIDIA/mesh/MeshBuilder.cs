@@ -218,10 +218,12 @@ namespace MeshCutter
 
             GameObject leftSideObj = victim;
 
-            GameObject rightSideObj = new GameObject("right side", typeof(MeshFilter), typeof(MeshRenderer));
+            GameObject rightSideObj = new GameObject("right side", typeof(MeshFilter), typeof(MeshRenderer), typeof(MeshCollider));
             rightSideObj.transform.position = victim.transform.position;
             rightSideObj.transform.rotation = victim.transform.rotation;
             rightSideObj.GetComponent<MeshFilter>().mesh = right_HalfMesh;
+            rightSideObj.GetComponent<MeshCollider>().sharedMesh = right_HalfMesh;
+            rightSideObj.GetComponent<MeshCollider>().convex = true;
 
             if (victim.transform.parent != null)
             {

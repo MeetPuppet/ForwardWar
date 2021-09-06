@@ -8,7 +8,12 @@ public class GetItem : MonoBehaviour
     {
         if(collision.gameObject.layer == 7)
         {
-            collision.gameObject.GetComponent<PlayerMove>().hp += 2;
+            PlayerMove pm = collision.gameObject.GetComponent<PlayerMove>();
+            pm.hp += 2;
+            if (pm.hp > 20)
+                pm.hp = 20f;
+            pm.pf.Ammor += 5;
+            pm.pf.AmmorUI.text = pm.pf.Ammor.ToString();
             Destroy(gameObject);
         }
     }

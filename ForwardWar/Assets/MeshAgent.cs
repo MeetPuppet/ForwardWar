@@ -24,6 +24,6 @@ public class MeshAgent : MonoBehaviour
     void MovePosition(Transform MoveDest)
     {
         goal = MoveDest;
-        agent.destination = goal.position;
+        agent.SetDestination(goal.position);
     }
 }

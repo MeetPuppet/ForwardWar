@@ -97,8 +97,13 @@ public class EnemyBase : MonoBehaviour
 
     void Update()
     {
+        if (agent == null)
+            return;
         EnemyUpdate();
         hpSlider.value = (float)HP / (float)MaxHP;
+
+        if (agent.hasPath)
+            agent.acceleration = (agent.remainingDistance < 4) ? 60f : 2f;
     }
     void EnemyUpdate()
     {
@@ -174,6 +179,15 @@ public class EnemyBase : MonoBehaviour
     public void BloodActive(RaycastHit ray)
     {
         GameManager.Updater.Add(FlowBlood(ray));
+    }
+
+    public void ExploreDamage(Vector3 pos)
+    {
+        HitEnemy(HP);
+        Destroy(gameObject.GetComponent<NavMeshAgent>());
+        Rigidbody rigid = gameObject.AddComponent<Rigidbody>();
+
+        rigid.AddForce(pos * 50);
     }
 
     bool block = false;

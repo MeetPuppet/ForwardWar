@@ -3,13 +3,14 @@
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c124e7227a7437c43b89f4cbd031e9cb, type: 3}
-  m_Name: FlexClothAsset
+  m_Name: FlexClothAssetBox
   m_EditorClassIdentifier: 
   m_particles:
   - {x: -0.00000022351742, y: 3.2741808e-13, z: -0.5, w: 1}

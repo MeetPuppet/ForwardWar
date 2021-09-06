@@ -13,6 +13,8 @@ public class WeaponSwitch : ActSwitchObject
     {
         player.RefreshItem(ItemNum);
         player.pf.gun = player.Weapons[ItemNum].GetComponent<AudioSource>();
-        player.pf.GunSetting(ItemNum, Power, Ammor);
+        player.pf.GunSetting(ItemNum, Power, player.pf.Ammor);
+        player.WeaponEnables[ItemNum] = true;
+        Destroy(gameObject);
     }
 }

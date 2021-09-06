@@ -10,14 +10,14 @@ public class NaviComp : MonoBehaviour
     // Start is called before the first frame update
     public void Find(Vector3 dest)
     {
-        agent.destination = dest;
+        agent.SetDestination(dest);
     }
     private void Update()
     {
         if(agent.destination != transform.position &&
             Vector3.Distance(agent.destination, transform.position) <= 3f)
         {
-            agent.destination = transform.position;
+            agent.SetDestination(transform.position);
             Destroy(gameObject, 2);
         }
     }

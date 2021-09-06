@@ -24,6 +24,24 @@ public class BombAction : MonoBehaviour
         Collider[] collider = Physics.OverlapSphere(transform.position, 10);
         for (int i = 0; i < collider.Length; ++i)
         {
+            EnemyBase enemy = collider[i].GetComponent<EnemyBase>();
+            if (enemy)
+            {
+                Vector3 vec3 = collider[i].transform.position - transform.position;
+                float dist = 10 - Vector3.Distance(collider[i].transform.position, transform.position);
+                enemy.ExploreDamage(vec3 * dist);
+            }
+        }
+
+        // 자기 자신을 제거한다.
+        Destroy(gameObject);
+    }
+    void CutPartSet()
+    {
+        //거리 10내의 모든 콜라이더 확인
+        Collider[] collider = Physics.OverlapSphere(transform.position, 10);
+        for (int i = 0; i < collider.Length; ++i)
+        {
             Transform parent = collider[i].transform.parent;
             //부모가 있는 경우
             if (parent)
@@ -41,7 +59,7 @@ public class BombAction : MonoBehaviour
 
             //rigidBody가 있는 경우
             Rigidbody rd = collider[i].GetComponent<Rigidbody>();
-            if(rd)
+            if (rd)
             {
                 //대상 방향 확인
                 Vector3 dir = default;
@@ -53,7 +71,6 @@ public class BombAction : MonoBehaviour
             }
         }
 
-        // 자기 자신을 제거한다.
-        Destroy(gameObject);
     }
 }
+
